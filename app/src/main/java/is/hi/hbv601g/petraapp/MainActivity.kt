@@ -6,19 +6,17 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
-import org.json.JSONObject
-import java.net.HttpURLConnection
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
+    private lateinit var mButtonDCW: Button
     lateinit var DCWList: ArrayList<DaycareWorker>
 
     companion object {
@@ -107,6 +105,15 @@ class MainActivity : AppCompatActivity() {
         mButtonRegister = findViewById(R.id.register_button)
         mButtonRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        mButtonDCW = findViewById(R.id.dcw_button)
+        mButtonDCW.setOnClickListener {
+            val intent = Intent(this, DcwActivity::class.java)
+
+            // Pass data to SecondActivity (optional)
+            // intent.putExtra("message", "Hello from MainActivity!")
             startActivity(intent)
         }
 
