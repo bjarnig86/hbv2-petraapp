@@ -4,4 +4,8 @@
     <string name="password_field_text">Lykilorð</string>
     <string name="login_button">Innskrá</string>
     <string name="register_button">Nýskrá</string>
+    <string name="exp_card_list_item">Starfsreynsla</string>
+    <string name="card_list_item_phone">Sími</string>
+    <string name="card_list_item_email">Netfang</string>
+    <string name="card_list_item_address">Heimilisfang</string>
 </resources>
