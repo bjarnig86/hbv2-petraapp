@@ -11,24 +11,95 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nýskráning"
+        android:text="Nýskráning dagforeldris"
         android:textSize="24dp"
         android:textStyle="bold"
-        android:paddingBottom="70pt"
+        android:paddingBottom="20pt"
+        />
+
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="150pt">
+        <EditText
+            android:id="@+id/firstName"
+            android:layout_width="70pt"
+            android:layout_height="wrap_content"
+            android:hint="Fornafn"
+            />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/lastName"
+            android:layout_width="70pt"
+            android:layout_height="wrap_content"
+            android:hint="Eftirnafn"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/ssn"
+        android:layout_width="150pt"
+        android:layout_height="wrap_content"
+        android:hint="Kennitala"
         />
 
     <EditText
         android:id="@+id/email_field"
-        android:layout_width="100pt"
+        android:layout_width="150pt"
         android:layout_height="wrap_content"
         android:hint="@string/email_field_text"
         />
 
     <EditText
-        android:id="@+id/password_field"
-        android:layout_width="100pt"
+        android:id="@+id/mobile_field"
+        android:layout_width="150pt"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:hint="Símanúmer"
+        />
+
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="150pt">
+        <EditText
+            android:id="@+id/locationCode"
+            android:layout_width="45pt"
+            android:layout_height="wrap_content"
+            android:hint="Póstnúmer"
+            />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="100pt"
+            android:layout_height="wrap_content"
+            android:hint="Bæjarfélag"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/address"
+        android:layout_width="150pt"
+        android:layout_height="wrap_content"
+        android:hint="Heimilisfang"
+        />
+
+    <EditText
+        android:id="@+id/experience"
+        android:layout_width="150pt"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Starfsreynsla í árum"
+        />
+
+    <EditText
+        android:id="@+id/password_field"
+        android:layout_width="150pt"
+        android:layout_height="wrap_content"
+        android:inputType="text"
         android:hint="@string/password_field_text"
         />
 
@@ -37,19 +108,13 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="20pt"
         android:paddingTop="10pt"
-        >
-        <RelativeLayout
-            android:layout_width="fill_parent"
+        android:baselineAligned="false">
+
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="70pt"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <Button
-                android:id="@+id/register_button"
-                android:layout_width="50pt"
-                android:layout_height="wrap_content"
-                android:text="@string/register_button"></Button>
-        </RelativeLayout>
+            android:text="@string/register_button" />
     </LinearLayout>
 
 

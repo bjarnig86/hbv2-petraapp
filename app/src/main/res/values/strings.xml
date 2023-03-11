@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">petraapp</string>
+    <string name="app_name">PETRA</string>
     <string name="email_field_text">Netfang</string>
     <string name="password_field_text">Lykilorð</string>
     <string name="login_button">Innskrá</string>
