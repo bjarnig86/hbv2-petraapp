@@ -1,6 +1,5 @@
 package `is`.hi.hbv601g.petraapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,12 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import org.json.JSONObject
-import java.net.HttpURLConnection
 
-class MainActivity : AppCompatActivity() {
+class LoginActivity : AppCompatActivity() {
 
     private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
+    private lateinit var mEditTextUsername: EditText
+    private lateinit var mEditTextPassword: EditText
 
     companion object {
         const val TAG: String = "LoginActivity"
@@ -21,21 +21,34 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
 
         mButtonLogin = findViewById(R.id.login_button)
         mButtonLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            mEditTextUsername = findViewById(R.id.email_field)
+            mEditTextPassword = findViewById(R.id.register_button)
 
-            // Pass data to SecondActivity (optional)
-            // intent.putExtra("message", "Hello from MainActivity!")
-            startActivity(intent)
+            val email = mEditTextUsername.text
+            val password = mEditTextUsername.text
+
+            val endpoint = "https://${R.string.auth0_domain}/oauth/ro"
+
+            val headers = JSONObject()
+            headers.put("Content-Type", "application/json")
+
+            val body = JSONObject()
+            body.put("client_id", R.string.auth0_client_id)
+            body.put("username", email)
+            body.put("password", password)
+            body.put("connection", "CONNECTION")
+            body.put("scope", "openid")
+
+
         }
 
         mButtonRegister = findViewById(R.id.register_button)
         mButtonRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            Toast.makeText(this, "HEY DABBA!", Toast.LENGTH_SHORT).show()
         }
 
     }

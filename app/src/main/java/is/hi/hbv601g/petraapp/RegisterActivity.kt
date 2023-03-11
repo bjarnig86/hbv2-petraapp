@@ -1,6 +1,5 @@
 package `is`.hi.hbv601g.petraapp
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -8,34 +7,23 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import org.json.JSONObject
-import java.net.HttpURLConnection
 
-class MainActivity : AppCompatActivity() {
+class RegisterActivity : AppCompatActivity() {
 
     private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
 
     companion object {
-        const val TAG: String = "LoginActivity"
+        const val TAG: String = "RegisterActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        mButtonLogin = findViewById(R.id.login_button)
-        mButtonLogin.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-
-            // Pass data to SecondActivity (optional)
-            // intent.putExtra("message", "Hello from MainActivity!")
-            startActivity(intent)
-        }
+        setContentView(R.layout.activity_register)
 
         mButtonRegister = findViewById(R.id.register_button)
         mButtonRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            Toast.makeText(this, "HEY DABBA!", Toast.LENGTH_SHORT).show()
         }
 
     }

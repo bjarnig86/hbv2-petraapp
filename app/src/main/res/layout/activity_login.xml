@@ -6,17 +6,31 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Verið velkomin á Petru"
+        android:text="Innskráning"
         android:textSize="24dp"
         android:textStyle="bold"
         android:paddingBottom="70pt"
         />
 
+    <EditText
+        android:id="@+id/email_field"
+        android:layout_width="100pt"
+        android:layout_height="wrap_content"
+        android:hint="@string/email_field_text"
+        />
+
+    <EditText
+        android:id="@+id/password_field"
+        android:layout_width="100pt"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:hint="@string/password_field_text"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
