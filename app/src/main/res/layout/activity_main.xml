@@ -13,6 +13,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginHorizontal="16dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         >
 
         <EditText
@@ -22,6 +24,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:hint="Leita"
+            android:singleLine="true"
             android:textAppearance="?attr/textAppearanceBody2"
             />
 

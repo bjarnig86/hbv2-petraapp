@@ -11,8 +11,17 @@ import android.widget.EditText
 
 class RegisterActivity : AppCompatActivity() {
 
-    private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
+    private lateinit var mFirstName: EditText
+    private lateinit var mLastName: EditText
+    private lateinit var mSSN: EditText
+    private lateinit var mEmail: EditText
+    private lateinit var mMobile: EditText
+    private lateinit var mLocationCode: EditText
+    private lateinit var mLocation: EditText
+    private lateinit var mAddress: EditText
+    private lateinit var mExp: EditText
+    private lateinit var mPassword: EditText
 
     companion object {
         const val TAG: String = "RegisterActivity"
@@ -22,6 +31,51 @@ class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
+
+        mFirstName = findViewById<EditText>(R.id.firstName)
+        mLastName = findViewById<EditText>(R.id.lastName)
+        mSSN = findViewById<EditText>(R.id.ssn)
+        mEmail = findViewById<EditText>(R.id.email_field)
+        mMobile = findViewById<EditText>(R.id.mobile_field)
+        mLocationCode = findViewById<EditText>(R.id.locationCode)
+        mLocation = findViewById<EditText>(R.id.location)
+        mAddress = findViewById<EditText>(R.id.address)
+        mExp = findViewById<EditText>(R.id.experience)
+        mPassword = findViewById<EditText>(R.id.password_field)
+
+        mButtonRegister = findViewById<Button>(R.id.register_button)
+        mButtonRegister.setOnClickListener {
+            val allInputsValid = checkRequiredFields();
+
+            if (allInputsValid) {
+                // call network register function
+            }
+        }
+    }
+
+    private fun checkRequiredFields(): Boolean {
+        val requiredFields = arrayOf(
+            R.id.firstName,
+            R.id.lastName,
+            R.id.ssn,
+            R.id.email_field,
+            R.id.mobile_field,
+            R.id.locationCode,
+            R.id.location,
+            R.id.address,
+            R.id.experience,
+            R.id.password_field
+        )
+
+        var isValid = true;
+        for (id in requiredFields) {
+            val field = findViewById<EditText>(id);
+            if (field.text.isEmpty()) {
+                field.error = "Verður að fylla út"
+                isValid = false;
+            }
+        }
+        return isValid
     }
 
     override fun onStart() {
