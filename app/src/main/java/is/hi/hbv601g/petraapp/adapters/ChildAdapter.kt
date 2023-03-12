@@ -1,6 +1,7 @@
 package `is`.hi.hbv601g.petraapp.adapters
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,10 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
+import `is`.hi.hbv601g.petraapp.DayReportActivity
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
 
@@ -57,7 +60,12 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
 
         val reportCreate = viewHolder.createReport
         reportCreate.setOnClickListener{
-            Toast.makeText(context,"Skýrlsa", Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, DayReportActivity::class.java)
+
+            // Pass data to SecondActivity (optional)
+            val childName = "${mChild.get(position).firstName} ${mChild.get(position).lastName}"
+            intent.putExtra("child", childName)
+            startActivity(context, intent, null)
         }
 
         val reportsGet = viewHolder.getReport
