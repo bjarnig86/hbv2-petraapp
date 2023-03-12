@@ -8,15 +8,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Verið velkomin á Petru"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:paddingBottom="1pt"
-        />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -42,31 +33,6 @@
         android:paddingHorizontal="20pt"
         android:paddingTop="10pt"
         >
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <Button
-                android:id="@+id/login_button"
-                android:layout_width="50pt"
-                android:layout_height="wrap_content"
-                android:text="@string/login_button"></Button>
-
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-            <Button
-                android:id="@+id/register_button"
-                android:layout_width="50pt"
-                android:layout_height="wrap_content"
-                android:text="@string/register_button"></Button>
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -76,7 +42,7 @@
             >
             <Button
                 android:id="@+id/dcw_button"
-                android:layout_width="50pt"
+                android:layout_width="55pt"
                 android:layout_height="wrap_content"
                 android:text="@string/dcw_button"></Button>
         </RelativeLayout>

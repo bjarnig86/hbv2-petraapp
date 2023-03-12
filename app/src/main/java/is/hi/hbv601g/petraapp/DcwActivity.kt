@@ -3,6 +3,7 @@ package `is`.hi.hbv601g.petraapp
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,9 +13,7 @@ import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 
 
 class DcwActivity : AppCompatActivity(){
-
-    private lateinit var mButtonLogin: Button
-    private lateinit var mButtonRegister: Button
+    
     private lateinit var ChildList: ArrayList<Child>
 
     companion object {
@@ -46,14 +45,11 @@ class DcwActivity : AppCompatActivity(){
 
         );
 
-        val adapter = ChildAdapter(ChildList);
+        val adapter = ChildAdapter(ChildList,this);
 
         childRecyclerView.adapter = adapter;
 
         childRecyclerView.layoutManager = LinearLayoutManager(this);
-
-        mButtonLogin = findViewById(R.id.login_button)
-        mButtonRegister = findViewById(R.id.register_button)
 
     }
 }

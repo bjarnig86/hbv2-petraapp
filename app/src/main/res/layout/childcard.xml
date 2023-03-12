@@ -31,7 +31,8 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
@@ -40,12 +41,13 @@
                         android:contentDescription="Baby Icon"
                         />
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center_vertical|left"
                         android:paddingLeft="10dp"
                         >
+
                         <TextView
                             android:id="@+id/card_title"
                             android:layout_width="wrap_content"
@@ -63,7 +65,23 @@
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="?android:attr/textColorSecondary"
                             />
+
                     </LinearLayout>
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"/>
+
+                    <ImageButton
+                        android:id="@+id/danger_button"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:src="@drawable/danger_icon"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="danger Icon"
+                        android:background="@color/white"
+                        />
                 </LinearLayout>
 
 
@@ -148,7 +166,16 @@
                     android:text="Búa til skýrslu"
                     style="?attr/borderlessButtonStyle"
                     />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="Sækja skýrslur"
+                    style="?attr/borderlessButtonStyle"
+                    />
             </LinearLayout>
+
 
         </LinearLayout>
 
