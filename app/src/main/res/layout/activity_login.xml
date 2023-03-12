@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Innskráning"
+        android:text="@string/login_activity_title_text"
         android:textSize="24dp"
         android:textStyle="bold"
         android:paddingBottom="70pt"
@@ -46,7 +46,7 @@
             >
             <Button
                 android:id="@+id/login_button"
-                android:layout_width="50pt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_button"></Button>
 
@@ -59,7 +59,7 @@
             >
             <Button
                 android:id="@+id/register_button"
-                android:layout_width="50pt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register_button"></Button>
         </RelativeLayout>

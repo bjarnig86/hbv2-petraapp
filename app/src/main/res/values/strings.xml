@@ -8,4 +8,6 @@
     <string name="card_list_item_phone">Sími</string>
     <string name="card_list_item_email">Netfang</string>
     <string name="card_list_item_address">Heimilisfang</string>
+    <string name="login_activity_title_text">Innskráning</string>
+    <string name="auth0_client_secret">eoJjUmSMCOo4d5CVh4eLs33nanTNqlXwwwx3XWDUPK29odhT0DJH-b6gaHjE3mHR</string>
 </resources>
