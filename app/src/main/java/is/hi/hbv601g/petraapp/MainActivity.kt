@@ -1,24 +1,28 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
-import org.json.JSONObject
-import java.net.HttpURLConnection
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var mSearchQueryView: EditText
+    private lateinit var mSearchQueryBtn: Button
     private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
+    private lateinit var mButtonDCW: Button
     lateinit var DCWList: ArrayList<DaycareWorker>
 
     companion object {
@@ -29,8 +33,38 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dcwRecyclerView = findViewById<View>(R.id.rvDaycareWorkers) as RecyclerView
+        // Search input logic
+        mSearchQueryView = findViewById<EditText>(R.id.searchQuery)
+        mSearchQueryBtn = findViewById<Button>(R.id.searchButton)
 
+        mSearchQueryView.setOnKeyListener {_, keyCode, event ->
+            if (mSearchQueryView.text.isNotEmpty()) {
+                if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                    Toast.makeText(this, mSearchQueryView.text, Toast.LENGTH_SHORT).show()
+
+                    this.currentFocus?.let { view ->
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                    }
+                }
+                return@setOnKeyListener true
+            }
+            return@setOnKeyListener false
+        }
+
+        mSearchQueryBtn.setOnClickListener {
+            if (mSearchQueryView.text.isNotEmpty()) {
+                Toast.makeText(this, mSearchQueryView.text, Toast.LENGTH_SHORT).show()
+
+                this.currentFocus?.let { view ->
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            }
+        }
+
+        // List of cards logic
+        val dcwRecyclerView = findViewById<View>(R.id.rvDaycareWorkers) as RecyclerView
         DCWList = arrayListOf(
             DaycareWorker(
                 id = 1,
@@ -88,13 +122,11 @@ class MainActivity : AppCompatActivity() {
                 mobile = "5812345"
             )
         );
-
         val adapter = DaycareWorkerCardAdapter(DCWList);
-
         dcwRecyclerView.adapter = adapter;
-
         dcwRecyclerView.layoutManager = LinearLayoutManager(this);
 
+        // Bottom screen button logic
         mButtonLogin = findViewById(R.id.login_button)
         mButtonLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -107,6 +139,15 @@ class MainActivity : AppCompatActivity() {
         mButtonRegister = findViewById(R.id.register_button)
         mButtonRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+        }
+
+        mButtonDCW = findViewById(R.id.dcw_button)
+        mButtonDCW.setOnClickListener {
+            val intent = Intent(this, DcwActivity::class.java)
+
+            // Pass data to SecondActivity (optional)
+            // intent.putExtra("message", "Hello from MainActivity!")
             startActivity(intent)
         }
 

@@ -41,7 +41,8 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>) : Recycle
         subTitle.text = addressCombined
 
         val exp = viewHolder.expTitleViewContent
-        exp.text = dcw.experienceInYears.toString()
+        val expString = "${dcw.experienceInYears.toString()} ár"
+        exp.text = expString
 
         val phone = viewHolder.phoneTitleViewContent
         phone.text = dcw.mobile
