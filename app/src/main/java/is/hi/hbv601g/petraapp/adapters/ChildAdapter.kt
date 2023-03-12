@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
 
@@ -23,6 +24,10 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
         val ssnTitleViewContent = itemView.findViewById<TextView>(R.id.child_card_list_ssn_content);
 
         val alertBtn = itemView.findViewById<ImageButton>(R.id.danger_button);
+
+        val createReport = itemView.findViewById<MaterialButton>(R.id.child_card_create_report)
+
+        val getReport = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
 
 
     }
@@ -48,6 +53,16 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
         val alertBtn = viewHolder.alertBtn
         alertBtn.setOnClickListener {
             Toast.makeText(context,"HÆTTA!", Toast.LENGTH_SHORT).show()
+        }
+
+        val reportCreate = viewHolder.createReport
+        reportCreate.setOnClickListener{
+            Toast.makeText(context,"Skýrlsa", Toast.LENGTH_SHORT).show()
+        }
+
+        val reportsGet = viewHolder.getReport
+        reportsGet.setOnClickListener{
+            Toast.makeText(context,"Sækja skýrlsu", Toast.LENGTH_SHORT).show()
         }
     }
 

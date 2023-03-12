@@ -11,5 +11,10 @@
     <string name="card_list_item_address">Heimilisfang</string>
     <string name="child_card_list_item_ssn">Kennitala</string>
     <string name="child_card_list_item_name">Nafn</string>
+    <string name="sleep_from">Svefn frá</string>
+    <string name="sleep_To">Svefn til</string>
+    <string name="appetite">Matarlyst</string>
+    <string name="report_comment">Athugasemd</string>
+    <string name="report_create">Skrá skýrslu</string>
 
 </resources>
