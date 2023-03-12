@@ -6,7 +6,13 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -15,9 +21,12 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mEditTextUsername: EditText
     private lateinit var mEditTextPassword: EditText
 
+    private lateinit var mToken: String
+
     companion object {
         const val TAG: String = "LoginActivity"
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,24 +35,22 @@ class LoginActivity : AppCompatActivity() {
         mButtonLogin = findViewById(R.id.login_button)
         mButtonLogin.setOnClickListener {
             mEditTextUsername = findViewById(R.id.email_field)
-            mEditTextPassword = findViewById(R.id.register_button)
+            mEditTextPassword = findViewById(R.id.password_field)
 
-            val email = mEditTextUsername.text
-            val password = mEditTextUsername.text
+            val email = mEditTextUsername.text.toString()
+            val password = mEditTextPassword.text.toString()
 
-            val endpoint = "https://${R.string.auth0_domain}/oauth/ro"
+            val networkManager = NetworkManager.getInstance(this)
+            networkManager.getToken(email, password, object : NetworkCallback<String> {
+                override fun onSuccess(result: String) {
+                    mToken = result
+                    Log.d(TAG, "Token is: $mToken")
+                }
 
-            val headers = JSONObject()
-            headers.put("Content-Type", "application/json")
-
-            val body = JSONObject()
-            body.put("client_id", R.string.auth0_client_id)
-            body.put("username", email)
-            body.put("password", password)
-            body.put("connection", "CONNECTION")
-            body.put("scope", "openid")
-
-
+                override fun onFailure(errorString: String) {
+                    Log.e(TAG, "Failed to get TOKEN!! \n $errorString")
+                }
+            })
         }
 
         mButtonRegister = findViewById(R.id.register_button)
