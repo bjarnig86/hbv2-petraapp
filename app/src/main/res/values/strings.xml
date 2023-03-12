@@ -9,10 +9,8 @@
     <string name="card_list_item_phone">Sími</string>
     <string name="card_list_item_email">Netfang</string>
     <string name="card_list_item_address">Heimilisfang</string>
-<<<<<<< HEAD
     <string name="login_activity_title_text">Innskráning</string>
     <string name="auth0_client_secret">eoJjUmSMCOo4d5CVh4eLs33nanTNqlXwwwx3XWDUPK29odhT0DJH-b6gaHjE3mHR</string>
-=======
     <string name="child_card_list_item_ssn">Kennitala</string>
     <string name="child_card_list_item_name">Nafn</string>
     <string name="sleep_from">Svefn frá</string>
@@ -20,6 +18,4 @@
     <string name="appetite">Matarlyst</string>
     <string name="report_comment">Athugasemd</string>
     <string name="report_create">Skrá skýrslu</string>
-
->>>>>>> 7dc6cfd9487c53c9dcd0b14cb507338e06e87bd7
 </resources>
