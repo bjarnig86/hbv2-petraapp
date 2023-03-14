@@ -1,14 +1,14 @@
 package `is`.hi.hbv601g.petraapp.networking
 
+import android.annotation.SuppressLint
 import android.content.Context
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
+import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.R
 
 class NetworkManager private constructor(context: Context) {
@@ -16,7 +16,9 @@ class NetworkManager private constructor(context: Context) {
 
     companion object {
         private const val AUTH_URL = "https://dev-xzuj3qsd.eu.auth0.com/oauth/token"
+        private const val BASE_URL = "https://hbv2-bakendi-production.up.railway.app/api/"
 
+        @SuppressLint("StaticFieldLeak")
         private lateinit var mInstance: NetworkManager
         private lateinit var mQueue: RequestQueue
         @Synchronized
@@ -32,6 +34,36 @@ class NetworkManager private constructor(context: Context) {
             mQueue = Volley.newRequestQueue(mContext.applicationContext)
         }
         return mQueue
+    }
+
+    fun getDCWs(endpoint: String, callback: NetworkCallback<DaycareWorker>) {
+        val request = object : StringRequest(
+            Method.GET, BASE_URL+endpoint,
+            Response.Listener { response ->
+                val gson = Gson()
+                val dcws = gson.fromJson(response, DaycareWorker::class.java)
+                callback.onSuccess(dcws)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue.add(request)
+    }
+
+    fun getDCW(auth0id: String, callback: NetworkCallback<DaycareWorker>) {
+        val request = object : StringRequest(
+            Method.GET, BASE_URL+"/daycareworker",
+            Response.Listener { response ->
+                val gson = Gson()
+                val dcws = gson.fromJson(response, DaycareWorker::class.java)
+                callback.onSuccess(dcws)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue.add(request)
     }
 
     fun getToken(email: String, password: String, callback: NetworkCallback<String>) {
@@ -58,7 +90,7 @@ class NetworkManager private constructor(context: Context) {
                 return params
             }
         }
-        Volley.newRequestQueue(mContext).add(request)
+        mQueue.add(request)
     }
     // Rest of the class implementation goes here
 }

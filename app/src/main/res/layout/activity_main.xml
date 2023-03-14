@@ -7,6 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".MainActivity">
+    <include layout="@layout/action_bar_text"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,11 +35,11 @@
             android:layout_weight="1"/>
 
 
-            <Button
-                android:id="@+id/searchButton"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="Leita"></Button>
+        <Button
+            android:id="@+id/searchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Leita" />
 
     </LinearLayout>
 
@@ -66,44 +67,43 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="20pt"
         android:paddingTop="10pt"
+        android:orientation="horizontal"
         >
         <RelativeLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center|left"
             >
             <Button
                 android:id="@+id/login_button"
-                android:layout_width="50pt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/login_button"></Button>
+                android:text="@string/login_button" />
 
         </RelativeLayout>
         <RelativeLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
             >
             <Button
                 android:id="@+id/register_button"
-                android:layout_width="50pt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register_button"></Button>
+                android:text="@string/register_button" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center|right"
             >
             <Button
                 android:id="@+id/dcw_button"
-                android:layout_width="50pt"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/dcw_button"></Button>
+                android:text="@string/dcw_button"
+                />
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="fill_parent"

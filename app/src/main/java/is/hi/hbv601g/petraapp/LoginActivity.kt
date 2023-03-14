@@ -3,9 +3,18 @@ package `is`.hi.hbv601g.petraapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.auth0.android.Auth0
+import com.auth0.android.authentication.AuthenticationAPIClient
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.callback.Callback
+import com.auth0.android.provider.WebAuthProvider
+import com.auth0.android.result.Credentials
+import com.auth0.android.result.UserProfile
+import `is`.hi.hbv601g.petraapp.databinding.ActivityLoginBinding
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 import okhttp3.OkHttpClient
@@ -22,42 +31,67 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var mEditTextPassword: EditText
 
     private lateinit var mToken: String
+    private lateinit var account: Auth0
+
 
     companion object {
         const val TAG: String = "LoginActivity"
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        account = Auth0(
+            clientId = this.getString(R.string.auth0_client_id),
+            domain = this.getString(R.string.auth0_domain)
+        )
+
         mButtonLogin = findViewById(R.id.login_button)
         mButtonLogin.setOnClickListener {
-            mEditTextUsername = findViewById(R.id.email_field)
-            mEditTextPassword = findViewById(R.id.password_field)
+            loginWithBrowser()
 
-            val email = mEditTextUsername.text.toString()
-            val password = mEditTextPassword.text.toString()
+            mButtonLogin.visibility = View.GONE
+        }
 
-            val networkManager = NetworkManager.getInstance(this)
-            networkManager.getToken(email, password, object : NetworkCallback<String> {
-                override fun onSuccess(result: String) {
-                    mToken = result
-                    Log.d(TAG, "Token is: $mToken")
+    }
+
+    private fun loginWithBrowser() {
+        // Setup the WebAuthProvider, using the custom scheme and scope.
+
+        WebAuthProvider.login(account)
+            .withScheme("demo")
+            .withScope("openid profile email")
+            .withAudience("https://dev-xzuj3qsd.eu.auth0.com/api/v2/")
+            // Launch the authentication passing the callback where the results will be received
+            .start(this, object : Callback<Credentials, AuthenticationException> {
+                // Called when there is an authentication failure
+                override fun onFailure(exception: AuthenticationException) {
+                    Log.d(TAG, "onFailure: $exception")
                 }
 
-                override fun onFailure(errorString: String) {
-                    Log.e(TAG, "Failed to get TOKEN!! \n $errorString")
+                // Called when authentication completed successfully
+                override fun onSuccess(credentials: Credentials) {
+                    // Get the access token from the credentials object.
+                    // This can be used to call APIs
+                    val accessToken = credentials.accessToken
+                    mToken = accessToken
+                    val authClient = AuthenticationAPIClient(account)
+                    authClient.userInfo(mToken).start(object : Callback<UserProfile, AuthenticationException> {
+                        override fun onSuccess(payload: UserProfile) {
+                            // Store the user's profile in your app's memory or persistent storage
+                            val user = payload
+                            // Handle the user object
+                            Log.d(TAG, "onSuccess: ${user.email}")
+                        }
+
+                        override fun onFailure(error: AuthenticationException) {
+                            // Handle the error
+                        }
+                    })
+                    Log.d(TAG, "Access Token: $mToken")
                 }
             })
-        }
-
-        mButtonRegister = findViewById(R.id.register_button)
-        mButtonRegister.setOnClickListener {
-            Toast.makeText(this, "HEY DABBA!", Toast.LENGTH_SHORT).show()
-        }
-
     }
 
     override fun onStart() {

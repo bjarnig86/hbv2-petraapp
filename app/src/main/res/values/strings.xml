@@ -10,7 +10,9 @@
     <string name="card_list_item_email">Netfang</string>
     <string name="card_list_item_address">Heimilisfang</string>
     <string name="login_activity_title_text">Innskráning</string>
-    <string name="auth0_client_secret">eoJjUmSMCOo4d5CVh4eLs33nanTNqlXwwwx3XWDUPK29odhT0DJH-b6gaHjE3mHR</string>
+    <string name="auth0_client_id">ox325QZVYQitbySZYq0CZOW5vJLs9r4Q</string>
+    <string name="auth0_domain">dev-xzuj3qsd.eu.auth0.com</string>
+    <string name="auth0_client_secret">V8i8Xrr0epjcSaOvf1A2vy8mycbwS30MlHlmeMj3R71J4jYTepaq64k7rL5my1sY</string>
     <string name="child_card_list_item_ssn">Kennitala</string>
     <string name="child_card_list_item_name">Nafn</string>
     <string name="sleep_from">Svefn frá</string>
@@ -18,4 +20,6 @@
     <string name="appetite">Matarlyst</string>
     <string name="report_comment">Athugasemd</string>
     <string name="report_create">Skrá skýrslu</string>
+    <string name="logout_button">Útskrá</string>
+    <string name="hello_user">Halló, User!</string>
 </resources>

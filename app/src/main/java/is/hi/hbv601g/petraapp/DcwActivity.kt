@@ -2,14 +2,11 @@ package `is`.hi.hbv601g.petraapp
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapter
-import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 
 
 class DcwActivity : AppCompatActivity(){
