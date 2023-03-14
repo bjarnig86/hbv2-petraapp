@@ -1,5 +1,6 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -34,6 +35,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
     private lateinit var mButtonDCW: Button
+    private lateinit var mButtonParent: Button
     lateinit var DCWList: ArrayList<DaycareWorker>
 
     private lateinit var account: Auth0
@@ -170,6 +172,15 @@ class MainActivity : AppCompatActivity() {
         mButtonDCW = findViewById(R.id.dcw_button)
         mButtonDCW.setOnClickListener {
             val intent = Intent(this, DcwActivity::class.java)
+
+            // Pass data to SecondActivity (optional)
+            // intent.putExtra("message", "Hello from MainActivity!")
+            startActivity(intent)
+        }
+
+        mButtonParent = findViewById(R.id.parent_button)
+        mButtonParent.setOnClickListener {
+            val intent = Intent(this, ParentActivity::class.java)
 
             // Pass data to SecondActivity (optional)
             // intent.putExtra("message", "Hello from MainActivity!")

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -16,7 +17,7 @@ import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
 
 
-class ChildAdapter(private val mChild: List<Child>,private val context : Context) : RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
+class ChildAdapterParent(private val mChild: List<Child>, private val context : Context) : RecyclerView.Adapter<ChildAdapterParent.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
         val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)
@@ -27,21 +28,21 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
 
         val alertBtn = itemView.findViewById<ImageButton>(R.id.danger_button);
 
-        val createReport = itemView.findViewById<MaterialButton>(R.id.child_card_create_report)
+        val notifySickness = itemView.findViewById<MaterialButton>(R.id.child_card_notify_sickness)
 
         val getReport = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
 
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapterParent.ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
-        val childView = inflater.inflate(R.layout.childcard, parent, false)
+        val childView = inflater.inflate(R.layout.childcard_parent, parent, false)
         return ViewHolder(childView)
     }
 
-    override fun onBindViewHolder(viewHolder: ChildAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ChildAdapterParent.ViewHolder, position: Int) {
         val child: Child = mChild.get(position)
         val title = viewHolder.titleView
         title.text = child.firstName
@@ -57,14 +58,9 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
             Toast.makeText(context,"HÆTTA!", Toast.LENGTH_SHORT).show()
         }
 
-        val reportCreate = viewHolder.createReport
-        reportCreate.setOnClickListener{
-            val intent = Intent(context, DayReportActivity::class.java)
-
-            // Pass data to SecondActivity (optional)
-            val childName = "${mChild.get(position).firstName} ${mChild.get(position).lastName}"
-            intent.putExtra("child", childName)
-            startActivity(context, intent, null)
+        val notifySickness = viewHolder.notifySickness
+        notifySickness.setOnClickListener{
+            Toast.makeText(context,"Veikindi var tylkinnt", Toast.LENGTH_SHORT).show()
         }
 
         val reportsGet = viewHolder.getReport

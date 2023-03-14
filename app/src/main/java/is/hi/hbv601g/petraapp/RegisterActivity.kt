@@ -27,7 +27,6 @@ class RegisterActivity : AppCompatActivity() {
         const val TAG: String = "RegisterActivity"
     }
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
