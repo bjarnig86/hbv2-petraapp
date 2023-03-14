@@ -223,7 +223,7 @@ class MainActivity : AppCompatActivity() {
                             Log.d(TAG, "onSuccess: ${user.name}")
                             Log.d(TAG, "onSuccess: ${user.isEmailVerified}")
                             Log.d(TAG, "onSuccess: ${user.nickname}")
-                            Log.d(TAG, "onSuccess: ${user.getExtraInfo()["roles"]}")
+                            Log.d(TAG, "onSuccess: ${user.getUserMetadata()}")
                         }
 
                         override fun onFailure(error: AuthenticationException) {

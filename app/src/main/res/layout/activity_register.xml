@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".RegisterActivity">
-    <include layout="@layout/action_bar_text"/>
+    <include layout="@layout/custom_action_bar"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
