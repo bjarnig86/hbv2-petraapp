@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
         mButtonLogin = findViewById(R.id.login_button)
         mButtonLogin.setOnClickListener {
-            loginWithBrowser()
+                loginWithBrowser()
 
             mButtonLogin.visibility = View.GONE
         }
