@@ -2,58 +2,78 @@ package `is`.hi.hbv601g.petraapp.networking
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.R
+import java.lang.reflect.Type
+import java.util.Base64.Encoder
+
 
 class NetworkManager private constructor(context: Context) {
-    private val mContext: Context = context
+    private val AUTH_URL = "https://dev-xzuj3qsd.eu.auth0.com/oauth/token/"
+    private val BASE_URL = "https://hbv2-bakendi-production.up.railway.app/api/"
+    private val mContext: Context = context.applicationContext
+    private var mQueue: RequestQueue? = null
 
     companion object {
-        private const val AUTH_URL = "https://dev-xzuj3qsd.eu.auth0.com/oauth/token"
-        private const val BASE_URL = "https://hbv2-bakendi-production.up.railway.app/api/"
+        private var INSTANCE: NetworkManager? = null
 
-        @SuppressLint("StaticFieldLeak")
-        private lateinit var mInstance: NetworkManager
-        private lateinit var mQueue: RequestQueue
-        @Synchronized
         fun getInstance(context: Context): NetworkManager {
-            mInstance = NetworkManager(context)
-            return mInstance
+            if (INSTANCE == null) {
+                INSTANCE = NetworkManager(context)
+            }
+            return INSTANCE!!
         }
     }
 
+    init {
+        mQueue = getRequestQueue()
+    }
 
-    fun getRequestQueue(): RequestQueue {
+    private fun getRequestQueue(): RequestQueue {
         if (mQueue == null) {
-            mQueue = Volley.newRequestQueue(mContext.applicationContext)
+            mQueue = Volley.newRequestQueue(mContext)
         }
-        return mQueue
+        return mQueue!!
     }
 
-    fun getDCWs(endpoint: String, callback: NetworkCallback<DaycareWorker>) {
-        val request = object : StringRequest(
-            Method.GET, BASE_URL+endpoint,
+    // Inner class to hold a reference to the context object
+    private inner class ContextHolder(val context: Context)
+
+    // Method to get the context object from the holder
+    private fun getContext(): Context {
+        return mContextHolder.context
+    }
+
+    // Holder for the context object
+    private val mContextHolder = ContextHolder(context)
+
+    fun getDCWs(callback: NetworkCallback<List<DaycareWorker>>) {
+        val request = object : Utf8StringRequest(
+            Method.GET, BASE_URL + "daycareworkers",
             Response.Listener { response ->
                 val gson = Gson()
-                val dcws = gson.fromJson(response, DaycareWorker::class.java)
+                val listType: Type = object : TypeToken<List<DaycareWorker>>(){}.type
+                val dcws: List<DaycareWorker> = gson.fromJson(response, listType)
                 callback.onSuccess(dcws)
             },
             Response.ErrorListener { error ->
                 callback.onFailure(error.toString())
             }
         ) {}
-        mQueue.add(request)
+        mQueue?.add(request)
     }
 
     fun getDCW(auth0id: String, callback: NetworkCallback<DaycareWorker>) {
-        val request = object : StringRequest(
-            Method.GET, BASE_URL+"/daycareworker",
+        val request = object : Utf8StringRequest(
+            Method.GET, BASE_URL+"/daycareworkers",
             Response.Listener { response ->
                 val gson = Gson()
                 val dcws = gson.fromJson(response, DaycareWorker::class.java)
@@ -63,11 +83,11 @@ class NetworkManager private constructor(context: Context) {
                 callback.onFailure(error.toString())
             }
         ) {}
-        mQueue.add(request)
+        mQueue?.add(request)
     }
 
     fun getToken(email: String, password: String, callback: NetworkCallback<String>) {
-        val request = object : StringRequest(
+        val request = object : Utf8StringRequest(
             Method.POST, AUTH_URL,
             Response.Listener { response ->
                 val gson = Gson()
@@ -90,7 +110,7 @@ class NetworkManager private constructor(context: Context) {
                 return params
             }
         }
-        mQueue.add(request)
+        mQueue?.add(request)
     }
     // Rest of the class implementation goes here
 }

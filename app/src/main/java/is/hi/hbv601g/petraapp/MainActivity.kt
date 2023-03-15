@@ -1,6 +1,5 @@
 package `is`.hi.hbv601g.petraapp
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +9,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
-import android.widget.RelativeLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.auth0.android.Auth0
@@ -27,6 +25,8 @@ import com.auth0.android.result.UserProfile
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.Entities.User
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,7 +36,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mButtonRegister: Button
     private lateinit var mButtonDCW: Button
     private lateinit var mButtonParent: Button
-    lateinit var DCWList: ArrayList<DaycareWorker>
+    private lateinit var mProgressBar: ProgressBar
+    private var mDCWList = mutableListOf<DaycareWorker>()
 
     private lateinit var account: Auth0
     private lateinit var mCustomActionBarGreeting: TextView
@@ -54,6 +55,9 @@ class MainActivity : AppCompatActivity() {
             clientId = this.getString(R.string.auth0_client_id),
             domain = this.getString(R.string.auth0_domain)
         )
+
+        // get the progress bar
+        mProgressBar = findViewById(R.id.progress_bar)
 
         // Search input logic
         mSearchQueryView = findViewById<EditText>(R.id.searchQuery)
@@ -85,68 +89,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // List of cards logic
-        val dcwRecyclerView = findViewById<View>(R.id.rvDaycareWorkers) as RecyclerView
-        DCWList = arrayListOf(
-            DaycareWorker(
-                id = 1,
-                fullName = "Maiya Cartwright",
-                email = "Glennie_Beatty93@gmail.com",
-                address = "6604 Farrell Island",
-                location = "Grenivík",
-                locationCode = "616",
-                freeSpots = 5,
-                experienceInYears = 304,
-                mobile = "5812345"
-            ),
-            DaycareWorker(
-                id = 2,
-                fullName = "Rico Beier",
-                email = "Ryley37@gmail.com",
-                address = "016 Daugherty Loaf",
-                location = "Hvolsvelli",
-                locationCode = "860",
-                freeSpots = 5,
-                experienceInYears = 4,
-                mobile = "5812345"
-            ),
-            DaycareWorker(
-                id = 3,
-                fullName = "Naomie Swaniawski",
-                email = "Claud85@hotmail.com",
-                address = "28162 Haylie Landing",
-                location = "Súðavík",
-                locationCode = "420",
-                freeSpots = 5,
-                experienceInYears = 5,
-                mobile = "5812345"
-            ),
-            DaycareWorker(
-                id = 4,
-                fullName = "Zula Corkery",
-                email = "Gene64@yahoo.com",
-                address = "558 Keebler Square",
-                location = "Bíldudal",
-                locationCode = "466",
-                freeSpots = 5,
-                experienceInYears = 6,
-                mobile = "5812345"
-            ),
-            DaycareWorker(
-                id = 5,
-                fullName = "Aida Cassin",
-                email = "Icie.Miller21@yahoo.com",
-                address = "716 Zemlak Trace",
-                location = "Akureyri",
-                locationCode = "603",
-                freeSpots = 5,
-                experienceInYears = 4,
-                mobile = "5812345"
-            )
-        );
-        val adapter = DaycareWorkerCardAdapter(DCWList);
-        dcwRecyclerView.adapter = adapter;
-        dcwRecyclerView.layoutManager = LinearLayoutManager(this);
+        val networkManager = NetworkManager.getInstance(this)
+        networkManager.getDCWs( object: NetworkCallback<List<DaycareWorker>> {
+            override fun onSuccess(result: List<DaycareWorker>) {
+                mDCWList = result.toMutableList()
+                Log.d(TAG, "Successfully fetched DCWs ${mDCWList.size}")
+                // List of cards logic
+                val dcwRecyclerView = findViewById<View>(R.id.rvDaycareWorkers) as RecyclerView
+                val adapter = DaycareWorkerCardAdapter(mDCWList);
+                dcwRecyclerView.adapter = adapter;
+                dcwRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
+                dcwRecyclerView.visibility = View.VISIBLE
+                mProgressBar.visibility = View.GONE
+            }
+
+            override fun onFailure(errorString: String) {
+                Log.d(TAG, "Failed to get DCWs: $errorString")
+            }
+        })
+
+
 
         // Bottom screen button logic
         mButtonLogin = findViewById(R.id.login_button)
