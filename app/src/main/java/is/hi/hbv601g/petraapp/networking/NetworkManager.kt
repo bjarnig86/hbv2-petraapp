@@ -2,6 +2,7 @@ package `is`.hi.hbv601g.petraapp.networking
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.util.Log
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -71,9 +72,15 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
-    fun getDCW(auth0id: String, callback: NetworkCallback<DaycareWorker>) {
+    fun getDCW(email: String?, callback: NetworkCallback<DaycareWorker>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("daycareworker")
+            .appendPath(email)
+            .build().toString()
+
         val request = object : Utf8StringRequest(
-            Method.GET, BASE_URL+"/daycareworkers",
+            Method.GET, url,
             Response.Listener { response ->
                 val gson = Gson()
                 val dcws = gson.fromJson(response, DaycareWorker::class.java)

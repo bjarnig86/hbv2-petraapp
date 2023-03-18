@@ -113,11 +113,6 @@ class MainActivity : AppCompatActivity() {
         // Bottom screen button logic
         mButtonLogin = findViewById(R.id.login_button)
         mButtonLogin.setOnClickListener {
-//            val intent = Intent(this, LoginActivity::class.java)
-
-            // Pass data to SecondActivity (optional)
-            // intent.putExtra("message", "Hello from MainActivity!")
-//            startActivity(intent)
             if (User.getInstance() == null) {
                 loginWithBrowser()
             } else {
@@ -176,6 +171,8 @@ class MainActivity : AppCompatActivity() {
                         override fun onSuccess(result: UserProfile) {
                             // Store the user's profile in your app's memory or persistent storage
                             val user = result
+                            getUserInfo(user)
+                            saveUserToSharedPreferences()
                             // Handle the user object
                             User.setUser(user)
                             handleButtonsOnLoginAndLogout()
@@ -186,15 +183,47 @@ class MainActivity : AppCompatActivity() {
                             Log.d(TAG, "onSuccess: ${user.isEmailVerified}")
                             Log.d(TAG, "onSuccess: ${user.nickname}")
                             Log.d(TAG, "onSuccess: ${user.getUserMetadata()}")
+                            Log.d(TAG, "onSuccess: ${user.getId()}")
+                            Log.d(TAG, "onSuccess: ${user.getExtraInfo()["https://petraapp.com/userRoles"]}")
                         }
 
                         override fun onFailure(error: AuthenticationException) {
-                            // Handle the error
+                            Log.e(TAG, "onFailure: $error")
                         }
                     })
                     Log.d(TAG, "Access Token: $accessToken")
                 }
             })
+    }
+
+    private fun getUserInfo(user: UserProfile) {
+        Log.d(TAG, "getUserInfo: $user")
+        val userRole = (user.getExtraInfo()["https://petraapp.com/userRoles"] as ArrayList<*>)[0] as String
+        val userEmail = user.email
+        val networkManager = NetworkManager.getInstance(this)
+        
+        if (userRole == "Parent") {
+//        TODO("fetch parent in database")
+        } else if (userRole == "DCW") {
+//            TODO("fetch dcw in database")
+            networkManager.getDCW(userEmail, object: NetworkCallback<DaycareWorker>{
+                override fun onSuccess(result: DaycareWorker) {
+                    Log.d("$TAG userinfo", "onSuccess: $result")
+//                    TODO: Set the info to the sharedPreferences User object...
+                }
+
+                override fun onFailure(errorString: String) {
+                    Log.e(TAG, "getUserInfo: onFailure: failed to get dcw!!", )
+                }
+            })
+        } else {
+//            TODO("if there is no type on user???")
+            Log.e(TAG, "getUserInfo: user has no roles on Auth0", )
+        }
+    }
+
+    private fun saveUserToSharedPreferences() {
+//        TODO("Not yet implemented")
     }
 
     private fun logout() {
@@ -209,7 +238,8 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(error: AuthenticationException) {
-                    // Something went wrong!
+                    // TODO: not yet implemented (maybe just log this...)
+                    Log.e(TAG, "onFailure: Failed to finish the logout", error)
                 }
             })
     }
