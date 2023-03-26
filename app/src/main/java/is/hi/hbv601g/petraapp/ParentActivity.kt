@@ -24,12 +24,12 @@ class ParentActivity : AppCompatActivity() {
             Child(
                 firstName = "Kid1",
                 lastName = "Surname",
-                ssn = 5812300
+                ssn = "5812300"
             ),
             Child(
                 firstName = "Kid2",
                 lastName = "Surname",
-                ssn = 5552300
+                ssn = "5552300"
             )
             );
 

@@ -22,8 +22,11 @@ import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
+import com.google.gson.Gson
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.FullDCW
+import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
@@ -40,6 +43,8 @@ class MainActivity : AppCompatActivity() {
     private var mDCWList = mutableListOf<DaycareWorker>()
 
     private lateinit var account: Auth0
+    private lateinit var accessToken: String
+    private lateinit var auth0Client: AuthenticationAPIClient
     private lateinit var mCustomActionBarGreeting: TextView
 
     companion object {
@@ -50,11 +55,48 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val networkManager = NetworkManager.getInstance(this)
+
         // initialize the auth0 account
         account = Auth0(
             clientId = this.getString(R.string.auth0_client_id),
             domain = this.getString(R.string.auth0_domain)
         )
+
+        // retrieve user if in sharedPrefrences
+        val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        accessToken = prefs.getString("ACCESS_TOKEN", "").toString()
+
+        if (accessToken.isNotBlank()) {
+            val role = prefs.getString("USER_ROLE", "").toString()
+            val user: Any
+            if (role == "DCW") {
+                user = fetchUserFromSharedPreferences(role) as FullDCW
+                User.firstName = user.firstName
+            } else if (role == "Parent") {
+                user = fetchUserFromSharedPreferences(role) as Parent
+                User.firstName = user.firstName
+            }
+
+            networkManager.getUserInfo(accessToken, object: NetworkCallback<UserProfile> {
+                override fun onSuccess(result: UserProfile) {
+                    User.setUser(result)
+                    User.role = role
+                    handleButtonsOnLoginAndLogout()
+                    handleGrettingInActionBar()
+                    Log.d(TAG, "This is a log message from ${Thread.currentThread().stackTrace[2].methodName}() at line ${Thread.currentThread().stackTrace[2].lineNumber}")
+                    Log.d(TAG, "onSuccess: SUCCESS ${result.email}")
+                }
+
+                override fun onFailure(errorString: String) {
+                    User.setUser(null)
+                    Log.e(TAG, "This is a log message from ${Thread.currentThread().stackTrace[2].methodName}() at line ${Thread.currentThread().stackTrace[2].lineNumber}")
+                    Log.e(TAG, "onFailure: User set to NULL", )
+                    Log.e(TAG, "onFailure: FAILED $errorString", )
+                }
+
+            })
+        }
 
         // get the progress bar
         mProgressBar = findViewById(R.id.progress_bar)
@@ -89,7 +131,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val networkManager = NetworkManager.getInstance(this)
         networkManager.getDCWs( object: NetworkCallback<List<DaycareWorker>> {
             override fun onSuccess(result: List<DaycareWorker>) {
                 mDCWList = result.toMutableList()
@@ -171,20 +212,10 @@ class MainActivity : AppCompatActivity() {
                         override fun onSuccess(result: UserProfile) {
                             // Store the user's profile in your app's memory or persistent storage
                             val user = result
-                            getUserInfo(user)
-                            saveUserToSharedPreferences()
-                            // Handle the user object
                             User.setUser(user)
+                            getUserInfoAndStoreInMemory(User.getInstance(), accessToken)
                             handleButtonsOnLoginAndLogout()
-                            handleGrettingInActionBar(User.getInstance())
-                            Log.d(TAG, "onSuccess: ${user.givenName}")
-                            Log.d(TAG, "onSuccess: ${user.familyName}")
-                            Log.d(TAG, "onSuccess: ${user.name}")
-                            Log.d(TAG, "onSuccess: ${user.isEmailVerified}")
-                            Log.d(TAG, "onSuccess: ${user.nickname}")
-                            Log.d(TAG, "onSuccess: ${user.getUserMetadata()}")
-                            Log.d(TAG, "onSuccess: ${user.getId()}")
-                            Log.d(TAG, "onSuccess: ${user.getExtraInfo()["https://petraapp.com/userRoles"]}")
+                            Log.d(TAG, "onLogin: ${user.getId()}")
                         }
 
                         override fun onFailure(error: AuthenticationException) {
@@ -196,24 +227,49 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    private fun getUserInfo(user: UserProfile) {
+    private fun getUserInfoAndStoreInMemory(user: UserProfile?, accessToken: String, role: String = "") {
         Log.d(TAG, "getUserInfo: $user")
-        val userRole = (user.getExtraInfo()["https://petraapp.com/userRoles"] as ArrayList<*>)[0] as String
-        val userEmail = user.email
+        val userRole = role.ifBlank { (user?.getExtraInfo()?.get("https://petraapp.com/userRoles") as ArrayList<*>)[0] as String? }
+        val userEmail = user?.email
+        val auth0id = user?.getId() as String
         val networkManager = NetworkManager.getInstance(this)
         
         if (userRole == "Parent") {
-//        TODO("fetch parent in database")
-        } else if (userRole == "DCW") {
-//            TODO("fetch dcw in database")
-            networkManager.getDCW(userEmail, object: NetworkCallback<DaycareWorker>{
-                override fun onSuccess(result: DaycareWorker) {
-                    Log.d("$TAG userinfo", "onSuccess: $result")
-//                    TODO: Set the info to the sharedPreferences User object...
+            networkManager.getParent(auth0id, object: NetworkCallback<Parent>{
+                override fun onSuccess(result: Parent) {
+                    Log.d(TAG +"userinfo", "onSuccess: $result")
+                    User.firstName = result.firstName
+                    User.role = userRole
+                    handleGrettingInActionBar()
+
+                    // save to sharedpreferences
+                    saveUserToSharedPreferences(result)
+                    saveStringToSharedPreferences("ACCESS_TOKEN", accessToken)
+                    saveStringToSharedPreferences("USER_ID", auth0id)
+                    saveStringToSharedPreferences("USER_ROLE", userRole)
                 }
 
                 override fun onFailure(errorString: String) {
-                    Log.e(TAG, "getUserInfo: onFailure: failed to get dcw!!", )
+                    Log.e(TAG +"userinfo", "onFailure: $errorString", )
+                }
+            })
+        } else if (userRole == "DCW") {
+            networkManager.getFullDCW(userEmail, object: NetworkCallback<FullDCW>{
+                override fun onSuccess(result: FullDCW) {
+                    Log.d("$TAG userinfo", "onSuccess: $result")
+                    User.firstName = result.firstName
+                    User.role = userRole
+                    handleGrettingInActionBar()
+
+                    // save to sharedpreferences
+                    saveUserToSharedPreferences(result)
+                    saveStringToSharedPreferences("ACCESS_TOKEN", accessToken)
+                    saveStringToSharedPreferences("USER_ID", auth0id)
+                    saveStringToSharedPreferences("USER_ROLE", userRole)
+                }
+
+                override fun onFailure(errorString: String) {
+                    Log.e(TAG, "getUserInfo: onFailure: $errorString", )
                 }
             })
         } else {
@@ -222,19 +278,55 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveUserToSharedPreferences() {
-//        TODO("Not yet implemented")
+    private fun saveUserToSharedPreferences(value: Any) {
+        val gson = Gson()
+        val json = gson.toJson(value)
+        val sharedPreferences = getSharedPreferences(
+            "MY_APP_PREFS",
+            Context.MODE_PRIVATE)
+        sharedPreferences.edit().putString("USER_KEY", json).apply()
     }
 
-    private fun logout() {
+    private fun clearSharedPreferences() {
+        val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        val editor = prefs.edit()
+        editor.clear()
+        editor.apply()
+        Log.d(TAG, "User was cleared from sharedPrefs!")
+    }
+
+
+
+    private fun fetchUserFromSharedPreferences(role: String): Any {
+        val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        val userString = prefs.getString("USER_KEY", "")
+        val gson = Gson()
+        return when (role) {
+            "DCW" -> gson.fromJson(userString, FullDCW::class.java)
+            "Parent" -> gson.fromJson(userString, Parent::class.java)
+            else -> throw Error("No role found to determine class!")
+        }
+    }
+
+    private fun saveStringToSharedPreferences(key: String, value: String) {
+        val sharedPreferences = getSharedPreferences(
+            "MY_APP_PREFS",
+            Context.MODE_PRIVATE
+        )
+        sharedPreferences.edit().putString(key, value).apply()
+    }
+
+
+        private fun logout() {
         WebAuthProvider.logout(account)
             .withScheme("demo")
             .start(this, object : Callback<Void?, AuthenticationException> {
                 override fun onSuccess(result: Void?) {
                     // The user has been logged out!
                     User.setUser(null)
+                    handleGrettingInActionBar()
                     handleButtonsOnLoginAndLogout()
-                    handleGrettingInActionBar(User.getInstance())
+                    clearSharedPreferences()
                 }
 
                 override fun onFailure(error: AuthenticationException) {
@@ -255,10 +347,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun handleGrettingInActionBar(userProfile: UserProfile?) {
+    fun handleGrettingInActionBar() {
         if (User.getInstance() != null) {
             mCustomActionBarGreeting = findViewById(R.id.custom_action_bar_greeting_text)
-            mCustomActionBarGreeting.text = "Hæ ${userProfile?.nickname}!"
+            mCustomActionBarGreeting.text = getString(R.string.greeting_message, User.firstName, User.role)
         } else {
             mCustomActionBarGreeting = findViewById(R.id.custom_action_bar_greeting_text)
             mCustomActionBarGreeting.text = ""
