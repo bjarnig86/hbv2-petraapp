@@ -27,17 +27,17 @@ class DcwActivity : AppCompatActivity(){
             Child(
                 firstName = "Einar",
                 lastName = "Pálsson",
-                ssn = 5812345
+                ssn = "5812345"
             ),
             Child(
                 firstName = "Bjarni",
                 lastName = "Guðmundsson",
-                ssn = 5552345
+                ssn = "5552345"
             ),
             Child(
                 firstName = "Dagbjört",
                 lastName = "Þorgrímsdóttir",
-                ssn = 5812345
+                ssn = "5812345"
             ),
 
         );

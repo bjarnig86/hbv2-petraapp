@@ -8,17 +8,20 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.auth0.android.result.UserProfile
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.FullDCW
+import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.R
 import java.lang.reflect.Type
 import java.util.Base64.Encoder
 
 
 class NetworkManager private constructor(context: Context) {
-    private val AUTH_URL = "https://dev-xzuj3qsd.eu.auth0.com/oauth/token/"
+    private val AUTH_URL = "https://dev-xzuj3qsd.eu.auth0.com/userInfo"
     private val BASE_URL = "https://hbv2-bakendi-production.up.railway.app/api/"
     private val mContext: Context = context.applicationContext
     private var mQueue: RequestQueue? = null
@@ -93,28 +96,65 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
-    fun getToken(email: String, password: String, callback: NetworkCallback<String>) {
+    fun getFullDCW(email: String?, callback: NetworkCallback<FullDCW>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("daycareworker")
+            .appendPath(email)
+            .build().toString()
+
         val request = object : Utf8StringRequest(
-            Method.POST, AUTH_URL,
+            Method.GET, url,
             Response.Listener { response ->
                 val gson = Gson()
-                val jsonObject = gson.fromJson(response, JsonObject::class.java)
-                val accessToken = jsonObject.get("access_token").asString
-                callback.onSuccess(accessToken)
+                val dcws = gson.fromJson(response, FullDCW::class.java)
+                callback.onSuccess(dcws)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue?.add(request)
+    }
+
+
+    fun getParent(auth0id: String?, callback: NetworkCallback<Parent>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("parent")
+            .appendPath(auth0id)
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.GET, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val parent = gson.fromJson(response, Parent::class.java)
+                callback.onSuccess(parent)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue?.add(request)
+    }
+
+    fun getUserInfo(token: String, callback: NetworkCallback<UserProfile>) {
+        val request = object : Utf8StringRequest(
+            Method.GET, AUTH_URL,
+            Response.Listener { response ->
+                val gson = Gson()
+                val userProfile = gson.fromJson(response, UserProfile::class.java)
+                callback.onSuccess(userProfile)
             },
             Response.ErrorListener { error ->
                 callback.onFailure(error.toString())
             }
         ) {
-            override fun getParams(): MutableMap<String, String> {
-                val params = HashMap<String, String>()
-                params["username"] = email
-                params["password"] = password
-                params["client_id"] = mContext.getString(R.string.auth0_client_id)
-                params["client_secret"] = mContext.getString(R.string.auth0_client_secret)
-                params["audience"] = "https://dev-xzuj3qsd.eu.auth0.com/api/v2/"
-                params["grant_type"] = "client_credentials"
-                return params
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Authorization"] = "Bearer $token"
+                return headers
             }
         }
         mQueue?.add(request)

@@ -23,4 +23,6 @@
     <string name="logout_button">Útskrá</string>
     <string name="hello_user">Halló, User!</string>
     <string name="search_button_text">Leita</string>
+    <string name="greeting_message">Hæ %1$s %2$s!</string>
+    <string name="preference_file_key">settings</string>
 </resources>
