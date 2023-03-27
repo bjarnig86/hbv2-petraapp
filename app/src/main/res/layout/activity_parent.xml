@@ -7,10 +7,10 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".MainActivity">
-
+    <include layout="@layout/custom_action_bar"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -22,7 +22,20 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/newChildButton"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="@string/create_child"
+            tools:layout_editor_absoluteX="128dp"
+            tools:layout_editor_absoluteY="282dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -32,19 +45,20 @@
         android:layout_height="wrap_content"
         android:paddingHorizontal="20pt"
         android:paddingTop="10pt"
-        >
+        android:baselineAligned="false">
 
         <RelativeLayout
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             >
+
             <Button
                 android:id="@+id/parent_button"
                 android:layout_width="55pt"
                 android:layout_height="wrap_content"
-                android:text="Foreldri"></Button>
+                android:text="@string/foreldri" />
         </RelativeLayout>
 
 
