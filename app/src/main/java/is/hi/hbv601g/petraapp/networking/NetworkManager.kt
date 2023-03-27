@@ -14,6 +14,7 @@ import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.Entities.FullDCW
+import `is`.hi.hbv601g.petraapp.Entities.Location
 import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.R
 import java.lang.reflect.Type
@@ -131,6 +132,29 @@ class NetworkManager private constructor(context: Context) {
                 val gson = Gson()
                 val parent = gson.fromJson(response, Parent::class.java)
                 callback.onSuccess(parent)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue?.add(request)
+    }
+
+    fun getLocations(callback: NetworkCallback<ArrayList<String>>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("locations")
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.GET, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val listType: Type = object : TypeToken<List<Location>>(){}.type
+                val location: List<Location> = gson.fromJson(response, listType)
+                val strLocationList: ArrayList<String> = ArrayList()
+                location.map { loc -> strLocationList.add(loc.toString()) }
+                callback.onSuccess(strLocationList)
             },
             Response.ErrorListener { error ->
                 callback.onFailure(error.toString())

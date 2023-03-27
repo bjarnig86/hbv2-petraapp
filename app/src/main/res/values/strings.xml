@@ -25,4 +25,6 @@
     <string name="search_button_text">Leita</string>
     <string name="greeting_message">Hæ %1$s %2$s!</string>
     <string name="preference_file_key">settings</string>
+    <string name="card_list_item_location">Staður</string>
+    <string name="search_bar_hint">Leitaðu eftir póstnúmeri</string>
 </resources>

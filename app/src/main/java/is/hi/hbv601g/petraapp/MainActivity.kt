@@ -3,10 +3,14 @@ package `is`.hi.hbv601g.petraapp
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -23,24 +27,25 @@ import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
 import com.google.gson.Gson
+import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
-import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
-import `is`.hi.hbv601g.petraapp.Entities.FullDCW
-import `is`.hi.hbv601g.petraapp.Entities.Parent
-import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var mSearchQueryView: EditText
+    private lateinit var mSearchQueryView: AutoCompleteTextView
     private lateinit var mSearchQueryBtn: Button
     private lateinit var mButtonLogin: Button
     private lateinit var mButtonRegister: Button
     private lateinit var mButtonDCW: Button
     private lateinit var mButtonParent: Button
     private lateinit var mProgressBar: ProgressBar
+    private lateinit var mDCWRecyclerView: RecyclerView
+
     private var mDCWList = mutableListOf<DaycareWorker>()
+    private var mLocationList = ArrayList<String>()
+
 
     private lateinit var account: Auth0
     private lateinit var accessToken: String
@@ -54,8 +59,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         val networkManager = NetworkManager.getInstance(this)
+
+
 
         // initialize the auth0 account
         account = Auth0(
@@ -83,7 +89,7 @@ class MainActivity : AppCompatActivity() {
                     User.setUser(result)
                     User.role = role
                     handleButtonsOnLoginAndLogout()
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
                     Log.d(TAG, "This is a log message from ${Thread.currentThread().stackTrace[2].methodName}() at line ${Thread.currentThread().stackTrace[2].lineNumber}")
                     Log.d(TAG, "onSuccess: SUCCESS ${result.email}")
                 }
@@ -102,27 +108,72 @@ class MainActivity : AppCompatActivity() {
         mProgressBar = findViewById(R.id.progress_bar)
 
         // Search input logic
-        mSearchQueryView = findViewById<EditText>(R.id.searchQuery)
-        mSearchQueryBtn = findViewById<Button>(R.id.searchButton)
+        mSearchQueryView = findViewById(R.id.searchQuery)
+        mSearchQueryBtn = findViewById(R.id.searchButton)
 
-        mSearchQueryView.setOnKeyListener {_, keyCode, event ->
-            if (mSearchQueryView.text.isNotEmpty()) {
-                if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                    Toast.makeText(this, mSearchQueryView.text, Toast.LENGTH_SHORT).show()
+        // location shiiitt
+        networkManager.getLocations(object : NetworkCallback<ArrayList<String>> {
+            override fun onSuccess(result: ArrayList<String>) {
+                mLocationList = result
+                Log.d(TAG, "onSuccess: ${mLocationList[0]}")
 
-                    this.currentFocus?.let { view ->
-                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-                        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                val locationAdapter: ArrayAdapter<String> = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, mLocationList)
+                mSearchQueryView.setAdapter(locationAdapter)
+                mSearchQueryView.addTextChangedListener(object: TextWatcher {
+                    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                     }
-                }
-                return@setOnKeyListener true
+
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                        locationAdapter.filter.filter(p0)
+                    }
+
+                    override fun afterTextChanged(p0: Editable?) {
+//                        val filteredList: MutableList<DaycareWorker> = ArrayList()
+//                        mDCWList.map {
+//                                dcw ->
+//                            if (dcw.ifLocationIncludes(p0.toString())) {
+//                                filteredList.add(dcw)
+//                            }
+//                        }
+//
+//                        val filteredAdapter = DaycareWorkerCardAdapter(filteredList)
+//                        mDCWRecyclerView.adapter = filteredAdapter
+//                        Toast.makeText(this@MainActivity, "${filteredList.size} items found", Toast.LENGTH_SHORT).show()
+                    }
+
+                })
             }
-            return@setOnKeyListener false
-        }
+
+            override fun onFailure(errorString: String) {
+                Log.e(TAG, "onFailure: Getting locations failed!", )
+            }
+        })
+
 
         mSearchQueryBtn.setOnClickListener {
             if (mSearchQueryView.text.isNotEmpty()) {
                 Toast.makeText(this, mSearchQueryView.text, Toast.LENGTH_SHORT).show()
+                val filteredList: MutableList<DaycareWorker> = ArrayList()
+                mDCWList.map {
+                    dcw ->
+                    if (dcw.ifLocationIncludes(mSearchQueryView.text.toString())) {
+                        filteredList.add(dcw)
+                    }
+                }
+
+                val filteredAdapter = DaycareWorkerCardAdapter(filteredList)
+                mDCWRecyclerView.adapter = filteredAdapter
+
+                Toast.makeText(this@MainActivity, "${filteredList.size} dagforeldri fundust!", Toast.LENGTH_SHORT).show()
+
+
+                this.currentFocus?.let { view ->
+                    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                    imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                }
+            } else {
+                val filteredAdapter = DaycareWorkerCardAdapter(mDCWList)
+                mDCWRecyclerView.adapter = filteredAdapter
 
                 this.currentFocus?.let { view ->
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -131,16 +182,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Daycare worker (DCW) recycler logic
+        mDCWRecyclerView = findViewById<View>(R.id.rvDaycareWorkers) as RecyclerView
         networkManager.getDCWs( object: NetworkCallback<List<DaycareWorker>> {
             override fun onSuccess(result: List<DaycareWorker>) {
                 mDCWList = result.toMutableList()
                 Log.d(TAG, "Successfully fetched DCWs ${mDCWList.size}")
                 // List of cards logic
-                val dcwRecyclerView = findViewById<View>(R.id.rvDaycareWorkers) as RecyclerView
                 val adapter = DaycareWorkerCardAdapter(mDCWList);
-                dcwRecyclerView.adapter = adapter;
-                dcwRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
-                dcwRecyclerView.visibility = View.VISIBLE
+                mDCWRecyclerView.adapter = adapter;
+                mDCWRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
+                mDCWRecyclerView.visibility = View.VISIBLE
                 mProgressBar.visibility = View.GONE
             }
 
@@ -240,7 +292,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG +"userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
 
                     // save to sharedpreferences
                     saveUserToSharedPreferences(result)
@@ -259,7 +311,7 @@ class MainActivity : AppCompatActivity() {
                     Log.d("$TAG userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
 
                     // save to sharedpreferences
                     saveUserToSharedPreferences(result)
@@ -324,7 +376,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onSuccess(result: Void?) {
                     // The user has been logged out!
                     User.setUser(null)
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
                     handleButtonsOnLoginAndLogout()
                     clearSharedPreferences()
                 }
@@ -347,7 +399,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun handleGrettingInActionBar() {
+    fun handleGreetingInActionBar() {
         if (User.getInstance() != null) {
             mCustomActionBarGreeting = findViewById(R.id.custom_action_bar_greeting_text)
             mCustomActionBarGreeting.text = getString(R.string.greeting_message, User.firstName, User.role)

@@ -21,6 +21,8 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>) : Recycle
         val emailTitleViewContent = itemView.findViewById<TextView>(R.id.card_list_email_content);
 
         val addressTitleViewContent = itemView.findViewById<TextView>(R.id.card_list_address_content);
+
+        val locationTitleViewContent = itemView.findViewById<TextView>(R.id.card_list_location_content);
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaycareWorkerCardAdapter.ViewHolder {
@@ -51,6 +53,10 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>) : Recycle
 
         val address = viewHolder.addressTitleViewContent
         address.text = dcw.address
+
+        val location = viewHolder.locationTitleViewContent
+        val locationString = "${dcw.locationCode} ${dcw.location}"
+        location.text = locationString
     }
 
     override fun getItemCount(): Int {

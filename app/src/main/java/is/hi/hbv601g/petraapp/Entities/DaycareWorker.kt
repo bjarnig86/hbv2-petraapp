@@ -10,4 +10,15 @@ data class DaycareWorker(
     val freeSpots: Int,
     val experienceInYears: Int,
     val mobile: String
-)
+)  {
+    fun ifLocationIncludes(s: String): Boolean {
+        val combinedValue = "$locationCode $location"
+        return s.lowercase() in combinedValue.lowercase()
+    }
+
+    fun ifDCWIncludes(s: String): Boolean {
+        val combinedValue = "$fullName $email $address $locationCode $location"
+        return s.lowercase() in combinedValue.lowercase()
+    }
+
+}

@@ -18,22 +18,22 @@
         android:focusableInTouchMode="true"
         >
 
-        <EditText
+        <AutoCompleteTextView
             android:id="@+id/searchQuery"
             android:layout_width="240dp"
             android:layout_height="wrap_content"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:hint="Leita"
+            android:hint="@string/search_bar_hint"
             android:singleLine="true"
             android:textAppearance="?attr/textAppearanceBody2"
-            />
+            android:completionThreshold="1"
+            android:completionHintView="@layout/custom_search_hint_view"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
-
 
         <Button
             android:id="@+id/searchButton"
@@ -46,18 +46,16 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"/>
 
-
         <ImageButton
             android:id="@+id/danger_button"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:src="@drawable/locationsearch"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:contentDescription="danger Icon"
             android:background="@color/white"
             android:layout_gravity="center"
             />
-
     </LinearLayout>
 
 
