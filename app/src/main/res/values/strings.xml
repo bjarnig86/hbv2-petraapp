@@ -27,4 +27,5 @@
     <string name="preference_file_key">settings</string>
     <string name="card_list_item_location">Staður</string>
     <string name="search_bar_hint">Leitaðu eftir póstnúmeri</string>
+    <string name="icon_location_search">leita nálægt mér</string>
 </resources>

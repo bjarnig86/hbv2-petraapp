@@ -52,7 +52,7 @@
             android:layout_height="25dp"
             android:src="@drawable/locationsearch"
             android:scaleType="fitCenter"
-            android:contentDescription="danger Icon"
+            android:contentDescription="@string/icon_location_search"
             android:background="@color/white"
             android:layout_gravity="center"
             />

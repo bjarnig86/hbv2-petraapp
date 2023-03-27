@@ -128,17 +128,15 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun afterTextChanged(p0: Editable?) {
-//                        val filteredList: MutableList<DaycareWorker> = ArrayList()
-//                        mDCWList.map {
-//                                dcw ->
-//                            if (dcw.ifLocationIncludes(p0.toString())) {
-//                                filteredList.add(dcw)
-//                            }
-//                        }
-//
-//                        val filteredAdapter = DaycareWorkerCardAdapter(filteredList)
-//                        mDCWRecyclerView.adapter = filteredAdapter
-//                        Toast.makeText(this@MainActivity, "${filteredList.size} items found", Toast.LENGTH_SHORT).show()
+                        if (mSearchQueryView.text.isBlank()) {
+                            val adapter = DaycareWorkerCardAdapter(mDCWList)
+                            mDCWRecyclerView.adapter = adapter
+
+                            this@MainActivity.currentFocus?.let { view ->
+                                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                                imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                            }
+                        }
                     }
 
                 })
