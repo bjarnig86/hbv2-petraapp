@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     User.setUser(result)
                     User.role = role
 //                    handleButtonsOnLoginAndLogout()
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
                     setFragment(BottomNavLoggedIn());
                     Log.d(TAG, "This is a log message from ${Thread.currentThread().stackTrace[2].methodName}() at line ${Thread.currentThread().stackTrace[2].lineNumber}")
                     Log.d(TAG, "onSuccess: SUCCESS ${result.email}")
@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     Log.d(TAG +"userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
                     setFragment(BottomNavLoggedIn());
 
                     // save to sharedpreferences
@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     Log.d("$TAG userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
                     setFragment(BottomNavLoggedIn());
 
                     // save to sharedpreferences
@@ -395,7 +395,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 override fun onSuccess(result: Void?) {
                     // The user has been logged out!
                     User.setUser(null)
-                    handleGrettingInActionBar()
+                    handleGreetingInActionBar()
 //                    handleButtonsOnLoginAndLogout()
                     clearSharedPreferences()
                 }
