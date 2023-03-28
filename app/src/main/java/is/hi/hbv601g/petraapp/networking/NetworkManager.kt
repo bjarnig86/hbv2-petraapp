@@ -12,10 +12,7 @@ import com.auth0.android.result.UserProfile
 import com.google.gson.Gson
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
-import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
-import `is`.hi.hbv601g.petraapp.Entities.FullDCW
-import `is`.hi.hbv601g.petraapp.Entities.Location
-import `is`.hi.hbv601g.petraapp.Entities.Parent
+import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.R
 import java.lang.reflect.Type
 import java.util.Base64.Encoder
@@ -181,6 +178,27 @@ class NetworkManager private constructor(context: Context) {
                 return headers
             }
         }
+        mQueue?.add(request)
+    }
+
+    fun createChild(auth0id: String?, callback: NetworkCallback<Child>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("createchild")
+            .appendPath(auth0id)
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.POST, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val child = gson.fromJson(response, Child::class.java)
+                callback.onSuccess(child)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
         mQueue?.add(request)
     }
     // Rest of the class implementation goes here
