@@ -3,17 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/custom_action_bar"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="60dp"
     android:gravity="center_vertical"
     android:layout_gravity="bottom"
     android:background="@drawable/rounded_corner">
 
     <ImageButton
         android:id="@+id/action_bar_home"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_alignParentStart="true"
         android:layout_marginStart="47dp"
+        android:layout_marginTop="10dp"
         android:background="@null"
         android:contentDescription="danger Icon"
         android:scaleType="fitCenter"
@@ -21,10 +22,10 @@
 
     <ImageButton
         android:id="@+id/action_bar_petra"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="187dp"
+        android:layout_marginStart="184dp"
         android:background="@null"
         android:contentDescription="danger Icon"
         android:scaleType="fitCenter"
@@ -32,10 +33,11 @@
 
     <ImageButton
         android:id="@+id/action_bar_user"
-        android:layout_width="40dp"
-        android:layout_height="39dp"
+        android:layout_width="30dp"
+        android:layout_height="29dp"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="326dp"
+        android:layout_marginStart="332dp"
+        android:layout_marginTop="10dp"
         android:background="@null"
         android:contentDescription="danger Icon"
         android:scaleType="fitCenter"

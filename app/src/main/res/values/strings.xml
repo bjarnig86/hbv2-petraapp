@@ -30,4 +30,6 @@
     <string name="icon_location_search">leita nálægt mér</string>
     <string name="create_child">Bæta við barn</string>
     <string name="foreldri">Foreldri</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

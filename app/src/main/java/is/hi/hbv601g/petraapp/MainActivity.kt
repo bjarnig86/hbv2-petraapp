@@ -17,6 +17,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.auth0.android.Auth0
@@ -29,17 +30,24 @@ import com.auth0.android.result.UserProfile
 import com.google.gson.Gson
 import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
+import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.FullDCW
+import `is`.hi.hbv601g.petraapp.Entities.Parent
+import `is`.hi.hbv601g.petraapp.Entities.User
+import `is`.hi.hbv601g.petraapp.databinding.ActivityMainBinding
+import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
+import `is`.hi.hbv601g.petraapp.fragments.BottomNavNotLoggedIn
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var mSearchQueryView: AutoCompleteTextView
     private lateinit var mSearchQueryBtn: Button
     private lateinit var mButtonLogin: Button
-    private lateinit var mButtonRegister: Button
-    private lateinit var mButtonDCW: Button
-    private lateinit var mButtonParent: Button
+//    private lateinit var mButtonRegister: Button
+//    private lateinit var mButtonDCW: Button
+//    private lateinit var mButtonParent: Button
     private lateinit var mProgressBar: ProgressBar
     private lateinit var mDCWRecyclerView: RecyclerView
 
@@ -51,6 +59,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var accessToken: String
     private lateinit var auth0Client: AuthenticationAPIClient
     private lateinit var mCustomActionBarGreeting: TextView
+    lateinit var binding: ActivityMainBinding
 
     companion object {
         const val TAG: String = "MainActivity"
@@ -58,7 +67,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         val networkManager = NetworkManager.getInstance(this)
 
 
@@ -88,21 +99,26 @@ class MainActivity : AppCompatActivity() {
                 override fun onSuccess(result: UserProfile) {
                     User.setUser(result)
                     User.role = role
-                    handleButtonsOnLoginAndLogout()
-                    handleGreetingInActionBar()
+//                    handleButtonsOnLoginAndLogout()
+                    handleGrettingInActionBar()
+                    setFragment(BottomNavLoggedIn());
                     Log.d(TAG, "This is a log message from ${Thread.currentThread().stackTrace[2].methodName}() at line ${Thread.currentThread().stackTrace[2].lineNumber}")
                     Log.d(TAG, "onSuccess: SUCCESS ${result.email}")
                 }
 
                 override fun onFailure(errorString: String) {
                     User.setUser(null)
+                    setFragment(BottomNavNotLoggedIn());
                     Log.e(TAG, "This is a log message from ${Thread.currentThread().stackTrace[2].methodName}() at line ${Thread.currentThread().stackTrace[2].lineNumber}")
                     Log.e(TAG, "onFailure: User set to NULL", )
                     Log.e(TAG, "onFailure: FAILED $errorString", )
                 }
 
             })
+        } else {
+            setFragment(BottomNavNotLoggedIn());
         }
+
 
         // get the progress bar
         mProgressBar = findViewById(R.id.progress_bar)
@@ -202,42 +218,43 @@ class MainActivity : AppCompatActivity() {
 
 
         // Bottom screen button logic
-        mButtonLogin = findViewById(R.id.login_button)
-        mButtonLogin.setOnClickListener {
-            if (User.getInstance() == null) {
-                loginWithBrowser()
-            } else {
-                logout()
-            }
-        }
+    //        mButtonLogin = findViewById(R.id.login_button)
+    //        mButtonLogin.setOnClickListener {
+    //            if (User.getInstance() == null) {
+    //                loginWithBrowser()
+    //            } else {
+    //                logout()
+    //            }
+    //        }
 
-        mButtonRegister = findViewById(R.id.register_button)
-        mButtonRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
-        }
-
-        mButtonDCW = findViewById(R.id.dcw_button)
-        mButtonDCW.setOnClickListener {
-            val intent = Intent(this, DcwActivity::class.java)
-
-            // Pass data to SecondActivity (optional)
-            // intent.putExtra("message", "Hello from MainActivity!")
-            startActivity(intent)
-        }
-
-        mButtonParent = findViewById(R.id.parent_button)
-        mButtonParent.setOnClickListener {
-            val intent = Intent(this, ParentActivity::class.java)
-
-            // Pass data to SecondActivity (optional)
-            // intent.putExtra("message", "Hello from MainActivity!")
-            startActivity(intent)
-        }
+//
+//        mButtonRegister = findViewById(R.id.register_button)
+//        mButtonRegister.setOnClickListener {
+//            val intent = Intent(this, RegisterActivity::class.java)
+//            startActivity(intent)
+//        }
+//
+//        mButtonDCW = findViewById(R.id.dcw_button)
+//        mButtonDCW.setOnClickListener {
+//            val intent = Intent(this, DcwActivity::class.java)
+//
+//            // Pass data to SecondActivity (optional)
+//            // intent.putExtra("message", "Hello from MainActivity!")
+//            startActivity(intent)
+//        }
+//
+//        mButtonParent = findViewById(R.id.parent_button)
+//        mButtonParent.setOnClickListener {
+//            val intent = Intent(this, ParentActivity::class.java)
+//
+//            // Pass data to SecondActivity (optional)
+//            // intent.putExtra("message", "Hello from MainActivity!")
+//            startActivity(intent)
+//        }
 
     }
 
-    private fun loginWithBrowser() {
+    fun loginWithBrowser() {
         // Setup the WebAuthProvider, using the custom scheme and scope.
 
         WebAuthProvider.login(account)
@@ -264,7 +281,7 @@ class MainActivity : AppCompatActivity() {
                             val user = result
                             User.setUser(user)
                             getUserInfoAndStoreInMemory(User.getInstance(), accessToken)
-                            handleButtonsOnLoginAndLogout()
+//                            handleButtonsOnLoginAndLogout()
                             Log.d(TAG, "onLogin: ${user.getId()}")
                         }
 
@@ -290,7 +307,8 @@ class MainActivity : AppCompatActivity() {
                     Log.d(TAG +"userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
-                    handleGreetingInActionBar()
+                    handleGrettingInActionBar()
+                    setFragment(BottomNavLoggedIn());
 
                     // save to sharedpreferences
                     saveUserToSharedPreferences(result)
@@ -300,6 +318,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(errorString: String) {
+                    setFragment(BottomNavNotLoggedIn());
                     Log.e(TAG +"userinfo", "onFailure: $errorString", )
                 }
             })
@@ -309,7 +328,8 @@ class MainActivity : AppCompatActivity() {
                     Log.d("$TAG userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
-                    handleGreetingInActionBar()
+                    handleGrettingInActionBar()
+                    setFragment(BottomNavLoggedIn());
 
                     // save to sharedpreferences
                     saveUserToSharedPreferences(result)
@@ -319,6 +339,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(errorString: String) {
+                    setFragment(BottomNavNotLoggedIn());
                     Log.e(TAG, "getUserInfo: onFailure: $errorString", )
                 }
             })
@@ -367,15 +388,15 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-        private fun logout() {
+    fun logout() {
         WebAuthProvider.logout(account)
             .withScheme("demo")
             .start(this, object : Callback<Void?, AuthenticationException> {
                 override fun onSuccess(result: Void?) {
                     // The user has been logged out!
                     User.setUser(null)
-                    handleGreetingInActionBar()
-                    handleButtonsOnLoginAndLogout()
+                    handleGrettingInActionBar()
+//                    handleButtonsOnLoginAndLogout()
                     clearSharedPreferences()
                 }
 
@@ -386,15 +407,15 @@ class MainActivity : AppCompatActivity() {
             })
     }
 
-    fun handleButtonsOnLoginAndLogout() {
-        if (User.getInstance() != null) {
-            mButtonLogin.text = getString(R.string.logout_button)
-            mButtonRegister.visibility = View.GONE
-        } else {
-            mButtonLogin.text = getString(R.string.login_button)
-            mButtonRegister.visibility = View.VISIBLE
-        }
-    }
+//    fun handleButtonsOnLoginAndLogout() {
+//        if (User.getInstance() != null) {
+//            mButtonLogin.text = getString(R.string.logout_button)
+//            mButtonRegister.visibility = View.GONE
+//        } else {
+//            mButtonLogin.text = getString(R.string.login_button)
+//            mButtonRegister.visibility = View.VISIBLE
+//        }
+//    }
 
 
     fun handleGreetingInActionBar() {
@@ -405,6 +426,12 @@ class MainActivity : AppCompatActivity() {
             mCustomActionBarGreeting = findViewById(R.id.custom_action_bar_greeting_text)
             mCustomActionBarGreeting.text = ""
         }
+    }
+
+    private fun setFragment(fragment: Fragment) {
+        val fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.bottom_nav, fragment);
+        fragmentTransaction.commit();
     }
 
     override fun onStart() {

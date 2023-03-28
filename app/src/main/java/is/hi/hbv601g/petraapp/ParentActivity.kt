@@ -15,18 +15,27 @@ import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapterParent
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
+import `is`.hi.hbv601g.petraapp.databinding.ActivityMainBinding
+import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
+import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
 
 class ParentActivity : AppCompatActivity() {
     private lateinit var ChildList: ArrayList<Child>
     private lateinit var mCreateNewChild: Button
-
+    lateinit var binding: ActivityParentBinding
     companion object {
         const val TAG: String = "ParentActivity"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_parent)
+        binding = ActivityParentBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+
+        val fragmentTransaction = supportFragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.bottom_nav, BottomNavLoggedIn());
+        fragmentTransaction.commit();
 
         val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
 
