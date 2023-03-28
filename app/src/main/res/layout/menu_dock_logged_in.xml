@@ -6,7 +6,9 @@
     android:layout_height="60dp"
     android:gravity="center_vertical"
     android:layout_gravity="bottom"
-    android:background="@drawable/rounded_corner">
+    android:background="@drawable/rounded_corner"
+    android:windowSoftInputMode="adjustPan"
+    >
 
     <ImageButton
         android:id="@+id/action_bar_home"
