@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".CreateChildActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/nytt_barn_title"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:paddingBottom="5pt"
+        />
+
+    <EditText
+        android:id="@+id/ssn"
+        android:layout_width="400pt"
+        android:layout_height="wrap_content"
+        android:hint="@string/kt"
+        />
+
+    <EditText
+        android:id="@+id/childsFirstName"
+        android:layout_width="400pt"
+        android:layout_height="wrap_content"
+        android:hint="@string/nafn"
+        />
+    <EditText
+        android:id="@+id/childsLastName"
+        android:layout_width="400pt"
+        android:layout_height="wrap_content"
+        android:hint="@string/eftirnafn"
+        />
+
+    <Button
+        android:id="@+id/createChildButton"
+        android:layout_width="300dp"
+        android:layout_height="40dp"
+        android:text="@string/nytt_barn_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintVertical_bias="0.0"
+        />
+
+
+</LinearLayout>

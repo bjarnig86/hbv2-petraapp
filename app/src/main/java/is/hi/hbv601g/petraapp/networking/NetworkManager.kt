@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.Log
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.auth0.android.result.UserProfile
@@ -181,24 +182,32 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
-    fun createChild(auth0id: String?, callback: NetworkCallback<Child>) {
+
+    fun createChild(auth0id: String?, child: Child, callback: NetworkCallback<Child>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("createchild")
             .appendPath(auth0id)
             .build().toString()
-
         val request = object : Utf8StringRequest(
             Method.POST, url,
             Response.Listener { response ->
                 val gson = Gson()
-                val child = gson.fromJson(response, Child::class.java)
-                callback.onSuccess(child)
+                val returnChild = gson.fromJson(response, Child::class.java)
+                callback.onSuccess(returnChild)
             },
             Response.ErrorListener { error ->
                 callback.onFailure(error.toString())
+            },
+        ) {
+            override fun getParams(): MutableMap<String, String>? {
+                val map = HashMap<String, String>()
+                map.put("firstName", child.firstName)
+                map.put("lastName", child.lastName)
+                map.put("ssn", child.ssn)
+                return map
             }
-        ) {}
+        }
         mQueue?.add(request)
     }
     // Rest of the class implementation goes here

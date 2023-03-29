@@ -1,11 +1,13 @@
 package `is`.hi.hbv601g.petraapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -14,6 +16,7 @@ import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapterParent
 import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
+import `is`.hi.hbv601g.petraapp.CreateChildActivity
 
 
 class ParentActivity : AppCompatActivity() {
@@ -44,8 +47,10 @@ class ParentActivity : AppCompatActivity() {
         ChildList = obj.children as ArrayList<Child>;
 
         mCreateNewChild = findViewById(R.id.newChildButton)
-        mCreateNewChild.setOnClickListener {
-            Toast.makeText(this@ParentActivity, "Create new child!", Toast.LENGTH_SHORT).show()
+        mCreateNewChild.setOnClickListener{
+            val intent = Intent(this, CreateChildActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
         }
 
         val adapter = ChildAdapterParent(ChildList,this);
