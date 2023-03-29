@@ -20,6 +20,7 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
     private lateinit var mNavBar: View;
     private lateinit var mPetraBtn: ImageButton
     private lateinit var mHomeBtn: ImageButton
+    private lateinit var mUserBtn: ImageButton
     lateinit var res: Drawable;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -32,6 +33,7 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
         mNavBar = root.findViewById(R.id.custom_action_bar)
         mPetraBtn = root.findViewById(R.id.action_bar_petra)
         mHomeBtn = root.findViewById(R.id.action_bar_home)
+        mUserBtn = root.findViewById(R.id.action_bar_user)
 
         // Disabling and handling which acvitity user is on
         if (activity is ParentActivity) {
@@ -67,6 +69,12 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
             // one only if no previous existed
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             startActivity(intent)
+        }
+
+        mUserBtn.setOnClickListener {
+            if (activity is MainActivity) {
+                (activity as MainActivity?)?.logout()
+            }
         }
 
         return root

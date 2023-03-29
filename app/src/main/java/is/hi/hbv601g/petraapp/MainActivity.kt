@@ -395,9 +395,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 override fun onSuccess(result: Void?) {
                     // The user has been logged out!
                     User.setUser(null)
-                    handleGreetingInActionBar()
 //                    handleButtonsOnLoginAndLogout()
                     clearSharedPreferences()
+                    handleGreetingInActionBar()
                 }
 
                 override fun onFailure(error: AuthenticationException) {

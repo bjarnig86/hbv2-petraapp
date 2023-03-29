@@ -10,27 +10,29 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingHorizontal="20pt"
-        android:paddingTop="10pt"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center|left">
+            android:paddingRight="10dp"
+            >
 
             <Button
                 android:id="@+id/login_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/login_button" />
+                android:text="@string/login_button"
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center">
+            android:paddingLeft="10dp"
+            >
 
             <Button
                 android:id="@+id/register_button"
@@ -39,30 +41,30 @@
                 android:text="@string/register_button" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center|right">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center|right">-->
 
-            <Button
-                android:id="@+id/dcw_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/dcw_button" />
-        </RelativeLayout>
+<!--            <Button-->
+<!--                android:id="@+id/dcw_button"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/dcw_button" />-->
+<!--        </RelativeLayout>-->
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:gravity="center">-->
 
-            <Button
-                android:id="@+id/parent_button"
-                android:layout_width="50pt"
-                android:layout_height="wrap_content"
-                android:text="Börn"></Button>
-        </RelativeLayout>
+<!--            <Button-->
+<!--                android:id="@+id/parent_button"-->
+<!--                android:layout_width="50pt"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Börn"></Button>-->
+<!--        </RelativeLayout>-->
     </LinearLayout>
 
 
