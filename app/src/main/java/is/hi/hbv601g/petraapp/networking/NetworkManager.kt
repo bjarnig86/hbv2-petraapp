@@ -1,22 +1,19 @@
 package `is`.hi.hbv601g.petraapp.networking
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.auth0.android.result.UserProfile
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import `is`.hi.hbv601g.petraapp.Entities.*
-import `is`.hi.hbv601g.petraapp.R
+import org.json.JSONObject
 import java.lang.reflect.Type
-import java.util.Base64.Encoder
 
 
 class NetworkManager private constructor(context: Context) {
@@ -27,7 +24,6 @@ class NetworkManager private constructor(context: Context) {
 
     companion object {
         private var INSTANCE: NetworkManager? = null
-
         fun getInstance(context: Context): NetworkManager {
             if (INSTANCE == null) {
                 INSTANCE = NetworkManager(context)
@@ -188,12 +184,15 @@ class NetworkManager private constructor(context: Context) {
             .buildUpon()
             .appendPath("createchild")
             .build().toString()
-        val request = object : Utf8StringRequest(
-            Method.POST, url,
+        val gson = Gson()
+        val child2: ParentChildDTO = ParentChildDTO(child.ssn, child.firstName, child.lastName, parent.id.toString())
+
+        val ob = JSONObject(gson.toJson(child2))
+        val request = object : JsonObjectRequest(
+            url, ob,
             Response.Listener { response ->
-                System.out.println(response)
-                val gson = Gson()
-                val returnChild = gson.fromJson(response, Child::class.java)
+                val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
+                val returnChild: Child = gson.fromJson(element,Child::class.java)
                 callback.onSuccess(returnChild)
             },
             Response.ErrorListener { error ->
@@ -201,14 +200,11 @@ class NetworkManager private constructor(context: Context) {
                 callback.onFailure(error.toString())
             },
         ) {
-            override fun getParams(): MutableMap<String, String>? {
-                val map = HashMap<String, String>()
-                map.put("firstName", child.firstName)
-                map.put("lastName", child.lastName)
-                map.put("ssn", child.ssn)
-                map.put("parentId", parent.id.toString())
-                return map
+            /* TO BE TESTED
+            override fun getBodyContentType(): String {
+                return "firstName=${child.firstName}&lastName=${child.lastName}&ssn=${child.ssn}&parentId=${parent.id}"
             }
+             */
         }
         mQueue?.add(request)
     }

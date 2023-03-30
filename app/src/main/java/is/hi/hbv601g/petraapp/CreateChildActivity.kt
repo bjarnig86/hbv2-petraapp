@@ -42,9 +42,10 @@ class CreateChildActivity : AppCompatActivity() {
             mFirstName = findViewById(R.id.childsFirstName)
             mLastName = findViewById(R.id.childsLastName)
             mSSN = findViewById(R.id.ssn)
-            networkManager.createChild(auth0id, Child(mSSN.toString(), mFirstName.toString(), mLastName.toString()), parent, object: NetworkCallback<Child>{
+            val child = Child(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
+            networkManager.createChild(auth0id, child, parent, object: NetworkCallback<Child>{
                 override fun onSuccess(result: Child) {
-                    System.out.println("hola,")
+                    System.out.println("hola")
                 }
 
                 override fun onFailure(errorString: String) {
