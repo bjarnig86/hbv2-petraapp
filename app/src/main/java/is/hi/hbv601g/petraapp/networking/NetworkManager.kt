@@ -183,20 +183,21 @@ class NetworkManager private constructor(context: Context) {
     }
 
 
-    fun createChild(auth0id: String?, child: Child, callback: NetworkCallback<Child>) {
+    fun createChild(auth0id: String?, child: Child, parent: Parent, callback: NetworkCallback<Child>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("createchild")
-            .appendPath(auth0id)
             .build().toString()
         val request = object : Utf8StringRequest(
             Method.POST, url,
             Response.Listener { response ->
+                System.out.println(response)
                 val gson = Gson()
                 val returnChild = gson.fromJson(response, Child::class.java)
                 callback.onSuccess(returnChild)
             },
             Response.ErrorListener { error ->
+                System.out.println(error)
                 callback.onFailure(error.toString())
             },
         ) {
@@ -205,6 +206,7 @@ class NetworkManager private constructor(context: Context) {
                 map.put("firstName", child.firstName)
                 map.put("lastName", child.lastName)
                 map.put("ssn", child.ssn)
+                map.put("parentId", parent.id.toString())
                 return map
             }
         }
