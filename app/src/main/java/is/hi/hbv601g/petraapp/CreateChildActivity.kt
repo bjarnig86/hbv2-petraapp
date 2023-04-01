@@ -45,7 +45,8 @@ class CreateChildActivity : AppCompatActivity() {
             val child = Child(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
             networkManager.createChild(auth0id, child, parent, object: NetworkCallback<Child>{
                 override fun onSuccess(result: Child) {
-                    System.out.println("hola")
+                    finishActivity(0)
+                    return
                 }
 
                 override fun onFailure(errorString: String) {

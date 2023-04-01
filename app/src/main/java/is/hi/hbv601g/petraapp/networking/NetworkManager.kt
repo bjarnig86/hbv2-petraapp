@@ -184,13 +184,11 @@ class NetworkManager private constructor(context: Context) {
             .buildUpon()
             .appendPath("createchild")
             .build().toString()
-        val gson = Gson()
-        val child2: ParentChildDTO = ParentChildDTO(child.ssn, child.firstName, child.lastName, parent.id.toString())
 
-        val ob = JSONObject(gson.toJson(child2))
-        val request = object : JsonObjectRequest(
-            url, ob,
+        val request = object : Utf8StringRequest(
+            Method.POST, url,
             Response.Listener { response ->
+                val gson = Gson()
                 val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
                 val returnChild: Child = gson.fromJson(element,Child::class.java)
                 callback.onSuccess(returnChild)
@@ -200,11 +198,19 @@ class NetworkManager private constructor(context: Context) {
                 callback.onFailure(error.toString())
             },
         ) {
-            /* TO BE TESTED
             override fun getBodyContentType(): String {
-                return "firstName=${child.firstName}&lastName=${child.lastName}&ssn=${child.ssn}&parentId=${parent.id}"
+                return "application/json; charset=utf-8"
             }
-             */
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val jsonObject = JsonObject().apply {
+                    addProperty("fristName", child.firstName)
+                    addProperty("lastName", child.lastName)
+                    addProperty("ssn", child.ssn)
+                    addProperty("parentId", parent.id.toString())
+                }
+                return gson.toJson(jsonObject).toString().toByteArray()
+            }
         }
         mQueue?.add(request)
     }
