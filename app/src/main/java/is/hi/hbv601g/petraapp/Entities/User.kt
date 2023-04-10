@@ -13,6 +13,7 @@ data class User(
         private var instance: UserProfile? = null
         var firstName: String? = null
         var email: String? = null
+        var id: Long? = null
         var role: String? = null
         var account = Auth0(
             clientId = "ox325QZVYQitbySZYq0CZOW5vJLs9r4Q",

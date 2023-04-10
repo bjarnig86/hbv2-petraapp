@@ -33,21 +33,26 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="6dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/ic_user_icon"
                         android:scaleType="centerCrop"
-                        android:contentDescription="User Icon"
-                        />
+                        android:contentDescription="User Icon"/>
+
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center_vertical|left"
-                        android:paddingLeft="10dp"
-                        >
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|start"
+                        android:paddingStart="10dp">
+
                         <TextView
                             android:id="@+id/card_title"
                             android:layout_width="wrap_content"
@@ -55,19 +60,46 @@
                             android:text="Titill"
                             android:textColor="@color/primaryVariant"
                             android:textStyle="bold"
-                            android:textAppearance="?attr/textAppearanceHeadline6"
-                            />
+                            android:textAppearance="?attr/textAppearanceHeadline6"/>
+
                         <TextView
                             android:id="@+id/card_sub_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="SubTitill"
                             android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="@color/primary"
-                            />
+                            android:textColor="@color/primary"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="0.3"
+                        android:gravity="end|center_vertical"
+                        android:paddingVertical="10dp">
+
+                        <TextView
+                            android:id="@+id/free_spots"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:textAlignment="center"
+                            android:textSize="24sp"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="@color/primary"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="center"
+                            android:text="@string/free_spots"
+                            android:textSize="10dp"
+                            android:textAppearance="?attr/textAppearanceBody2"
+                            android:textColor="@color/primary"/>
+
                     </LinearLayout>
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -133,6 +165,11 @@
                             />
                     </LinearLayout>
 
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -146,12 +183,10 @@
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textColor="@color/primary"
                             />
-
                         <Space
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"/>
-
                         <TextView
                             android:id="@+id/card_list_email_content"
                             android:layout_width="wrap_content"
@@ -233,11 +268,12 @@
                 android:layout_margin="8dp"
                 android:orientation="horizontal">
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/apply_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:textColor="@color/primaryVariant"
-                    android:text="Sækja um"
+                    android:text="@string/apply_btn_text"
                     style="?attr/borderlessButtonStyle"
                     />
             </LinearLayout>

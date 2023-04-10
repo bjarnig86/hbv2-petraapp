@@ -1,5 +1,6 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+<<<<<<< Updated upstream
+=======
+import androidx.fragment.app.DialogFragment
+>>>>>>> Stashed changes
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -15,8 +20,11 @@ import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapterParent
 import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
+<<<<<<< Updated upstream
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
+=======
+>>>>>>> Stashed changes
 
 
 class ParentActivity : AppCompatActivity() {
@@ -94,23 +102,44 @@ class ParentActivity : AppCompatActivity() {
         Log.d(TAG, "onStart: ")
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d(CreateChildFragment.TAG, "onStart: ")
+    }
+
     override fun onResume() {
         super.onResume()
+<<<<<<< Updated upstream
         Log.d(TAG, "onResume: ")
+=======
+        Log.d(CreateChildFragment.TAG, "onResume: ")
+>>>>>>> Stashed changes
     }
 
     override fun onDestroy() {
         super.onDestroy()
+<<<<<<< Updated upstream
         Log.d(TAG, "onDestroy: ")
+=======
+        Log.d(CreateChildFragment.TAG, "onDestroy: ")
+>>>>>>> Stashed changes
     }
 
     override fun onStop() {
         super.onStop()
+<<<<<<< Updated upstream
         Log.d(TAG, "onStop: ")
+=======
+        Log.d(CreateChildFragment.TAG, "onStop: ")
+>>>>>>> Stashed changes
     }
 
     override fun onPause() {
         super.onPause()
+<<<<<<< Updated upstream
         Log.d(TAG, "onPause: ")
+=======
+        Log.d(CreateChildFragment.TAG, "onPause: ")
+>>>>>>> Stashed changes
     }
 }

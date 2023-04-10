@@ -235,5 +235,41 @@ class NetworkManager private constructor(context: Context) {
         }
         mQueue?.add(request)
     }
+
+    fun applyToDCW(childId: Long, parentId: Long, dcwId: Long, callback: NetworkCallback<ApplicationDTO>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("daycareworker")
+            .appendPath("apply")
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.POST, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
+                val application: ApplicationDTO = gson.fromJson(element, ApplicationDTO::class.java)
+                callback.onSuccess(application)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            },
+        ) {
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val jsonObject = JsonObject().apply {
+                    addProperty("daycareWorkerId", dcwId)
+                    addProperty("parentId", parentId)
+                    addProperty("childId", childId)
+                }
+                return gson.toJson(jsonObject).toString().toByteArray()
+            }
+        }
+        mQueue?.add(request)
+    }
     // Rest of the class implementation goes here
 }

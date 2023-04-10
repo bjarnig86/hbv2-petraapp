@@ -32,11 +32,17 @@
     <string name="foreldri">Foreldri</string>
     <string name="plus">+</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="application_welcome_text">Hæ %1$s, þú ert að fara að sækja um pláss hjá %2$s</string>
+    <string name="application_instruction_text">Veldu barn:</string>
     <string name="nytt_barn_title">Búa til Barn</string>
     <string name="kt">Kennitala</string>
     <string name="nafn">Nafn</string>
     <string name="eftirnafn">Eftirnafn</string>
     <string name="cancel_button">Hætta við</string>
+<<<<<<< Updated upstream
     <string name="create_child_error">Fylla verður í alla reiti!</string>
+    <string name="apply_btn_text">Sækja um</string>
+    <string name="free_spots">laus pláss</string>
+=======
+>>>>>>> Stashed changes
 </resources>

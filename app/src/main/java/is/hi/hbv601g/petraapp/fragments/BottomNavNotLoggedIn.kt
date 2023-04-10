@@ -96,11 +96,13 @@ class BottomNavNotLoggedIn : Fragment() {
                     Log.d(MainActivity.TAG +"userinfo", "onSuccess: $result")
                     User.firstName = result.firstName
                     User.role = userRole
+                    User.id = result.id.toLong()
 
                     // save to sharedpreferences
                     SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
                     SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
                     SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ID", auth0id)
+                    SharedPreferencesUtil.saveStringToSharedPreferences(context,"PARENT_ID", result.id.toString())
                     SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ROLE", userRole)
 
                     val intent = Intent(requireContext(), ParentActivity::class.java)

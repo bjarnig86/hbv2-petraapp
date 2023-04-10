@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
                     override fun afterTextChanged(p0: Editable?) {
                         if (mSearchQueryView.text.isBlank()) {
-                            val adapter = DaycareWorkerCardAdapter(mDCWList)
+                            val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity)
                             mDCWRecyclerView.adapter = adapter
 
                             this@MainActivity.currentFocus?.let { view ->
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     }
                 }
 
-                val filteredAdapter = DaycareWorkerCardAdapter(filteredList)
+                val filteredAdapter = DaycareWorkerCardAdapter(filteredList, this)
                 mDCWRecyclerView.adapter = filteredAdapter
 
                 Toast.makeText(this@MainActivity, "${filteredList.size} dagforeldri fundust!", Toast.LENGTH_SHORT).show()
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     imm?.hideSoftInputFromWindow(view.windowToken, 0)
                 }
             } else {
-                val filteredAdapter = DaycareWorkerCardAdapter(mDCWList)
+                val filteredAdapter = DaycareWorkerCardAdapter(mDCWList, this)
                 mDCWRecyclerView.adapter = filteredAdapter
 
                 this.currentFocus?.let { view ->
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 mDCWList = result.toMutableList()
                 Log.d(TAG, "Successfully fetched DCWs ${mDCWList.size}")
                 // List of cards logic
-                val adapter = DaycareWorkerCardAdapter(mDCWList);
+                val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity);
                 mDCWRecyclerView.adapter = adapter;
                 mDCWRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
                 mDCWRecyclerView.visibility = View.VISIBLE
