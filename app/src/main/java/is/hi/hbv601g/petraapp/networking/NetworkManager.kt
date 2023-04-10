@@ -22,7 +22,6 @@ class NetworkManager private constructor(context: Context) {
 
     companion object {
         private var INSTANCE: NetworkManager? = null
-
         fun getInstance(context: Context): NetworkManager {
             if (INSTANCE == null) {
                 INSTANCE = NetworkManager(context)
@@ -183,16 +182,16 @@ class NetworkManager private constructor(context: Context) {
             .buildUpon()
             .appendPath("createchild")
             .build().toString()
+
         val request = object : Utf8StringRequest(
             Method.POST, url,
             Response.Listener { response ->
-                println(response)
                 val gson = Gson()
-                val returnChild = gson.fromJson(response, Child::class.java)
+                val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
+                val returnChild: Child = gson.fromJson(element,Child::class.java)
                 callback.onSuccess(returnChild)
             },
             Response.ErrorListener { error ->
-                println(error)
                 callback.onFailure(error.toString())
             },
         ) {

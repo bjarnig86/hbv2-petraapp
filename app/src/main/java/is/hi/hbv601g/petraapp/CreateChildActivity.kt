@@ -41,14 +41,10 @@ class CreateChildActivity : AppCompatActivity() {
             mFirstName = findViewById(R.id.childsFirstName)
             mLastName = findViewById(R.id.childsLastName)
             mSSN = findViewById(R.id.ssn)
-            networkManager.createChild(
-                Child(mSSN.text.toString(),
-                    mFirstName.text.toString(),
-                    mLastName.text.toString()),
-                parent,
-                object: NetworkCallback<Child>{
+            val child = Child(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
+            networkManager.createChild(child, parent, object: NetworkCallback<Child>{
                 override fun onSuccess(result: Child) {
-                    Log.d(TAG, "onSuccess: createChild: $result")
+                    finishActivity(0)
                 }
 
                 override fun onFailure(errorString: String) {
