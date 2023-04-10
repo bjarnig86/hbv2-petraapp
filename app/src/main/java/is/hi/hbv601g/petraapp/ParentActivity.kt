@@ -1,13 +1,12 @@
 package `is`.hi.hbv601g.petraapp
 
-import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -16,11 +15,17 @@ import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapterParent
 import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
 
 class ParentActivity : AppCompatActivity() {
     private lateinit var ChildList: ArrayList<Child>
     private lateinit var mCreateNewChild: Button
+    private lateinit var mParentId: String
+    private lateinit var mProgressBar: ProgressBar
+    private lateinit var mChildrenRecyclerView: RecyclerView
+
     lateinit var binding: ActivityParentBinding
     companion object {
         const val TAG: String = "ParentActivity"
@@ -31,19 +36,41 @@ class ParentActivity : AppCompatActivity() {
         binding = ActivityParentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        mProgressBar = findViewById(R.id.progress_bar)
+        mChildrenRecyclerView = findViewById(R.id.rvChildren)
+
         // do it this way because you cannot be on this page unless logged in
         val fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.bottom_nav, BottomNavLoggedIn());
         fragmentTransaction.commit();
 
-        val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
         val preferences = getSharedPreferences("MY_APP_PREFS",
             Context.MODE_PRIVATE);
         val gson = Gson()
         val json: String? = preferences.getString("USER_KEY", "children")
         val obj: Parent = gson.fromJson(json, Parent::class.java)
+        mParentId = obj.id.toString()
 
-        ChildList = obj.children as ArrayList<Child>;
+        val nm = NetworkManager.getInstance(this)
+
+        nm.getChildrenByParent(mParentId, object: NetworkCallback<List<Child>> {
+            override fun onSuccess(result: List<Child>) {
+                ChildList = result as ArrayList<Child>
+                val adapter = ChildAdapterParent(ChildList,this@ParentActivity);
+                val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
+                childRecyclerView.adapter = adapter;
+                childRecyclerView.layoutManager = LinearLayoutManager(this@ParentActivity);
+                mProgressBar.visibility = View.GONE
+                mChildrenRecyclerView.visibility = View.VISIBLE
+            }
+
+            override fun onFailure(errorString: String) {
+//                TODO("Not yet implemented")
+                Log.e(TAG, "onFailure: onResume: $errorString", )
+            }
+
+        })
+
 
         mCreateNewChild = findViewById(R.id.newChildButton)
         mCreateNewChild.setOnClickListener{
@@ -54,11 +81,11 @@ class ParentActivity : AppCompatActivity() {
             createChildFragment.show(supportFragmentManager, "ble")
         }
 
-        val adapter = ChildAdapterParent(ChildList,this);
-
-        childRecyclerView.adapter = adapter;
-
-        childRecyclerView.layoutManager = LinearLayoutManager(this);
+//        val adapter = ChildAdapterParent(ChildList,this);
+//
+//        childRecyclerView.adapter = adapter;
+//
+//        childRecyclerView.layoutManager = LinearLayoutManager(this);
 
     }
 

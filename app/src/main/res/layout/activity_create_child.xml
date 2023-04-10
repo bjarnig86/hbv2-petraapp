@@ -59,6 +59,16 @@
         android:layout_centerHorizontal="true"
         android:hint="@string/eftirnafn" />
 
+    <TextView
+        android:id="@+id/error_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/childsLastName"
+        android:layout_centerHorizontal="true"
+        android:textColor="@android:color/holo_red_dark">
+
+    </TextView>
+
     <Button
         android:id="@+id/createChildButton"
         android:layout_width="wrap_content"

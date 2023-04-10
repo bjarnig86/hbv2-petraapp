@@ -132,6 +132,29 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
+    fun getChildrenByParent(parentId: String, callback: NetworkCallback<List<Child>>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("parent")
+            .appendPath(parentId)
+            .appendPath("children")
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.GET, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val listType: Type = object : TypeToken<List<Child>>(){}.type
+                val children: List<Child> = gson.fromJson(response, listType)
+                callback.onSuccess(children)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue?.add(request)
+    }
+
     fun getLocations(callback: NetworkCallback<ArrayList<String>>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()

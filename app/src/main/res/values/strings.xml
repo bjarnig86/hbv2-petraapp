@@ -38,4 +38,5 @@
     <string name="nafn">Nafn</string>
     <string name="eftirnafn">Eftirnafn</string>
     <string name="cancel_button">Hætta við</string>
+    <string name="create_child_error">Fylla verður í alla reiti!</string>
 </resources>

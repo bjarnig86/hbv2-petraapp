@@ -15,9 +15,10 @@ import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.DayReportActivity
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 
 
-class ChildAdapterParent(private val mChild: List<Child>, private val context : Context) : RecyclerView.Adapter<ChildAdapterParent.ViewHolder>() {
+class ChildAdapterParent(private val mChild: List<Child>, private val context: Context) : RecyclerView.Adapter<ChildAdapterParent.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
         val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)

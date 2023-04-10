@@ -2,6 +2,7 @@ package `is`.hi.hbv601g.petraapp
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import com.google.gson.Gson
@@ -65,18 +68,24 @@ class CreateChildFragment : DialogFragment() {
         val parent: Parent = gson.fromJson(json, Parent::class.java)
 
         mCreateChildButton.setOnClickListener{
-            val child = Child(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
-            mNetworkManager.createChild(child, parent, object: NetworkCallback<Child>{
-                override fun onSuccess(result: Child) {
-                    Log.d(TAG, "onSuccess: $result")
-                    dismiss()
+            if (mSSN.text.isBlank() || mFirstName.text.isBlank() || mLastName.text.isBlank()) {
+                val errorTextView = view.findViewById<TextView>(R.id.error_msg)
+                errorTextView.text = this.getString(R.string.create_child_error)
+            } else {
+                val child = Child(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
+                mNetworkManager.createChild(child, parent, object: NetworkCallback<Child>{
+                    override fun onSuccess(result: Child) {
+                        Log.d(TAG, "onSuccess: $result")
+                        dismiss()
+                        val intent = Intent(requireContext(), ParentActivity::class.java)
+                        startActivity(intent)
+                    }
 
-                }
-
-                override fun onFailure(errorString: String) {
-                    Log.e(TAG, "onFailure: createChild: $errorString", )
-                }
-            })
+                    override fun onFailure(errorString: String) {
+                        Log.e(TAG, "onFailure: createChild: $errorString", )
+                    }
+                })
+            }
         }
 
         mCancelButton.setOnClickListener{
