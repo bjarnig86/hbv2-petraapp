@@ -1,22 +1,17 @@
 package `is`.hi.hbv601g.petraapp.networking
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.auth0.android.result.UserProfile
 import com.google.gson.Gson
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import `is`.hi.hbv601g.petraapp.Entities.*
-import `is`.hi.hbv601g.petraapp.R
 import java.lang.reflect.Type
-import java.util.Base64.Encoder
 
 
 class NetworkManager private constructor(context: Context) {
@@ -183,7 +178,7 @@ class NetworkManager private constructor(context: Context) {
     }
 
 
-    fun createChild(auth0id: String?, child: Child, parent: Parent, callback: NetworkCallback<Child>) {
+    fun createChild(child: Child, parent: Parent, callback: NetworkCallback<Child>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("createchild")
@@ -191,23 +186,29 @@ class NetworkManager private constructor(context: Context) {
         val request = object : Utf8StringRequest(
             Method.POST, url,
             Response.Listener { response ->
-                System.out.println(response)
+                println(response)
                 val gson = Gson()
                 val returnChild = gson.fromJson(response, Child::class.java)
                 callback.onSuccess(returnChild)
             },
             Response.ErrorListener { error ->
-                System.out.println(error)
+                println(error)
                 callback.onFailure(error.toString())
             },
         ) {
-            override fun getParams(): MutableMap<String, String>? {
-                val map = HashMap<String, String>()
-                map.put("firstName", child.firstName)
-                map.put("lastName", child.lastName)
-                map.put("ssn", child.ssn)
-                map.put("parentId", parent.id.toString())
-                return map
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val jsonObject = JsonObject().apply {
+                    addProperty("firstName", child.firstName)
+                    addProperty("lastName", child.lastName)
+                    addProperty("ssn", child.ssn)
+                    addProperty("parentId", parent.id.toString())
+                }
+                return gson.toJson(jsonObject).toString().toByteArray()
             }
         }
         mQueue?.add(request)

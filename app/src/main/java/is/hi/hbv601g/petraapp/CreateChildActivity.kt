@@ -36,24 +36,27 @@ class CreateChildActivity : AppCompatActivity() {
         val gson = Gson()
         val json: String? = preferences.getString("USER_KEY", "children")
         val parent: Parent = gson.fromJson(json, Parent::class.java)
-        val auth0id = parent?.auth0Id as String
 
         mCreateChildButton.setOnClickListener{
             mFirstName = findViewById(R.id.childsFirstName)
             mLastName = findViewById(R.id.childsLastName)
             mSSN = findViewById(R.id.ssn)
-            networkManager.createChild(auth0id, Child(mSSN.toString(), mFirstName.toString(), mLastName.toString()), parent, object: NetworkCallback<Child>{
+            networkManager.createChild(
+                Child(mSSN.text.toString(),
+                    mFirstName.text.toString(),
+                    mLastName.text.toString()),
+                parent,
+                object: NetworkCallback<Child>{
                 override fun onSuccess(result: Child) {
-                    System.out.println("hola,")
+                    Log.d(TAG, "onSuccess: createChild: $result")
                 }
 
                 override fun onFailure(errorString: String) {
-                    System.out.println(errorString)
+                    Log.e(TAG, "onFailure: createChild: $errorString", )
                 }
             })
         }
     }
-
 
     override fun onStart() {
         super.onStart()

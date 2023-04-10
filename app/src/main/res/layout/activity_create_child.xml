@@ -19,20 +19,20 @@
 
     <EditText
         android:id="@+id/ssn"
-        android:layout_width="400pt"
+        android:layout_width="100pt"
         android:layout_height="wrap_content"
         android:hint="@string/kt"
         />
 
     <EditText
         android:id="@+id/childsFirstName"
-        android:layout_width="400pt"
+        android:layout_width="100pt"
         android:layout_height="wrap_content"
         android:hint="@string/nafn"
         />
     <EditText
         android:id="@+id/childsLastName"
-        android:layout_width="400pt"
+        android:layout_width="100pt"
         android:layout_height="wrap_content"
         android:hint="@string/eftirnafn"
         />
