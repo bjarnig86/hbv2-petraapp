@@ -33,7 +33,7 @@ class ParentActivity : AppCompatActivity() {
         binding = ActivityParentBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        // do it this way because you cannot be on this page unless logged in
         val fragmentTransaction = supportFragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.bottom_nav, BottomNavLoggedIn());
         fragmentTransaction.commit();

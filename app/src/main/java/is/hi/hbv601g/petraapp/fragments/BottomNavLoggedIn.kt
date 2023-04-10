@@ -1,20 +1,27 @@
 package `is`.hi.hbv601g.petraapp.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import com.auth0.android.authentication.AuthenticationException
+import com.auth0.android.callback.Callback
+import com.auth0.android.provider.WebAuthProvider
 import `is`.hi.hbv601g.petraapp.DcwActivity
 import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.MainActivity
 import `is`.hi.hbv601g.petraapp.ParentActivity
 import `is`.hi.hbv601g.petraapp.R
+import `is`.hi.hbv601g.petraapp.utils.SharedPreferencesUtil
 
 class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
     private lateinit var mNavBar: View;
@@ -72,11 +79,30 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
         }
 
         mUserBtn.setOnClickListener {
-            if (activity is MainActivity) {
-                (activity as MainActivity?)?.logout()
-            }
+            logout(requireContext())
         }
 
         return root
+    }
+
+    fun logout(context: Context) {
+        WebAuthProvider.logout(User.account)
+            .withScheme("demo")
+            .start(context, object : Callback<Void?, AuthenticationException> {
+                override fun onSuccess(result: Void?) {
+                    // The user has been logged out!
+                    User.setUser(null)
+                    SharedPreferencesUtil.clearSharedPreferences(context)
+
+                    // Go to main activity if logout is successful
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                }
+
+                override fun onFailure(error: AuthenticationException) {
+                    // TODO: not yet implemented (maybe just log this...)
+                    Log.e(MainActivity.TAG, "onFailure: Failed to finish the logout", error)
+                }
+            })
     }
 }
