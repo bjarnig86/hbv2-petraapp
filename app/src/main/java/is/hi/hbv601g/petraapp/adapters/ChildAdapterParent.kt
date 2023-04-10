@@ -27,12 +27,7 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
 
         val ssnTitleViewContent = itemView.findViewById<TextView>(R.id.child_card_list_ssn_content);
 
-        val alertBtn = itemView.findViewById<ImageButton>(R.id.danger_button);
-
         val notifySickness = itemView.findViewById<MaterialButton>(R.id.child_card_notify_sickness)
-
-        val getReport = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
-
 
     }
 
@@ -54,19 +49,9 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         val ssn = viewHolder.ssnTitleViewContent
         ssn.text = child.ssn.toString()
 
-        val alertBtn = viewHolder.alertBtn
-        alertBtn.setOnClickListener {
-            Toast.makeText(context,"HÆTTA!", Toast.LENGTH_SHORT).show()
-        }
-
         val notifySickness = viewHolder.notifySickness
         notifySickness.setOnClickListener{
             Toast.makeText(context,"Veikindi var tylkinnt", Toast.LENGTH_SHORT).show()
-        }
-
-        val reportsGet = viewHolder.getReport
-        reportsGet.setOnClickListener{
-            Toast.makeText(context,"Sækja skýrlsu", Toast.LENGTH_SHORT).show()
         }
     }
 

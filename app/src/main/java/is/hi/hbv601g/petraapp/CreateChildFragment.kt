@@ -53,7 +53,6 @@ class CreateChildFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val preferences = requireContext().getSharedPreferences("MY_APP_PREFS",
             Context.MODE_PRIVATE)
 

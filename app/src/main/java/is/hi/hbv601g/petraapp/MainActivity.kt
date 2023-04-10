@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var accessToken: String
     lateinit var binding: ActivityMainBinding
-    val bottomNav = BottomNav()
+    private val bottomNav = BottomNav()
 
     companion object {
         const val TAG: String = "MainActivity"

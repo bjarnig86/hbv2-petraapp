@@ -73,15 +73,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"/>
 
-                    <ImageButton
-                        android:id="@+id/danger_button"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:src="@drawable/danger_icon"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="danger Icon"
-                        android:background="@color/white"
-                        />
                 </LinearLayout>
 
 
@@ -164,16 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="Tylkina veikindi"
-                    style="?attr/borderlessButtonStyle"
-                    />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/child_card_get_reports"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:text="Sækja skýrsla"
+                    android:text="Tilkynna veikindi"
                     style="?attr/borderlessButtonStyle"
                     />
             </LinearLayout>

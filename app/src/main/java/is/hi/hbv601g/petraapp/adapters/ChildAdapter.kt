@@ -30,8 +30,6 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
         val createReport = itemView.findViewById<MaterialButton>(R.id.child_card_create_report)
 
         val getReport = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapter.ViewHolder {
@@ -63,7 +61,7 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
 
             // Pass data to SecondActivity (optional)
             val childName = "${mChild.get(position).firstName} ${mChild.get(position).lastName}"
-            intent.putExtra("child", childName)
+            intent.putExtra("childName", childName)
             startActivity(context, intent, null)
         }
 

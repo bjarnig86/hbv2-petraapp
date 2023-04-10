@@ -32,6 +32,9 @@
         android:layout_width="150pt"
         android:layout_height="wrap_content"
         android:hint="@string/sleep_from"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         />
 
     <EditText
@@ -39,12 +42,18 @@
         android:layout_width="150pt"
         android:layout_height="wrap_content"
         android:hint="@string/sleep_To"
+        android:inputType="none"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         />
-    <EditText
-        android:id="@+id/report_appetite"
+
+    <Spinner
         android:layout_width="150pt"
         android:layout_height="wrap_content"
+        android:id="@+id/report_appetite"
         android:hint="@string/appetite"
+        android:spinnerMode="dropdown"
+        android:prompt="@string/search_button_text"
         />
 
     <EditText
@@ -66,7 +75,7 @@
             android:layout_width="70pt"
             android:layout_height="wrap_content"
             android:text="@string/report_create" />
-    </LinearLayout>
 
+    </LinearLayout>
 
 </LinearLayout>

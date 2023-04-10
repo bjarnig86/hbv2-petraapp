@@ -43,7 +43,7 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
         mUserBtn = root.findViewById(R.id.action_bar_user)
 
         // Disabling and handling which acvitity user is on
-        if (activity is ParentActivity) {
+        if (activity is ParentActivity || activity is DcwActivity) {
             val drawableResId = R.drawable.kerra_selected;
             val drawable = resources.getDrawable(drawableResId, null)
             mPetraBtn.setImageDrawable(drawable);

@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapter
+import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 
 
 class DcwActivity : AppCompatActivity(){
     
     private lateinit var ChildList: ArrayList<Child>
+    private val bottomNav = BottomNav()
 
     companion object {
         const val TAG: String = "DcwActivity"
@@ -20,6 +22,8 @@ class DcwActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dcw)
+
+        bottomNav.handleFragments(this, supportFragmentManager, R.id.bottom_nav)
 
         val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
 
@@ -39,15 +43,11 @@ class DcwActivity : AppCompatActivity(){
                 lastName = "Þorgrímsdóttir",
                 ssn = "5812345"
             ),
-
         );
 
         val adapter = ChildAdapter(ChildList,this);
-
         childRecyclerView.adapter = adapter;
-
         childRecyclerView.layoutManager = LinearLayoutManager(this);
-
     }
 }
 
