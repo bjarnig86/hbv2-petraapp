@@ -74,7 +74,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CreateChildActivity"
+            android:name=".CreateChildFragment"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

@@ -1,56 +1,86 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ImageButton
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
-class CreateChildActivity : AppCompatActivity() {
+class CreateChildFragment : DialogFragment() {
 
     private lateinit var mCreateChildButton: Button
+    private lateinit var mCancelButton: ImageButton
     private lateinit var mFirstName: EditText
     private lateinit var mLastName: EditText
     private lateinit var mSSN: EditText
-    val networkManager = NetworkManager.getInstance(this)
-    companion object {
-        const val TAG: String = "DayReportActivity"
-    }
+    private lateinit var mNetworkManager: NetworkManager
 
+    companion object {
+        const val TAG: String = "CreateChildFragment"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_child)
-        val preferences = getSharedPreferences("MY_APP_PREFS",
-            Context.MODE_PRIVATE);
-        mCreateChildButton = findViewById(R.id.createChildButton)
+
+        // initialize non-UI related code here, if necessary
+        mNetworkManager = NetworkManager.getInstance(requireContext())
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.activity_create_child, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+
+        val preferences = requireContext().getSharedPreferences("MY_APP_PREFS",
+            Context.MODE_PRIVATE)
+
+        mCreateChildButton = view.findViewById(R.id.createChildButton)
+        mCancelButton = view.findViewById(R.id.close_button)
+        mFirstName = view.findViewById(R.id.childsFirstName)
+        mLastName = view.findViewById(R.id.childsLastName)
+        mSSN = view.findViewById(R.id.ssn)
+
         val gson = Gson()
         val json: String? = preferences.getString("USER_KEY", "children")
         val parent: Parent = gson.fromJson(json, Parent::class.java)
 
         mCreateChildButton.setOnClickListener{
-            mFirstName = findViewById(R.id.childsFirstName)
-            mLastName = findViewById(R.id.childsLastName)
-            mSSN = findViewById(R.id.ssn)
             val child = Child(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
-            networkManager.createChild(child, parent, object: NetworkCallback<Child>{
+            mNetworkManager.createChild(child, parent, object: NetworkCallback<Child>{
                 override fun onSuccess(result: Child) {
-                    finishActivity(0)
+                    Log.d(TAG, "onSuccess: $result")
+                    dismiss()
+
                 }
 
                 override fun onFailure(errorString: String) {
                     Log.e(TAG, "onFailure: createChild: $errorString", )
                 }
             })
+        }
+
+        mCancelButton.setOnClickListener{
+            dismiss()
         }
     }
 

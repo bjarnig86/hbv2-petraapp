@@ -37,4 +37,5 @@
     <string name="kt">Kennitala</string>
     <string name="nafn">Nafn</string>
     <string name="eftirnafn">Eftirnafn</string>
+    <string name="cancel_button">Hætta við</string>
 </resources>

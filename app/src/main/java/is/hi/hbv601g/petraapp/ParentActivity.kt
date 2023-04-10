@@ -1,14 +1,13 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -17,7 +16,6 @@ import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapterParent
 import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
-import `is`.hi.hbv601g.petraapp.CreateChildActivity
 
 
 class ParentActivity : AppCompatActivity() {
@@ -49,9 +47,11 @@ class ParentActivity : AppCompatActivity() {
 
         mCreateNewChild = findViewById(R.id.newChildButton)
         mCreateNewChild.setOnClickListener{
-            val intent = Intent(this, CreateChildActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            startActivity(intent)
+//            val intent = Intent(this, CreateChildActivity::class.java)
+//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+//            startActivity(intent)
+            val createChildFragment = CreateChildFragment()
+            createChildFragment.show(supportFragmentManager, "ble")
         }
 
         val adapter = ChildAdapterParent(ChildList,this);
@@ -62,8 +62,28 @@ class ParentActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart: ")
+    }
+
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "onResume: todo: implement this!?")
+        Log.d(TAG, "onResume: ")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy: ")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop: ")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause: ")
     }
 }
