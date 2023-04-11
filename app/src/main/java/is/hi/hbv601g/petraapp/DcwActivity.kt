@@ -5,14 +5,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import `is`.hi.hbv601g.petraapp.Entities.Child
+import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapter
 import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 
 
 class DcwActivity : AppCompatActivity(){
     
-    private lateinit var ChildList: ArrayList<Child>
+    private lateinit var ChildList: ArrayList<ChildDTO>
     private val bottomNav = BottomNav()
 
     companion object {
@@ -28,17 +28,17 @@ class DcwActivity : AppCompatActivity(){
         val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
 
         ChildList = arrayListOf(
-            Child(
+            ChildDTO(
                 firstName = "Einar",
                 lastName = "Pálsson",
                 ssn = "5812345"
             ),
-            Child(
+            ChildDTO(
                 firstName = "Bjarni",
                 lastName = "Guðmundsson",
                 ssn = "5552345"
             ),
-            Child(
+            ChildDTO(
                 firstName = "Dagbjört",
                 lastName = "Þorgrímsdóttir",
                 ssn = "5812345"

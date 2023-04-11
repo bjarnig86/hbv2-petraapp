@@ -132,11 +132,11 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
-    fun getChildrenByParent(parentId: String, callback: NetworkCallback<List<Child>>) {
+    fun getChildrenByParent(parentId: Long, callback: NetworkCallback<List<Child>>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("parent")
-            .appendPath(parentId)
+            .appendPath(parentId.toString())
             .appendPath("children")
             .build().toString()
 
@@ -200,7 +200,7 @@ class NetworkManager private constructor(context: Context) {
     }
 
 
-    fun createChild(child: Child, parent: Parent, callback: NetworkCallback<Child>) {
+    fun createChild(child: ChildDTO, parent: Parent, callback: NetworkCallback<Child>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("createchild")

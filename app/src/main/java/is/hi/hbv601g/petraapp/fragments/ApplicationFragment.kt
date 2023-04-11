@@ -1,32 +1,38 @@
 package `is`.hi.hbv601g.petraapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.ListView
+import androidx.core.view.get
+import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "parent"
 private const val ARG_PARAM2 = "dcw"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ApplicationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ApplicationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private var parentId: Long? = null
+    private var dcwId: Long? = null
+
+    private lateinit var childListView: ListView
+    private lateinit var selectChildButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            parentId = it.getLong(ARG_PARAM1)
+            dcwId = it.getLong(ARG_PARAM2)
         }
     }
 
@@ -34,26 +40,50 @@ class ApplicationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_application, container, false)
+        val view = inflater.inflate(R.layout.fragment_application, container, false)
+
+        childListView = view.findViewById(R.id.child_auto_complete_text_view)
+        selectChildButton = view.findViewById(R.id.select_child_button)
+
+        val nm = NetworkManager.getInstance(requireContext())
+        parentId?.let { nm.getChildrenByParent(it, object : NetworkCallback<List<Child>> {
+            override fun onSuccess(result: List<Child>) {
+                Log.d("ApplicationFragment", "onSuccess: $result")
+                val childAdapter = ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_dropdown_item_1line,
+                    result
+                )
+                childListView.adapter = childAdapter
+                
+
+            }
+
+            override fun onFailure(errorString: String) {
+                Log.e("ApplicationFragment", "onFailure: $errorString")
+            }
+
+        }) }
+        selectChildButton.setOnClickListener {
+            // TODO: handle button click and send request with selected child's ID
+        }
+
+        childListView.onItemClickListener = AdapterView.OnItemClickListener {
+                parent, view, pos, id ->
+            val child: Child = childListView.getItemAtPosition(pos) as Child
+            Log.d("ApplicationFragment", "onCreateView: ${child.id}")
+        }
+
+        return view
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param parent Parameter 1.
-         * @param dcw Parameter 2.
-         * @return A new instance of fragment ApplicationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(parent: String, dcw: String) =
+        fun newInstance(parent: Long, dcw: Long) =
             ApplicationFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, parent)
-                    putString(ARG_PARAM2, dcw)
+                    putLong(ARG_PARAM1, parent)
+                    putLong(ARG_PARAM2, dcw)
                 }
             }
     }

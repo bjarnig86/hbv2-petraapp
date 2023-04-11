@@ -1,21 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ApplicationFragment">
+    android:background="#80000000"
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="" />
 
-    <AutoCompleteTextView
-        android:id="@+id/application_AutoCompleteTextView"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:hint="@string/application_instruction_text" />
+        android:elevation="12dp"
+        android:clipToPadding="false"
+        android:clipChildren="false"
+        android:outlineProvider="bounds"
+        android:background="@drawable/rounded_background"
+        android:padding="16dp">
 
+        <TextView
+            android:id="@+id/application_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Choose a Child"
+            android:textAlignment="center"
+            android:paddingBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_gravity="top|center_horizontal"/>
+        <LinearLayout
+            android:id="@+id/listview_container"
+            android:layout_below="@+id/application_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+        <ListView
+            android:id="@+id/child_auto_complete_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/rounded_background"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"/>
+        </LinearLayout>
+        <Button
+            android:id="@+id/select_child_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/listview_container"
+            android:layout_centerInParent="true"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="16dp"
+            android:text="Select Child"/>
+
+    </RelativeLayout>
 </FrameLayout>

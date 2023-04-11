@@ -12,11 +12,11 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.DayReportActivity
-import `is`.hi.hbv601g.petraapp.Entities.Child
+import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
 import `is`.hi.hbv601g.petraapp.R
 
 
-class ChildAdapter(private val mChild: List<Child>,private val context : Context) : RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
+class ChildAdapter(private val mChild: ArrayList<ChildDTO>, private val context: Context) : RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
         val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)
@@ -40,7 +40,7 @@ class ChildAdapter(private val mChild: List<Child>,private val context : Context
     }
 
     override fun onBindViewHolder(viewHolder: ChildAdapter.ViewHolder, position: Int) {
-        val child: Child = mChild.get(position)
+        val child: ChildDTO = mChild.get(position)
         val title = viewHolder.titleView
         title.text = child.firstName
 

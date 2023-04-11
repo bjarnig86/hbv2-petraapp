@@ -1,6 +1,7 @@
 package `is`.hi.hbv601g.petraapp.adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -8,15 +9,17 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.MainActivity
 import `is`.hi.hbv601g.petraapp.R
+import `is`.hi.hbv601g.petraapp.fragments.ApplicationFragment
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
-class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>, private val context: Context) : RecyclerView.Adapter<DaycareWorkerCardAdapter.ViewHolder>() {
+class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>, private val context: Context, private val fragmentManager: FragmentManager) : RecyclerView.Adapter<DaycareWorkerCardAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
@@ -40,6 +43,7 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>, private v
         val context = parent.context
         val inflater = LayoutInflater.from(context)
         val dcwView = inflater.inflate(R.layout.dcwcard, parent, false)
+
         return ViewHolder(dcwView)
     }
 
@@ -81,9 +85,18 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>, private v
             } else {
                 val prefs = context.getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
                 val parentId = prefs.getString("PARENT_ID", "")?.toLong()
-                val dcwId = dcw.id
+                val dcwId = dcw.id.toLong()
 
-                val nm = NetworkManager.getInstance(context)
+                val transaction = fragmentManager.beginTransaction()
+
+                val fragment = parentId?.let { it1 -> ApplicationFragment.newInstance(it1, dcwId) }
+                if (fragment != null) {
+                    transaction.add(R.id.application_fragment_layout, fragment)
+                }
+                transaction.addToBackStack(null)
+
+                // Show the background view
+                transaction.commit()
             }
         }
     }

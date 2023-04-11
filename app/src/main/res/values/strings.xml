@@ -39,10 +39,8 @@
     <string name="nafn">Nafn</string>
     <string name="eftirnafn">Eftirnafn</string>
     <string name="cancel_button">Hætta við</string>
-<<<<<<< Updated upstream
     <string name="create_child_error">Fylla verður í alla reiti!</string>
     <string name="apply_btn_text">Sækja um</string>
     <string name="free_spots">laus pláss</string>
-=======
->>>>>>> Stashed changes
+
 </resources>
