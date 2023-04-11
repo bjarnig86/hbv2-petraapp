@@ -86,10 +86,11 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>, private v
                 val prefs = context.getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
                 val parentId = prefs.getString("PARENT_ID", "")?.toLong()
                 val dcwId = dcw.id.toLong()
+                val dcwName = dcw.fullName
 
                 val transaction = fragmentManager.beginTransaction()
 
-                val fragment = parentId?.let { it1 -> ApplicationFragment.newInstance(it1, dcwId) }
+                val fragment = parentId?.let { it1 -> ApplicationFragment.newInstance(it1, dcwId, dcwName) }
                 if (fragment != null) {
                     transaction.add(R.id.application_fragment_layout, fragment)
                 }

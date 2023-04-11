@@ -7,10 +7,9 @@
 
 
     <RelativeLayout
-        android:layout_width="250dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:elevation="12dp"
         android:clipToPadding="false"
         android:clipChildren="false"
         android:outlineProvider="bounds"
@@ -21,8 +20,8 @@
             android:id="@+id/application_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Choose a Child"
-            android:textAlignment="center"
+            android:text="@string/application_instruction_text"
+            android:gravity="center_vertical|center_horizontal"
             android:paddingBottom="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -32,14 +31,15 @@
             android:layout_below="@+id/application_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="20dp"
+            android:clipChildren="true"
             android:gravity="center">
-        <ListView
-            android:id="@+id/child_auto_complete_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/rounded_background"
-            android:paddingVertical="10dp"
-            android:paddingHorizontal="20dp"/>
+            <ListView
+                android:id="@+id/child_auto_complete_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@android:drawable/list_selector_background"/>
         </LinearLayout>
         <Button
             android:id="@+id/select_child_button"
@@ -49,7 +49,7 @@
             android:layout_centerInParent="true"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginTop="16dp"
-            android:text="Select Child"/>
+            android:text="@string/apply_btn_text"/>
 
     </RelativeLayout>
 </FrameLayout>
