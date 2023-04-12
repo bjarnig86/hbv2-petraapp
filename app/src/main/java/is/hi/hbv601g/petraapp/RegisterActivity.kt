@@ -1,13 +1,20 @@
 package `is`.hi.hbv601g.petraapp
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.content.Context
 import android.widget.Button
 import android.widget.EditText
-
+import androidx.core.content.ContentProviderCompat.requireContext
+import `is`.hi.hbv601g.petraapp.Entities.Child
+import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
+import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.DaycareWorkerDTO
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
 class RegisterActivity : AppCompatActivity() {
 
@@ -22,6 +29,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var mAddress: EditText
     private lateinit var mExp: EditText
     private lateinit var mPassword: EditText
+    val networkManager = NetworkManager.getInstance(this)
+
 
     companion object {
         const val TAG: String = "RegisterActivity"
@@ -29,6 +38,7 @@ class RegisterActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_register)
 
         mFirstName = findViewById<EditText>(R.id.firstName)
@@ -47,11 +57,31 @@ class RegisterActivity : AppCompatActivity() {
             val allInputsValid = checkRequiredFields();
 
             if (allInputsValid) {
-                // call network register function
+                val dcw = DaycareWorkerDTO(
+                            mFirstName.text.toString(),
+                            mLastName.text.toString(),
+                            mEmail.text.toString(),
+                            mSSN.text.toString(),
+                            mAddress.text.toString(),
+                            mLocation.text.toString(),
+                            mLocationCode.text.toString(),
+                            mExp.text.toString().toInt(),
+                            mMobile.text.toString(),
+                            mPassword.text.toString()
+                )
+
+                networkManager.addDaycareWorker(dcw, object: NetworkCallback<DaycareWorker> {
+                    override fun onSuccess(result: DaycareWorker) {
+                        Log.d(CreateChildFragment.TAG, "onSuccess: $result")
+                    }
+
+                    override fun onFailure(errorString: String) {
+                        Log.e(CreateChildFragment.TAG, "onFailure: createChild: $errorString",)
+                    }
+                })
             }
         }
     }
-
     private fun checkRequiredFields(): Boolean {
         val requiredFields = arrayOf(
             R.id.firstName,
@@ -65,8 +95,9 @@ class RegisterActivity : AppCompatActivity() {
             R.id.experience,
             R.id.password_field
         )
-
         var isValid = true;
+
+        /*
         for (id in requiredFields) {
             val field = findViewById<EditText>(id);
             if (field.text.isEmpty()) {
@@ -74,6 +105,7 @@ class RegisterActivity : AppCompatActivity() {
                 isValid = false;
             }
         }
+        */
         return isValid
     }
 

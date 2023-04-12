@@ -16,19 +16,17 @@ import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
 import com.auth0.android.result.Credentials
 import com.auth0.android.result.UserProfile
-import `is`.hi.hbv601g.petraapp.DcwActivity
+import `is`.hi.hbv601g.petraapp.*
 import `is`.hi.hbv601g.petraapp.Entities.FullDCW
 import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.Entities.User
-import `is`.hi.hbv601g.petraapp.MainActivity
-import `is`.hi.hbv601g.petraapp.ParentActivity
-import `is`.hi.hbv601g.petraapp.R
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 import `is`.hi.hbv601g.petraapp.utils.SharedPreferencesUtil
 
 class BottomNavNotLoggedIn : Fragment() {
     private lateinit var mButtonLogin: Button
+    private lateinit var mButtonRegister: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,9 +35,14 @@ class BottomNavNotLoggedIn : Fragment() {
     ): View? {
         val root = inflater.inflate(R.layout.menu_dock_not_logged_in, container, false)
         mButtonLogin = root.findViewById(R.id.login_button)
-
+        mButtonRegister = root.findViewById(R.id.register_button)
         mButtonLogin.setOnClickListener {
             loginWithBrowser(requireContext())
+        }
+        mButtonRegister.setOnClickListener {
+            val intent = Intent(requireContext(), RegisterActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
         }
         return root
     }
