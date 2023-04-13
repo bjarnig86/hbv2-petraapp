@@ -1,6 +1,7 @@
 package `is`.hi.hbv601g.petraapp
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -72,11 +73,14 @@ class RegisterActivity : AppCompatActivity() {
 
                 networkManager.addDaycareWorker(dcw, object: NetworkCallback<DaycareWorker> {
                     override fun onSuccess(result: DaycareWorker) {
-                        Log.d(CreateChildFragment.TAG, "onSuccess: $result")
+                        val intent = Intent()
+                        intent.putExtras(intent)
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
                     }
 
                     override fun onFailure(errorString: String) {
-                        Log.e(CreateChildFragment.TAG, "onFailure: createChild: $errorString",)
+                        Log.e(CreateChildFragment.TAG, "onFailure: createChild: $errorString")
                     }
                 })
             }
@@ -97,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
         )
         var isValid = true;
 
-        /*
+
         for (id in requiredFields) {
             val field = findViewById<EditText>(id);
             if (field.text.isEmpty()) {
@@ -105,7 +109,7 @@ class RegisterActivity : AppCompatActivity() {
                 isValid = false;
             }
         }
-        */
+
         return isValid
     }
 

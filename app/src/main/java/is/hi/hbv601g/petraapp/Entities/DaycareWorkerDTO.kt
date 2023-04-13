@@ -12,5 +12,8 @@ data class DaycareWorkerDTO(
     val mobile: String,
     val password: String
 )  {
+    override fun toString(): String {
+        return super.toString()
+    }
 
 }

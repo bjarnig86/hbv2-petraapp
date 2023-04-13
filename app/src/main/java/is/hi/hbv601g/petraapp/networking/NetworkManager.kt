@@ -283,8 +283,8 @@ class NetworkManager private constructor(context: Context) {
             Response.Listener { response ->
                 val gson = Gson()
                 val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
-                val returnChild: DaycareWorker = gson.fromJson(element, DaycareWorker::class.java)
-                callback.onSuccess(returnChild)
+                val returnDaycareWorker: DaycareWorker = gson.fromJson(element, DaycareWorker::class.java)
+                callback.onSuccess(returnDaycareWorker)
             },
             Response.ErrorListener { error ->
                 callback.onFailure(error.toString())
@@ -307,7 +307,6 @@ class NetworkManager private constructor(context: Context) {
                     addProperty("location", dcw.location)
                     addProperty("locationCode", dcw.locationCode)
                     addProperty("password", dcw.password)
-
                 }
                 return gson.toJson(jsonObject).toString().toByteArray()
             }
