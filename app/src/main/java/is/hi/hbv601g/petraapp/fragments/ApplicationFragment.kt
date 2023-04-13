@@ -57,8 +57,9 @@ class ApplicationFragment : Fragment() {
         greeting.text = "Veldu barn fyrir umsókn hjá \n$dcwName"
 
         val nm = NetworkManager.getInstance(requireContext())
-        parentId?.let { nm.getChildrenByParent(it, object : NetworkCallback<List<Child>> {
+        parentId?.let { nm.getUnregisteredChildrenByParent(it, object : NetworkCallback<List<Child>> {
             override fun onSuccess(result: List<Child>) {
+
                 Log.d(TAG, "onSuccess: $result")
                 val childAdapter = ArrayAdapter(
                     requireContext(),

@@ -8,7 +8,9 @@ data class Child(
     val firstName: String,
     val lastName: String,
     val sicknessDay: LocalDate? = null,
-    val dayReports: MutableList<DayReport>? = null
+    val dayReports: MutableList<DayReport>? = null,
+    val daycare_worker_id: Int? = null,
+    val parent_id: Int? = null
 ) {
     override fun toString(): String {
         return "$firstName $lastName"
