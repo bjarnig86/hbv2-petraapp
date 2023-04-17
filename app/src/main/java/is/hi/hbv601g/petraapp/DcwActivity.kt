@@ -33,6 +33,7 @@ class DcwActivity : AppCompatActivity(){
         val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
 
         val networkManager = NetworkManager.getInstance(this)
+        Log.d(TAG, "onCreate: dcwId = ${User.id}")
         networkManager.getChildrenByDCW(User.id!!, object: NetworkCallback<List<Child>> {
             override fun onSuccess(result: List<Child>) {
                 Log.d(TAG, "onSuccess: ${result[0].daycare_worker_id} dcwId")

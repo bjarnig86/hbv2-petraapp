@@ -71,7 +71,10 @@ class CreateChildFragment : DialogFragment() {
                 val errorTextView = view.findViewById<TextView>(R.id.error_msg)
                 errorTextView.text = this.getString(R.string.create_child_error)
             } else {
-                val child = ChildDTO(mSSN.text.toString(), mFirstName.text.toString(), mLastName.text.toString())
+                val child = ChildDTO(
+                    ssn = mSSN.text.toString(),
+                    firstName = mFirstName.text.toString(),
+                    lastName = mLastName.text.toString())
                 mNetworkManager.createChild(child, parent, object: NetworkCallback<Child>{
                     override fun onSuccess(result: Child) {
                         Log.d(TAG, "onSuccess: $result")
