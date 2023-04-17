@@ -156,11 +156,11 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
-    fun getChildrenByDCW(dcwId: Long, callback: NetworkCallback<List<Child>>) {
+    fun getChildrenByDCW(dcwId: String, callback: NetworkCallback<List<Child>>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("daycareworker")
-            .appendPath(dcwId.toString())
+            .appendPath(dcwId)
             .appendPath("children")
             .build().toString()
 

@@ -15,12 +15,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.auth0.android.result.UserProfile
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.FullDCW
+import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.databinding.ActivityMainBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
+import `is`.hi.hbv601g.petraapp.utils.SharedPreferencesUtil
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -34,6 +38,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
 
     private lateinit var accessToken: String
+    private lateinit var userRole: String
     lateinit var binding: ActivityMainBinding
     private val bottomNav = BottomNav()
 
@@ -53,6 +58,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         // retrieve user if in sharedPrefrences
         val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
         accessToken = prefs.getString("ACCESS_TOKEN", "").toString()
+        userRole = prefs.getString("USER_ROLE", null).toString()
 
         // get the progress bar
         mProgressBar = findViewById(R.id.progress_bar)

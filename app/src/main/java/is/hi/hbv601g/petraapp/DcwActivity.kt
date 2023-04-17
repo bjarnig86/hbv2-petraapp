@@ -1,5 +1,6 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -28,15 +29,17 @@ class DcwActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dcw)
 
+        val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        val dcwId = prefs.getString("DCW_ID", "")
+
         bottomNav.handleFragments(this, supportFragmentManager, R.id.bottom_nav)
 
         val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
 
         val networkManager = NetworkManager.getInstance(this)
-        Log.d(TAG, "onCreate: dcwId = ${User.id}")
-        networkManager.getChildrenByDCW(User.id!!, object: NetworkCallback<List<Child>> {
+        Log.d(TAG, "onCreate: dcwId = ${dcwId}")
+        networkManager.getChildrenByDCW(dcwId!!, object: NetworkCallback<List<Child>> {
             override fun onSuccess(result: List<Child>) {
-                Log.d(TAG, "onSuccess: ${result[0].daycare_worker_id} dcwId")
                 ChildList = result as ArrayList<Child>
                 val adapter = ChildAdapter(ChildList,this@DcwActivity);
                 childRecyclerView.adapter = adapter;

@@ -93,54 +93,60 @@ class BottomNavNotLoggedIn : Fragment() {
         val auth0id = user?.getId() as String
         val networkManager = NetworkManager.getInstance(context)
 
-        if (userRole == "Parent") {
-            networkManager.getParent(auth0id, object: NetworkCallback<Parent> {
-                override fun onSuccess(result: Parent) {
-                    Log.d(MainActivity.TAG +"userinfo", "onSuccess: $result")
-                    User.firstName = result.firstName
-                    User.role = userRole
-                    User.id = result.id.toLong()
+        when (userRole) {
+            "Parent" -> {
+                networkManager.getParent(auth0id, object: NetworkCallback<Parent> {
+                    override fun onSuccess(result: Parent) {
+                        Log.d(MainActivity.TAG +"userinfo", "onSuccess: $result")
+                        User.firstName = result.firstName
+                        User.role = userRole
+                        User.id = result.id?.toLong()
 
-                    // save to sharedpreferences
-                    SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ID", auth0id)
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context,"PARENT_ID", result.id.toString())
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ROLE", userRole)
+                        // save to sharedpreferences
+                        SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ID", auth0id)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context,"PARENT_ID", result.id.toString())
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ROLE", userRole)
 
-                    val intent = Intent(requireContext(), ParentActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
+                        val intent = Intent(requireContext(), ParentActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
 
-                override fun onFailure(errorString: String) {
-                    Log.e(MainActivity.TAG +"userinfo", "onFailure: $errorString", )
-                }
-            })
-        } else if (userRole == "DCW") {
-            networkManager.getFullDCW(userEmail, object: NetworkCallback<FullDCW> {
-                override fun onSuccess(result: FullDCW) {
-                    Log.d("${MainActivity.TAG} userinfo", "onSuccess: $result")
-                    User.firstName = result.firstName
-                    User.role = userRole
-                    User.id = result.id?.toLong()
-                    // save to sharedpreferences
-                    SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context, "USER_ID", auth0id)
-                    SharedPreferencesUtil.saveStringToSharedPreferences(context, "USER_ROLE", userRole)
-                    val intent = Intent(requireContext(), DcwActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
-                }
+                    override fun onFailure(errorString: String) {
+                        Log.e(MainActivity.TAG +"userinfo", "onFailure: $errorString", )
+                    }
+                })
+            }
+            "DCW" -> {
+                networkManager.getFullDCW(userEmail, object: NetworkCallback<FullDCW> {
+                    override fun onSuccess(result: FullDCW) {
+                        Log.d("${MainActivity.TAG} userinfo", "onSuccess: $result")
+                        User.firstName = result.firstName
+                        User.role = userRole
+                        User.id = result.id?.toLong()
+                        Log.d("LOGIN!!!", "onSuccess: ${User.id}")
+                        // save to sharedpreferences
+                        SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context, "USER_ID", auth0id)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context, "USER_ROLE", userRole)
+                        SharedPreferencesUtil.saveStringToSharedPreferences(context,"DCW_ID", result.id.toString())
+                        val intent = Intent(requireContext(), DcwActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+                    }
 
-                override fun onFailure(errorString: String) {
-                    Log.e(MainActivity.TAG, "getUserInfo: onFailure: $errorString", )
-                }
-            })
-        } else {
-//            TODO("if there is no type on user???")
-            Log.e(MainActivity.TAG, "getUserInfo: user has no roles on Auth0", )
+                    override fun onFailure(errorString: String) {
+                        Log.e(MainActivity.TAG, "getUserInfo: onFailure: $errorString", )
+                    }
+                })
+            }
+            else -> {
+    //            TODO("if there is no type on user???")
+                Log.e(MainActivity.TAG, "getUserInfo: user has no roles on Auth0", )
+            }
         }
     }
 
