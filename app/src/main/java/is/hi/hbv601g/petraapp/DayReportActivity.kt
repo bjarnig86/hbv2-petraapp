@@ -42,6 +42,7 @@ class DayReportActivity : AppCompatActivity() {
 
         val childId = bundle?.getLong("childId")
 
+        mComment = findViewById(R.id.report_comment)
 
         mDateFrom = findViewById(R.id.report_sleep_from)
         mDateFrom.inputType = InputType.TYPE_NULL
