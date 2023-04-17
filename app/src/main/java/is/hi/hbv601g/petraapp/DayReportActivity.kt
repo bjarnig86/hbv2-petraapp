@@ -1,19 +1,22 @@
 package `is`.hi.hbv601g.petraapp
 
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import `is`.hi.hbv601g.petraapp.Entities.Appetite
 import `is`.hi.hbv601g.petraapp.Entities.DayReport
-import `is`.hi.hbv601g.petraapp.Entities.User
-import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 
 class DayReportActivity : AppCompatActivity() {
@@ -27,6 +30,7 @@ class DayReportActivity : AppCompatActivity() {
         const val TAG: String = "DayReportActivity"
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dayreport)
@@ -40,7 +44,7 @@ class DayReportActivity : AppCompatActivity() {
             mChildName.text = childName
         }
 
-        val childId = bundle?.getLong("childId")
+        val childId = bundle?.getInt("childId")
 
         mComment = findViewById(R.id.report_comment)
 
@@ -68,8 +72,9 @@ class DayReportActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val sleepFrom = convertToProperDate(mDateFrom.text.toString())
-            val sleepTo = convertToProperDate(mDateTo.text.toString())
+            val sleepFrom: LocalDateTime = convertToProperDate(mDateFrom.text.toString())
+            val sleepTo: LocalDateTime = convertToProperDate(mDateTo.text.toString())
+            println(sleepTo.toString() + " : " + sleepFrom.toString())
 
             if (sleepFrom > sleepTo) {
                 Toast.makeText(this,"'Svefn frá' má ekki byrja á eftir 'svefn til'", Toast.LENGTH_SHORT).show()
@@ -79,9 +84,12 @@ class DayReportActivity : AppCompatActivity() {
                 Toast.makeText(this,"Verður að velja matarlyst", Toast.LENGTH_SHORT).show()
             }
 
-            val dcwId = User.id!!;
-
-            val dayReport = DayReport(sleepFrom, sleepTo, spinner.selectedItem.toString(), mComment.text.toString(), dcwId, childId!!);
+            val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+            val dcwId = prefs.getString("DCW_ID", null)?.toLong()
+            val appetite = spinner.selectedItemPosition
+            //TODO: Figure out this fucking Appetite!
+            Log.d(TAG, "onCreate: Appetite $appetite")
+            val dayReport = DayReport(sleepFrom, sleepTo, spinner.selectedItemPosition, mComment.text.toString(), dcwId!!, childId!!);
 
             val nm = NetworkManager.getInstance(this)
             nm.createDayReport(dayReport, object: NetworkCallback<DayReport>{
@@ -116,7 +124,8 @@ class DayReportActivity : AppCompatActivity() {
         timePicker.show(supportFragmentManager, tag)
     }
 
-    private fun convertToProperDate(str: String) : Date {
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun convertToProperDate(str: String): LocalDateTime {
         val calendar = Calendar.getInstance()
         val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
@@ -126,7 +135,11 @@ class DayReportActivity : AppCompatActivity() {
         calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR))
         calendar.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH))
         calendar.set(Calendar.DAY_OF_MONTH, Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
-        return calendar.time
+
+        val date = calendar.time
+        val zoneId = ZoneId.systemDefault()
+        val instant = date.toInstant()
+        return instant.atZone(zoneId).toLocalDateTime()
     }
 
     override fun onStart() {
