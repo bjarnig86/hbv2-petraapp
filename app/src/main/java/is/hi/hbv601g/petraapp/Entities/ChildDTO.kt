@@ -3,6 +3,7 @@ package `is`.hi.hbv601g.petraapp.Entities
 import java.time.LocalDate
 
 data class ChildDTO(
+    val id: Long,
     val ssn: String,
     val firstName: String,
     val lastName: String,

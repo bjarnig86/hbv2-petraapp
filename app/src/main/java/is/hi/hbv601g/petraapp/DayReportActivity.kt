@@ -8,7 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import `is`.hi.hbv601g.petraapp.Entities.DayReport
+import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.fragments.BottomNav
+import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -17,6 +21,7 @@ class DayReportActivity : AppCompatActivity() {
     private lateinit var mChildName: TextView
     private lateinit var mDateTo: EditText
     private lateinit var mDateFrom: EditText
+    private lateinit var mComment: EditText;
     private lateinit var mSubmitReport: Button
     companion object {
         const val TAG: String = "DayReportActivity"
@@ -35,16 +40,19 @@ class DayReportActivity : AppCompatActivity() {
             mChildName.text = childName
         }
 
+        val childId = bundle?.getLong("childId")
+
+
         mDateFrom = findViewById(R.id.report_sleep_from)
         mDateFrom.inputType = InputType.TYPE_NULL
         mDateFrom.setOnClickListener {
-            promptTimePicker("timePicker_From", mDateFrom);
+            promptTimePicker("timePicker_From", mDateFrom)
         }
 
         mDateTo = findViewById(R.id.report_sleep_to)
         mDateTo.inputType = InputType.TYPE_NULL
         mDateTo.setOnClickListener {
-            promptTimePicker("timePicker_To", mDateTo);
+            promptTimePicker("timePicker_To", mDateTo)
         }
 
         val spinner: Spinner = findViewById(R.id.report_appetite)
@@ -69,6 +77,21 @@ class DayReportActivity : AppCompatActivity() {
             if (spinner.selectedItem.toString() === "Matarlyst:") {
                 Toast.makeText(this,"Verður að velja matarlyst", Toast.LENGTH_SHORT).show()
             }
+
+            val dcwId = User.id!!;
+
+            val dayReport = DayReport(sleepFrom, sleepTo, spinner.selectedItem.toString(), mComment.text.toString(), dcwId, childId!!);
+
+            val nm = NetworkManager.getInstance(this)
+            nm.createDayReport(dayReport, object: NetworkCallback<DayReport>{
+                override fun onSuccess(result: DayReport) {
+                    Toast.makeText(this@DayReportActivity,"Gleðilega skýrslu", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onFailure(errorString: String) {
+                    Toast.makeText(this@DayReportActivity,"Úbbsí, eitthvað fór úrskeiðis", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
 

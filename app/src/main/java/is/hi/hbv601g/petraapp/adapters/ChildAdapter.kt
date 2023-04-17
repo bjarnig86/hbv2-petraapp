@@ -62,6 +62,7 @@ class ChildAdapter(private val mChild: ArrayList<ChildDTO>, private val context:
             // Pass data to SecondActivity (optional)
             val childName = "${mChild.get(position).firstName} ${mChild.get(position).lastName}"
             intent.putExtra("childName", childName)
+            intent.putExtra("childId", child.id)
             startActivity(context, intent, null)
         }
 

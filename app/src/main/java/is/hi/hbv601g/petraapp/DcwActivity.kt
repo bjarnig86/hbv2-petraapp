@@ -31,17 +31,20 @@ class DcwActivity : AppCompatActivity(){
             ChildDTO(
                 firstName = "Einar",
                 lastName = "Pálsson",
-                ssn = "5812345"
+                ssn = "5812345",
+                id = 50,
             ),
             ChildDTO(
                 firstName = "Bjarni",
                 lastName = "Guðmundsson",
-                ssn = "5552345"
+                ssn = "5552345",
+                id = 10
             ),
             ChildDTO(
                 firstName = "Dagbjört",
                 lastName = "Þorgrímsdóttir",
-                ssn = "5812345"
+                ssn = "5812345",
+                id = 89
             ),
         );
 

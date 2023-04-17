@@ -12,6 +12,7 @@ import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import `is`.hi.hbv601g.petraapp.Entities.*
 import java.lang.reflect.Type
+import java.time.LocalDateTime
 
 
 class NetworkManager private constructor(context: Context) {
@@ -330,6 +331,44 @@ class NetworkManager private constructor(context: Context) {
                     addProperty("location", dcw.location)
                     addProperty("locationCode", dcw.locationCode)
                     addProperty("password", dcw.password)
+                }
+                return gson.toJson(jsonObject).toString().toByteArray()
+            }
+        }
+        mQueue?.add(request)
+    }
+
+    fun createDayReport(dayReport: DayReport, callback: NetworkCallback<DayReport>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("createdayreport")
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.POST, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
+                val returnDayreport: DayReport = gson.fromJson(element, DayReport::class.java)
+                callback.onSuccess(returnDayreport)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            },
+        ) {
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val jsonObject = JsonObject().apply {
+                    addProperty("sleepFrom", dayReport.sleepFrom.toString());
+                    addProperty("sleepTo", dayReport.sleepTo.toString());
+                    addProperty("appetite", dayReport.appetite);
+                    addProperty("comment", dayReport.comment);
+                    addProperty("dcwId", dayReport.dcwId);
+                    addProperty("childId", dayReport.childId);
                 }
                 return gson.toJson(jsonObject).toString().toByteArray()
             }
