@@ -16,6 +16,7 @@ import `is`.hi.hbv601g.petraapp.DayReportActivity
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
+import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
 
 class ChildAdapterParent(private val mChild: List<Child>, private val context: Context) : RecyclerView.Adapter<ChildAdapterParent.ViewHolder>() {
@@ -39,7 +40,8 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
     }
 
     override fun onBindViewHolder(viewHolder: ChildAdapterParent.ViewHolder, position: Int) {
-        val child: Child = mChild.get(position)
+        val networkManager = NetworkManager.getInstance(context)
+        val child: Child = mChild[position]
         val title = viewHolder.titleView
         title.text = child.firstName
 
@@ -47,11 +49,12 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         name.text = child.firstName
 
         val ssn = viewHolder.ssnTitleViewContent
-        ssn.text = child.ssn.toString()
+        ssn.text = child.ssn
 
         val notifySickness = viewHolder.notifySickness
         notifySickness.setOnClickListener{
-            Toast.makeText(context,"Veikindi var tylkinnt", Toast.LENGTH_SHORT).show()
+
+            Toast.makeText(context,"Veikindi tilkynnt", Toast.LENGTH_SHORT).show()
         }
     }
 

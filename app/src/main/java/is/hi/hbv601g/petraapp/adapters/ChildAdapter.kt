@@ -12,11 +12,12 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.DayReportActivity
+import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
 import `is`.hi.hbv601g.petraapp.R
 
 
-class ChildAdapter(private val mChild: ArrayList<ChildDTO>, private val context: Context) : RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
+class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Context) : RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
         val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)
@@ -40,7 +41,7 @@ class ChildAdapter(private val mChild: ArrayList<ChildDTO>, private val context:
     }
 
     override fun onBindViewHolder(viewHolder: ChildAdapter.ViewHolder, position: Int) {
-        val child: ChildDTO = mChild.get(position)
+        val child: Child = mChild[position]
         val title = viewHolder.titleView
         title.text = child.firstName
 
@@ -60,7 +61,7 @@ class ChildAdapter(private val mChild: ArrayList<ChildDTO>, private val context:
             val intent = Intent(context, DayReportActivity::class.java)
 
             // Pass data to SecondActivity (optional)
-            val childName = "${mChild.get(position).firstName} ${mChild.get(position).lastName}"
+            val childName = "${mChild[position].firstName} ${mChild[position].lastName}"
             intent.putExtra("childName", childName)
             intent.putExtra("childId", child.id)
             startActivity(context, intent, null)
