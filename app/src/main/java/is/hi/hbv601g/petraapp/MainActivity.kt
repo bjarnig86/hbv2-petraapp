@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         networkManager.getLocations(object : NetworkCallback<ArrayList<String>> {
             override fun onSuccess(result: ArrayList<String>) {
                 mLocationList = result
+                prefs.edit().putStringSet("LOCATIONS", mLocationList.toSet()).apply()
                 Log.d(TAG, "onSuccess: ${mLocationList[0]}")
 
                 val locationAdapter: ArrayAdapter<String> = ArrayAdapter(this@MainActivity, android.R.layout.simple_dropdown_item_1line, mLocationList)

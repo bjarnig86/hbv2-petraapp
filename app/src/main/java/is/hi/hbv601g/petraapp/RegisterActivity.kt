@@ -7,13 +7,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.content.Context
-import android.widget.Button
-import android.widget.EditText
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.core.content.ContentProviderCompat.requireContext
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorkerDTO
+import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
@@ -25,8 +28,7 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var mSSN: EditText
     private lateinit var mEmail: EditText
     private lateinit var mMobile: EditText
-    private lateinit var mLocationCode: EditText
-    private lateinit var mLocation: EditText
+    private lateinit var mLocation: AutoCompleteTextView
     private lateinit var mAddress: EditText
     private lateinit var mExp: EditText
     private lateinit var mPassword: EditText
@@ -42,18 +44,62 @@ class RegisterActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_register)
 
-        mFirstName = findViewById<EditText>(R.id.firstName)
-        mLastName = findViewById<EditText>(R.id.lastName)
-        mSSN = findViewById<EditText>(R.id.ssn)
-        mEmail = findViewById<EditText>(R.id.email_field)
-        mMobile = findViewById<EditText>(R.id.mobile_field)
-        mLocationCode = findViewById<EditText>(R.id.locationCode)
-        mLocation = findViewById<EditText>(R.id.location)
-        mAddress = findViewById<EditText>(R.id.address)
-        mExp = findViewById<EditText>(R.id.experience)
-        mPassword = findViewById<EditText>(R.id.password_field)
+        mFirstName = findViewById(R.id.firstName)
+        mLastName = findViewById(R.id.lastName)
+        mSSN = findViewById(R.id.ssn)
+        mEmail = findViewById(R.id.email_field)
+        mMobile = findViewById(R.id.mobile_field)
 
-        mButtonRegister = findViewById<Button>(R.id.register_button)
+        // dynamic locations
+        val sharedPreferences = this.getSharedPreferences(
+            "MY_APP_PREFS",
+            Context.MODE_PRIVATE)
+        val locations = sharedPreferences.getStringSet("LOCATIONS", emptySet())
+
+
+        mLocation = findViewById(R.id.location)
+        val locationCodeAdapter: ArrayAdapter<String> = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, locations?.toList()!!)
+        mLocation.setAdapter(locationCodeAdapter)
+        mLocation.validator = object : AutoCompleteTextView.Validator {
+            override fun isValid(text: CharSequence?): Boolean {
+                // Check if the entered value is in the list of valid values
+                return locations.contains(text.toString())
+            }
+
+            override fun fixText(invalidText: CharSequence?): CharSequence {
+                // Since we only allow valid values, there's no need to fix invalid text
+                Toast.makeText(this@RegisterActivity, "Verður að velja rétt póstnúmer", Toast.LENGTH_SHORT).show()
+                return ""
+            }
+        }
+        mLocation.addTextChangedListener(object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                locationCodeAdapter.filter.filter(p0)
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+                if (mLocation.text.isBlank()) {
+                    this@RegisterActivity.currentFocus?.let { view ->
+                        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                        imm?.hideSoftInputFromWindow(view.windowToken, 0)
+                    }
+                }
+            }
+
+        })
+
+
+
+
+        mAddress = findViewById(R.id.address)
+        mExp = findViewById(R.id.experience)
+        mPassword = findViewById(R.id.password_field)
+
+        mButtonRegister = findViewById(R.id.register_button)
         mButtonRegister.setOnClickListener {
             val allInputsValid = checkRequiredFields();
 
@@ -64,8 +110,8 @@ class RegisterActivity : AppCompatActivity() {
                             mEmail.text.toString(),
                             mSSN.text.toString(),
                             mAddress.text.toString(),
-                            mLocation.text.toString(),
-                            mLocationCode.text.toString(),
+                            mLocation.text.toString().split(" ")[1],
+                            mLocation.text.toString().split(" ")[0],
                             mExp.text.toString().toInt(),
                             mMobile.text.toString(),
                             mPassword.text.toString()
@@ -93,7 +139,6 @@ class RegisterActivity : AppCompatActivity() {
             R.id.ssn,
             R.id.email_field,
             R.id.mobile_field,
-            R.id.locationCode,
             R.id.location,
             R.id.address,
             R.id.experience,
