@@ -35,9 +35,9 @@
                     android:orientation="horizontal">
                     <ImageView
                         android:id="@+id/baby_icon_image_view"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:src="@drawable/baby_icon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:src="@drawable/mood_kid"
                         android:scaleType="centerCrop"
                         android:contentDescription="Baby Icon"
                         />
