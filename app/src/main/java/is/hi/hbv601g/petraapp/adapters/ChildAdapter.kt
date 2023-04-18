@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
@@ -15,18 +16,20 @@ import `is`.hi.hbv601g.petraapp.DayReportActivity
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
 import `is`.hi.hbv601g.petraapp.R
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Context) : RecyclerView.Adapter<ChildAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
-        val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)
+        val icon = itemView.findViewById<ImageView>(R.id.baby_icon_image_view)
 
         val nameTitleViewContent = itemView.findViewById<TextView>(R.id.child_card_list_name_content);
 
         val ssnTitleViewContent = itemView.findViewById<TextView>(R.id.child_card_list_ssn_content);
-
-        val alertBtn = itemView.findViewById<ImageButton>(R.id.danger_button);
 
         val createReport = itemView.findViewById<MaterialButton>(R.id.child_card_create_report)
 
@@ -42,6 +45,16 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
 
     override fun onBindViewHolder(viewHolder: ChildAdapter.ViewHolder, position: Int) {
         val child: Child = mChild[position]
+
+        val icon = viewHolder.icon
+        val currentDate = Date()
+        if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
+            icon.setImageResource(R.drawable.ic_sickness)
+        } else {
+            icon.setImageResource(R.drawable.baby_icon)
+        }
+
+
         val title = viewHolder.titleView
         title.text = child.firstName
 
@@ -50,11 +63,6 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
 
         val ssn = viewHolder.ssnTitleViewContent
         ssn.text = child.ssn.toString()
-
-        val alertBtn = viewHolder.alertBtn
-        alertBtn.setOnClickListener {
-            Toast.makeText(context,"HÆTTA!", Toast.LENGTH_SHORT).show()
-        }
 
         val reportCreate = viewHolder.createReport
         reportCreate.setOnClickListener{
@@ -75,5 +83,19 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
 
     override fun getItemCount(): Int {
         return mChild.size
+    }
+
+    fun compareDates(date1: Date, date2: Date): Boolean {
+        // Create a SimpleDateFormat object to format the date in "yyyy-MM-dd" format
+        val utcTimeZone = TimeZone.getTimeZone("GMT+0")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        dateFormat.timeZone = utcTimeZone
+
+        // Convert the Date objects to strings in the desired format
+        val dateString1 = dateFormat.format(date1)
+        val dateString2 = dateFormat.format(date2)
+
+        // Compare the two date strings and return the result
+        return dateString1 == dateString2
     }
 }

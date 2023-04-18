@@ -1,5 +1,6 @@
 package `is`.hi.hbv601g.petraapp.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
@@ -19,6 +21,8 @@ import `is`.hi.hbv601g.petraapp.R
 import `is`.hi.hbv601g.petraapp.ViewDayReportsActivity
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ChildAdapterParent(private val mChild: List<Child>, private val context: Context) : RecyclerView.Adapter<ChildAdapterParent.ViewHolder>() {
@@ -27,7 +31,7 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
     }
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
-        val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)
+        val icon = itemView.findViewById<ImageView>(R.id.child_card_icon)
 
         val nameTitleViewContent = itemView.findViewById<TextView>(R.id.child_card_list_name_content);
 
@@ -48,6 +52,14 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
     override fun onBindViewHolder(viewHolder: ChildAdapterParent.ViewHolder, position: Int) {
         val networkManager = NetworkManager.getInstance(context)
         val child: Child = mChild[position]
+        val currentDate = Date()
+        val icon = viewHolder.icon
+        if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
+            icon.setImageResource(R.drawable.ic_sickness)
+        } else {
+            icon.setImageResource(R.drawable.baby_icon)
+        }
+
         val title = viewHolder.titleView
         title.text = child.firstName
 
@@ -59,7 +71,16 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
 
         val notifySickness = viewHolder.notifySickness
         notifySickness.setOnClickListener{
-            networkManager.notifySickLeave(child.id, object : NetworkCallback<String> {
+            val builder = AlertDialog.Builder(context)
+
+            // Set the title and message for the dialog
+            builder.setTitle("Tilkynna veikindi hjá ${child.firstName}")
+                .setMessage("Staðfesta veikindi barns?")
+
+            // Set the Yes button and its action
+            builder.setPositiveButton("Já") { dialog, which ->
+                // Send the request and go back to the activity
+                networkManager.notifySickLeave(child.id, object : NetworkCallback<String> {
                 override fun onSuccess(result: String) {
                     Log.d(TAG, "onSuccess: Notifying Sick Leave SUCCESSFUL")
                     Toast.makeText(context, "Veikindi tilkynnt!", Toast.LENGTH_SHORT).show()
@@ -71,7 +92,20 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
                 }
 
             })
-            Toast.makeText(context,"Veikindi tilkynnt", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+
+            // Set the Cancel button and its action
+            builder.setNegativeButton("Hætta við") { dialog, which ->
+                // Just go back to the activity
+                dialog.dismiss()
+            }
+
+            // Create and show the AlertDialog
+            val dialog = builder.create()
+            dialog.show()
+
+
         }
 
         val getReports = viewHolder.getReports
@@ -85,5 +119,19 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
 
     override fun getItemCount(): Int {
         return mChild.size
+    }
+
+    fun compareDates(date1: Date, date2: Date): Boolean {
+        // Create a SimpleDateFormat object to format the date in "yyyy-MM-dd" format
+        val utcTimeZone = TimeZone.getTimeZone("GMT+0")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+        dateFormat.timeZone = utcTimeZone
+
+        // Convert the Date objects to strings in the desired format
+        val dateString1 = dateFormat.format(date1)
+        val dateString2 = dateFormat.format(date2)
+
+        // Compare the two date strings and return the result
+        return dateString1 == dateString2
     }
 }
