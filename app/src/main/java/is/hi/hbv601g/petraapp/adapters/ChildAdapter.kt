@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -48,12 +49,6 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
 
         val icon = viewHolder.icon
         val currentDate = Date()
-        if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
-            icon.setImageResource(R.drawable.ic_sickness)
-        } else {
-            icon.setImageResource(R.drawable.baby_icon)
-        }
-
 
         val title = viewHolder.titleView
         title.text = child.firstName
@@ -63,6 +58,14 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
 
         val ssn = viewHolder.ssnTitleViewContent
         ssn.text = child.ssn.toString()
+
+        if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
+            icon.setImageResource(R.drawable.sick_outline_rounded)
+            title.setTextColor(ContextCompat.getColor(context, R.color.sickness_color))
+        } else {
+            icon.setImageResource(R.drawable.mood_kid)
+            title.setTextColor(ContextCompat.getColor(context, R.color.black))
+        }
 
         val reportCreate = viewHolder.createReport
         reportCreate.setOnClickListener{

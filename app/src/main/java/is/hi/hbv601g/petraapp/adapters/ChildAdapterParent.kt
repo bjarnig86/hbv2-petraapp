@@ -3,6 +3,7 @@ package `is`.hi.hbv601g.petraapp.adapters
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -54,11 +56,6 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         val child: Child = mChild[position]
         val currentDate = Date()
         val icon = viewHolder.icon
-        if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
-            icon.setImageResource(R.drawable.ic_sickness)
-        } else {
-            icon.setImageResource(R.drawable.baby_icon)
-        }
 
         val title = viewHolder.titleView
         title.text = child.firstName
@@ -70,6 +67,19 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         ssn.text = child.ssn
 
         val notifySickness = viewHolder.notifySickness
+
+        if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
+            icon.setImageResource(R.drawable.sick_outline_rounded)
+            notifySickness.setTextColor(Color.LTGRAY)
+            notifySickness.isEnabled = false
+            title.setTextColor(ContextCompat.getColor(context, R.color.sickness_color))
+        } else {
+            icon.setImageResource(R.drawable.mood_kid)
+            notifySickness.isEnabled = true
+            notifySickness.setTextColor(ContextCompat.getColor(context, R.color.primary))
+            title.setTextColor(ContextCompat.getColor(context, R.color.black))
+        }
+
         notifySickness.setOnClickListener{
             val builder = AlertDialog.Builder(context)
 

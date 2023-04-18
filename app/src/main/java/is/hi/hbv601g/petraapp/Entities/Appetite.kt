@@ -14,4 +14,8 @@ enum class Appetite {
             Appetite.VERY_GOOD -> "Mjög vel"
         }
     }
+
+    companion object {
+
+    }
 }
