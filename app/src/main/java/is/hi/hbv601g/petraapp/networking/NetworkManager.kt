@@ -17,6 +17,7 @@ import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.utils.LocalDateTimeDeserializer
 import `is`.hi.hbv601g.petraapp.utils.LocalDateTimeSerializer
 import java.lang.reflect.Type
+import java.nio.ByteBuffer
 import java.time.LocalDateTime
 
 
@@ -146,10 +147,14 @@ class NetworkManager private constructor(context: Context) {
             .appendPath("children")
             .build().toString()
 
-        val request = object : Utf8StringRequest(
+        val request = @RequiresApi(Build.VERSION_CODES.O)
+        object : Utf8StringRequest(
             Method.GET, url,
             Response.Listener { response ->
-                val gson = Gson()
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeSerializer())
+                    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+                    .create()
                 val listType: Type = object : TypeToken<List<Child>>(){}.type
                 val children: List<Child> = gson.fromJson(response, listType)
                 callback.onSuccess(children)
@@ -311,6 +316,25 @@ class NetworkManager private constructor(context: Context) {
                 return gson.toJson(jsonObject).toString().toByteArray()
             }
         }
+        mQueue?.add(request)
+    }
+
+    fun notifySickLeave(childId: Int, callback: NetworkCallback<String>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("notifysickleave")
+            .appendPath(childId.toString())
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.POST, url,
+            Response.Listener { result ->
+                callback.onSuccess(result)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            },
+        ) {}
         mQueue?.add(request)
     }
 

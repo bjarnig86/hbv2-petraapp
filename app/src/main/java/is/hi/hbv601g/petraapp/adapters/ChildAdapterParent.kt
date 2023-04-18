@@ -2,6 +2,7 @@ package `is`.hi.hbv601g.petraapp.adapters
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,9 @@ import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
 
 class ChildAdapterParent(private val mChild: List<Child>, private val context: Context) : RecyclerView.Adapter<ChildAdapterParent.ViewHolder>() {
+    companion object {
+        const val TAG = "ChildAdapterParent"
+    }
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleView = itemView.findViewById<TextView>(R.id.card_title)
         val subTitleView = itemView.findViewById<TextView>(R.id.card_sub_title)
@@ -55,7 +59,18 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
 
         val notifySickness = viewHolder.notifySickness
         notifySickness.setOnClickListener{
+            networkManager.notifySickLeave(child.id, object : NetworkCallback<String> {
+                override fun onSuccess(result: String) {
+                    Log.d(TAG, "onSuccess: Notifying Sick Leave SUCCESSFUL")
+                    Toast.makeText(context, "Veikindi tilkynnt!", Toast.LENGTH_SHORT).show()
+                }
 
+                override fun onFailure(errorString: String) {
+                    Toast.makeText(context, "VILLA!", Toast.LENGTH_SHORT).show()
+                    Log.e(TAG, "onFailure: $errorString")
+                }
+
+            })
             Toast.makeText(context,"Veikindi tilkynnt", Toast.LENGTH_SHORT).show()
         }
 
