@@ -57,14 +57,7 @@
                             android:textStyle="bold"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             />
-                        <TextView
-                            android:id="@+id/card_sub_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="SubTitill"
-                            android:textAppearance="?attr/textAppearanceBody2"
-                            android:textColor="?android:attr/textColorSecondary"
-                            />
+
 
                     </LinearLayout>
 
@@ -156,6 +149,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:text="Tilkynna veikindi"
+                    style="?attr/borderlessButtonStyle"
+                    />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/child_card_get_reports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/get_day_report_parent"
                     style="?attr/borderlessButtonStyle"
                     />
             </LinearLayout>

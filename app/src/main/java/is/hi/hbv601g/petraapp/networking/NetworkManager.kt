@@ -18,7 +18,6 @@ import `is`.hi.hbv601g.petraapp.utils.LocalDateTimeDeserializer
 import `is`.hi.hbv601g.petraapp.utils.LocalDateTimeSerializer
 import java.lang.reflect.Type
 import java.time.LocalDateTime
-import java.util.Date
 
 
 class NetworkManager private constructor(context: Context) {
@@ -231,6 +230,32 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
+    fun getDayReportsByChild(childId: Int, callback: NetworkCallback<ArrayList<DayReportDTO>>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("getdayreports")
+            .appendPath(childId.toString())
+            .build().toString()
+
+        val request = @RequiresApi(Build.VERSION_CODES.O)
+        object : Utf8StringRequest(
+            Method.GET, url,
+            Response.Listener { response ->
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeSerializer())
+                    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+                    .create()
+                val listType: Type = object : TypeToken<ArrayList<DayReportDTO>>(){}.type
+                val reports: ArrayList<DayReportDTO> = gson.fromJson(response, listType)
+                callback.onSuccess(reports)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            }
+        ) {}
+        mQueue?.add(request)
+    }
+
     fun getUserInfo(token: String, callback: NetworkCallback<UserProfile>) {
         val request = object : Utf8StringRequest(
             Method.GET, AUTH_URL,
@@ -367,18 +392,22 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
-    fun createDayReport(dayReport: DayReport, callback: NetworkCallback<DayReport>) {
+    fun createDayReport(dayReport: DayReport, callback: NetworkCallback<DayReportDTO>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
             .appendPath("createdayreport")
             .build().toString()
 
-        val request = object : Utf8StringRequest(
+        val request = @RequiresApi(Build.VERSION_CODES.O)
+        object : Utf8StringRequest(
             Method.POST, url,
             Response.Listener { response ->
-                val gson = Gson()
-                val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
-                val returnDayreport: DayReport = gson.fromJson(element, DayReport::class.java)
+                val gson = GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeSerializer())
+                    .registerTypeAdapter(LocalDateTime::class.java, LocalDateTimeDeserializer())
+                    .create()
+                val element: JsonElement = gson.fromJson(response, JsonElement::class.java)
+                val returnDayreport: DayReportDTO = gson.fromJson(element, DayReportDTO::class.java)
                 callback.onSuccess(returnDayreport)
             },
             Response.ErrorListener { error ->
@@ -397,8 +426,8 @@ class NetworkManager private constructor(context: Context) {
                     .create()
 
                 val jsonObject = JsonObject().apply {
-                    addProperty("sleepFrom", gson.toJson(dayReport.sleepFrom))
-                    addProperty("sleepTo", gson.toJson(dayReport.sleepTo))
+                    addProperty("sleepFrom", dayReport.sleepFrom.toString())
+                    addProperty("sleepTo", dayReport.sleepTo.toString())
                     addProperty("appetite", dayReport.appetite)
                     addProperty("comment", dayReport.comment)
                     addProperty("dcwId", dayReport.dcwId)

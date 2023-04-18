@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/childNameIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_child"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dateTextView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/childNameTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Child Name"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/childNameIcon"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/dateIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:padding="5dp"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintTop_toBottomOf="@id/childNameTextView"
+        app:layout_constraintBottom_toTopOf="@id/sleepFromTextView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Date"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/childNameTextView"
+        app:layout_constraintStart_toEndOf="@id/dateIcon"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/sleepFromIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_time_from"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/dateTextView"
+        app:layout_constraintBottom_toTopOf="@id/sleepToTextView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/sleepFromTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sleep From"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/dateTextView"
+        app:layout_constraintStart_toEndOf="@id/sleepFromIcon"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/sleepToIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_time_to"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/sleepFromTextView"
+        app:layout_constraintBottom_toTopOf="@id/commentTextView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/sleepToTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Sleep To"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/sleepFromTextView"
+        app:layout_constraintBottom_toTopOf="@id/commentTextView"
+        app:layout_constraintStart_toEndOf="@id/sleepToIcon"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/commentIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/is_comment"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/sleepToTextView"
+        app:layout_constraintBottom_toTopOf="@id/appetiteTextView"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/commentTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Comment"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/sleepToTextView"
+        app:layout_constraintBottom_toTopOf="@id/appetiteTextView"
+        app:layout_constraintStart_toEndOf="@id/commentIcon"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/appetiteIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_very_good"
+        android:padding="5dp"
+        app:layout_constraintTop_toBottomOf="@id/commentTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/appetiteTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Appetite"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/commentTextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/appetiteIcon"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package `is`.hi.hbv601g.petraapp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -8,10 +9,12 @@ import android.util.Log
 import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import `is`.hi.hbv601g.petraapp.Entities.Appetite
 import `is`.hi.hbv601g.petraapp.Entities.DayReport
+import `is`.hi.hbv601g.petraapp.Entities.DayReportDTO
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 import java.text.SimpleDateFormat
@@ -26,6 +29,7 @@ class DayReportActivity : AppCompatActivity() {
     private lateinit var mDateFrom: EditText
     private lateinit var mComment: EditText;
     private lateinit var mSubmitReport: Button
+    private lateinit var mDayReport: DayReport
     companion object {
         const val TAG: String = "DayReportActivity"
     }
@@ -80,27 +84,42 @@ class DayReportActivity : AppCompatActivity() {
                 Toast.makeText(this,"'Svefn frá' má ekki byrja á eftir 'svefn til'", Toast.LENGTH_SHORT).show()
             }
 
+            val spinnerIndex = spinner.selectedItemPosition
             if (spinner.selectedItem.toString() === "Matarlyst:") {
                 Toast.makeText(this,"Verður að velja matarlyst", Toast.LENGTH_SHORT).show()
+            } else {
+
+                val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+                val dcwId = prefs.getString("DCW_ID", null)?.toLong()
+
+                //TODO: Figure out this fucking Appetite!
+                mDayReport = DayReport(
+                    sleepFrom = sleepFrom,
+                    sleepTo = sleepTo,
+                    appetite = (spinnerIndex - 1).toString(),
+                    comment = mComment.text.toString(),
+                    dcwId = dcwId!!,
+                    childId = childId!!);
+
+                val nm = NetworkManager.getInstance(this)
+                nm.createDayReport(mDayReport, object: NetworkCallback<DayReportDTO>{
+                    override fun onSuccess(result: DayReportDTO) {
+                        Toast.makeText(this@DayReportActivity,"Gleðilega skýrslu", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@DayReportActivity, DcwActivity::class.java)
+
+                        // Pass data to SecondActivity (optional)
+//                        intent.putExtra("childName", childName)
+//                        intent.putExtra("childId", child.id)
+                        ContextCompat.startActivity(this@DayReportActivity, intent, null)
+                    }
+
+                    override fun onFailure(errorString: String) {
+                        Toast.makeText(this@DayReportActivity,"Úbbsí, eitthvað fór úrskeiðis", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
 
-            val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
-            val dcwId = prefs.getString("DCW_ID", null)?.toLong()
-            val appetite = spinner.selectedItemPosition
-            //TODO: Figure out this fucking Appetite!
-            Log.d(TAG, "onCreate: Appetite $appetite")
-            val dayReport = DayReport(sleepFrom, sleepTo, spinner.selectedItemPosition, mComment.text.toString(), dcwId!!, childId!!);
 
-            val nm = NetworkManager.getInstance(this)
-            nm.createDayReport(dayReport, object: NetworkCallback<DayReport>{
-                override fun onSuccess(result: DayReport) {
-                    Toast.makeText(this@DayReportActivity,"Gleðilega skýrslu", Toast.LENGTH_SHORT).show()
-                }
-
-                override fun onFailure(errorString: String) {
-                    Toast.makeText(this@DayReportActivity,"Úbbsí, eitthvað fór úrskeiðis", Toast.LENGTH_SHORT).show()
-                }
-            })
         }
     }
 

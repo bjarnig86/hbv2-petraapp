@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.DayReportActivity
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
+import `is`.hi.hbv601g.petraapp.ViewDayReportsActivity
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 
@@ -30,6 +31,7 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
 
         val notifySickness = itemView.findViewById<MaterialButton>(R.id.child_card_notify_sickness)
 
+        val getReports = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapterParent.ViewHolder {
@@ -55,6 +57,14 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         notifySickness.setOnClickListener{
 
             Toast.makeText(context,"Veikindi tilkynnt", Toast.LENGTH_SHORT).show()
+        }
+
+        val getReports = viewHolder.getReports
+        getReports.setOnClickListener {
+            val intent = Intent(context, ViewDayReportsActivity::class.java)
+            intent.putExtra("childId", child.id)
+            intent.putExtra("childName", child.firstName + " " + child.lastName)
+            startActivity(context, intent, null)
         }
     }
 

@@ -6,13 +6,12 @@ enum class Appetite {
     GOOD,
     VERY_GOOD;
 
-    fun getAppetite(str: String): Appetite {
-        return when (str) {
-            "Vond" -> Appetite.BAD
-            "Sæmileg" -> Appetite.OKAY
-            "Góð" -> Appetite.GOOD
-            "Mjög góð" -> Appetite.VERY_GOOD
-            else -> throw IllegalArgumentException("Invalid appetite string: $str")
+    fun getAppetite(appetite: Appetite): String {
+        return when (appetite) {
+            Appetite.BAD -> "Ekki vel"
+            Appetite.OKAY -> "Ágætlega"
+            Appetite.GOOD -> "Vel"
+            Appetite.VERY_GOOD -> "Mjög vel"
         }
     }
 }
