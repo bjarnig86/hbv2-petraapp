@@ -135,5 +135,7 @@
     </string>
     <string name="action_settings">Settings</string>
     <string name="reports_empty_string">Engar skýrslur um þetta barn</string>
+    <string name="dagforeldri">Dagforeldri</string>
+    <string name="foreldri_str">Foreldri</string>
 
 </resources>

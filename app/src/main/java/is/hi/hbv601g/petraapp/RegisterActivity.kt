@@ -9,13 +9,11 @@ import android.util.Log
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContentProviderCompat.requireContext
-import `is`.hi.hbv601g.petraapp.Entities.Child
-import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
-import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
-import `is`.hi.hbv601g.petraapp.Entities.DaycareWorkerDTO
+import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
@@ -23,6 +21,8 @@ import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var mButtonRegister: Button
+    private lateinit var mButtonDCWOption: Button
+    private lateinit var mButtonParentOption: Button
     private lateinit var mFirstName: EditText
     private lateinit var mLastName: EditText
     private lateinit var mSSN: EditText
@@ -49,6 +49,10 @@ class RegisterActivity : AppCompatActivity() {
         mSSN = findViewById(R.id.ssn)
         mEmail = findViewById(R.id.email_field)
         mMobile = findViewById(R.id.mobile_field)
+        mButtonDCWOption = findViewById(R.id.dcw_option_button)
+        mButtonParentOption = findViewById(R.id.parent_option_button)
+
+        var option = "DCW"
 
         // dynamic locations
         val sharedPreferences = this.getSharedPreferences(
@@ -100,53 +104,94 @@ class RegisterActivity : AppCompatActivity() {
         mPassword = findViewById(R.id.password_field)
 
         mButtonRegister = findViewById(R.id.register_button)
+
+        mButtonParentOption.setOnClickListener {
+            option = "Parent"
+            mExp.visibility = View.GONE
+            mAddress.visibility = View.GONE
+            mLocation.visibility = View.GONE
+        }
+        mButtonDCWOption.setOnClickListener {
+            option = "DCW"
+            mExp.visibility = View.VISIBLE
+            mAddress.visibility = View.VISIBLE
+            mLocation.visibility = View.VISIBLE
+
+        }
+
         mButtonRegister.setOnClickListener {
-            val allInputsValid = checkRequiredFields();
+            if (option == "DCW") {
+                val allInputsValid = checkRequiredFields(option);
+                if (allInputsValid) {
+                    val dcw = DaycareWorkerDTO(
+                        mFirstName.text.toString(),
+                        mLastName.text.toString(),
+                        mEmail.text.toString(),
+                        mSSN.text.toString(),
+                        mAddress.text.toString(),
+                        mLocation.text.toString().split(" ")[1],
+                        mLocation.text.toString().split(" ")[0],
+                        mExp.text.toString().toInt(),
+                        mMobile.text.toString(),
+                        mPassword.text.toString()
+                    )
 
-            if (allInputsValid) {
-                val dcw = DaycareWorkerDTO(
-                            mFirstName.text.toString(),
-                            mLastName.text.toString(),
-                            mEmail.text.toString(),
-                            mSSN.text.toString(),
-                            mAddress.text.toString(),
-                            mLocation.text.toString().split(" ")[1],
-                            mLocation.text.toString().split(" ")[0],
-                            mExp.text.toString().toInt(),
-                            mMobile.text.toString(),
-                            mPassword.text.toString()
-                )
+                    networkManager.addDaycareWorker(dcw, object : NetworkCallback<DaycareWorker> {
+                        override fun onSuccess(result: DaycareWorker) {
+                            val intent = Intent()
+                            intent.putExtras(intent)
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        }
 
-                networkManager.addDaycareWorker(dcw, object: NetworkCallback<DaycareWorker> {
-                    override fun onSuccess(result: DaycareWorker) {
-                        val intent = Intent()
-                        intent.putExtras(intent)
-                        setResult(Activity.RESULT_OK, intent)
-                        finish()
-                    }
+                        override fun onFailure(errorString: String) {
+                            Log.e(CreateChildFragment.TAG, "onFailure: createChild: $errorString")
+                        }
+                    })
+                }
+            } else {
+                val allInputsValid = checkRequiredFields(option);
+                if (allInputsValid) {
+                    val parent = ParentDTO(
+                        mSSN.text.toString(),
+                        mFirstName.text.toString(),
+                        mLastName.text.toString(),
+                        mEmail.text.toString(),
+                        mMobile.text.toString(),
+                        mPassword.text.toString()
+                    )
 
-                    override fun onFailure(errorString: String) {
-                        Log.e(CreateChildFragment.TAG, "onFailure: createChild: $errorString")
-                    }
-                })
+                    networkManager.addParent(parent, object : NetworkCallback<Parent> {
+                        override fun onSuccess(result: Parent) {
+                            val intent = Intent()
+                            intent.putExtras(intent)
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        }
+
+                        override fun onFailure(errorString: String) {
+                            Log.e(CreateChildFragment.TAG, "onFailure: createChild: $errorString")
+                        }
+                    })
+                }
             }
         }
     }
-    private fun checkRequiredFields(): Boolean {
+    private fun checkRequiredFields(option: String): Boolean {
         val requiredFields = arrayOf(
             R.id.firstName,
             R.id.lastName,
             R.id.ssn,
             R.id.email_field,
             R.id.mobile_field,
-            R.id.location,
-            R.id.address,
-            R.id.experience,
             R.id.password_field
         )
+        val requiredFieldsDCW = arrayOf(
+            R.id.location,
+            R.id.address,
+            R.id.experience
+        )
         var isValid = true;
-
-
         for (id in requiredFields) {
             val field = findViewById<EditText>(id);
             if (field.text.isEmpty()) {
@@ -154,7 +199,15 @@ class RegisterActivity : AppCompatActivity() {
                 isValid = false;
             }
         }
-
+        if (option == "DCW") {
+            for (id in requiredFieldsDCW) {
+                val field = findViewById<EditText>(id);
+                if (field.text.isEmpty()) {
+                    field.error = "Verður að fylla út"
+                    isValid = false;
+                }
+            }
+        }
         return isValid
     }
 

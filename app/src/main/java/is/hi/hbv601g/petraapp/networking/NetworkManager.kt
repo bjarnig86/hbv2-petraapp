@@ -416,6 +416,44 @@ class NetworkManager private constructor(context: Context) {
         mQueue?.add(request)
     }
 
+    fun addParent(parent: ParentDTO, callback: NetworkCallback<Parent>) {
+        val url = Uri.parse(BASE_URL)
+            .buildUpon()
+            .appendPath("addparent")
+            .build().toString()
+
+        val request = object : Utf8StringRequest(
+            Method.POST, url,
+            Response.Listener { response ->
+                val gson = Gson()
+                val element: JsonElement = gson.fromJson(response.toString(), JsonElement::class.java)
+                val returnParent: Parent = gson.fromJson(element, Parent::class.java)
+                callback.onSuccess(returnParent)
+            },
+            Response.ErrorListener { error ->
+                callback.onFailure(error.toString())
+            },
+        ) {
+            override fun getBodyContentType(): String {
+                return "application/json; charset=utf-8"
+            }
+
+            override fun getBody(): ByteArray {
+                val gson = Gson()
+                val jsonObject = JsonObject().apply {
+                    addProperty("email", parent.email)
+                    addProperty("ssn", parent.ssn)
+                    addProperty("firstName", parent.firstName)
+                    addProperty("lastName", parent.lastName)
+                    addProperty("mobile", parent.mobile)
+                    addProperty("password", parent.password)
+                }
+                return gson.toJson(jsonObject).toString().toByteArray()
+            }
+        }
+        mQueue?.add(request)
+    }
+
     fun createDayReport(dayReport: DayReport, callback: NetworkCallback<DayReportDTO>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
