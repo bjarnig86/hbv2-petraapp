@@ -13,6 +13,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
@@ -32,8 +33,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var mAddress: EditText
     private lateinit var mExp: EditText
     private lateinit var mPassword: EditText
+    private lateinit var mTitle: TextView
     val networkManager = NetworkManager.getInstance(this)
-
 
     companion object {
         const val TAG: String = "RegisterActivity"
@@ -51,6 +52,7 @@ class RegisterActivity : AppCompatActivity() {
         mMobile = findViewById(R.id.mobile_field)
         mButtonDCWOption = findViewById(R.id.dcw_option_button)
         mButtonParentOption = findViewById(R.id.parent_option_button)
+        mTitle = findViewById(R.id.register_type_title)
 
         var option = "DCW"
 
@@ -82,7 +84,6 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 locationCodeAdapter.filter.filter(p0)
-
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -96,20 +97,28 @@ class RegisterActivity : AppCompatActivity() {
 
         })
 
-
-
-
         mAddress = findViewById(R.id.address)
         mExp = findViewById(R.id.experience)
         mPassword = findViewById(R.id.password_field)
 
         mButtonRegister = findViewById(R.id.register_button)
 
+        mButtonDCWOption.isEnabled = false
+        mButtonDCWOption.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryVariant))
+
         mButtonParentOption.setOnClickListener {
             option = "Parent"
             mExp.visibility = View.GONE
             mAddress.visibility = View.GONE
             mLocation.visibility = View.GONE
+
+            mButtonParentOption.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryVariant))
+            mButtonParentOption.isEnabled = false
+
+            mButtonDCWOption.isEnabled = true
+            mButtonDCWOption.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
+
+            mTitle.text = getString(R.string.register_parent_title)
         }
 
         mButtonDCWOption.setOnClickListener {
@@ -117,6 +126,14 @@ class RegisterActivity : AppCompatActivity() {
             mExp.visibility = View.VISIBLE
             mAddress.visibility = View.VISIBLE
             mLocation.visibility = View.VISIBLE
+
+            mButtonDCWOption.setBackgroundColor(ContextCompat.getColor(this, R.color.primaryVariant))
+            mButtonDCWOption.isEnabled = false
+
+            mButtonParentOption.isEnabled = true
+            mButtonParentOption.setBackgroundColor(ContextCompat.getColor(this, R.color.primary))
+
+            mTitle.text = getString(R.string.register_dcw_title)
         }
 
         mButtonRegister.setOnClickListener {

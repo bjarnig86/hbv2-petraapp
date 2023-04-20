@@ -47,7 +47,7 @@
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight="1"
                         android:gravity="center_vertical|start"
@@ -57,7 +57,7 @@
                             android:id="@+id/card_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Titill"
+                            android:text="Ragnhildur Ósk Olgeirsdóttir"
                             android:textColor="@color/primaryVariant"
                             android:textStyle="bold"
                             android:textAppearance="?attr/textAppearanceHeadline6"/>

@@ -44,6 +44,8 @@
     <string name="free_spots">laus pláss</string>
     <string name="get_day_report_parent">Sjá skýrslur</string>
     <string name="title_activity_view_day_report">ViewDayReportActivity</string>
+    <string name="register_parent_title">Nýskráning foreldris</string>
+    <string name="register_dcw_title">Nýskráning dagforeldris</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
