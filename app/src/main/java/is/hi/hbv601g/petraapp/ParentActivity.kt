@@ -75,28 +75,16 @@ class ParentActivity : AppCompatActivity() {
             }
 
             override fun onFailure(errorString: String) {
-//                TODO("Not yet implemented")
                 Log.e(TAG, "onFailure: onResume: $errorString")
             }
-
         })
 
 
         mCreateNewChild = findViewById(R.id.newChildButton)
         mCreateNewChild.setOnClickListener{
-//            val intent = Intent(this, CreateChildActivity::class.java)
-//            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-//            startActivity(intent)
             val createChildFragment = CreateChildFragment()
             createChildFragment.show(supportFragmentManager, "ble")
         }
-
-//        val adapter = ChildAdapterParent(ChildList,this);
-//
-//        childRecyclerView.adapter = adapter;
-//
-//        childRecyclerView.layoutManager = LinearLayoutManager(this);
-
     }
 
     override fun onStart() {

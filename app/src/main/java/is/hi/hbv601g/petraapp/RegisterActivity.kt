@@ -158,6 +158,7 @@ class RegisterActivity : AppCompatActivity() {
                             val intent = Intent()
                             intent.putExtras(intent)
                             setResult(Activity.RESULT_OK, intent)
+                            Toast.makeText(this@RegisterActivity, "Nýskráning tókst!", Toast.LENGTH_SHORT).show()
                             finish()
                         }
 
@@ -183,6 +184,7 @@ class RegisterActivity : AppCompatActivity() {
                             val intent = Intent()
                             intent.putExtras(intent)
                             setResult(Activity.RESULT_OK, intent)
+                            Toast.makeText(this@RegisterActivity, "Nýskráning tókst!", Toast.LENGTH_SHORT).show()
                             finish()
                         }
 
