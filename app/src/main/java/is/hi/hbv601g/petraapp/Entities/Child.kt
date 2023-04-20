@@ -10,6 +10,9 @@ data class Child(
     val lastName: String,
     val sicknessDay: Date? = null,
     val daycare_worker_id: Int? = null,
+    val dcwName: String? = null,
+    val dcwMobile: String? = null,
+    val dcwEmail: String? = null,
     val parent_id: Int? = null
 ) {
     override fun toString(): String {

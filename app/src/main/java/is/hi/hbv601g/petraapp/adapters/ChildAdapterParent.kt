@@ -64,8 +64,13 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         name.text = child.firstName
 
         val ssn = viewHolder.ssnTitleViewContent
-        val ssnString = child.ssn.substring(0,6) + "-" + child.ssn.substring(6,10)
-        ssn.text = ssnString
+        var ssnString = ""
+        if (child.ssn.length == 10) {
+            ssnString = child.ssn.substring(0,6) + "-" + child.ssn.substring(6,10)
+            ssn.text = ssnString
+        } else {
+            ssn.text = child.ssn
+        }
 
         val notifySickness = viewHolder.notifySickness
 
@@ -119,15 +124,29 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
             // Create and show the AlertDialog
             val dialog = builder.create()
             dialog.show()
-
-
         }
 
         val getReports = viewHolder.getReports
+
+        if (child.dcwName == null) {
+            getReports.setTextColor(Color.LTGRAY)
+            getReports.isEnabled = false
+        } else {
+            getReports.isEnabled = true
+            getReports.setTextColor(ContextCompat.getColor(context, R.color.primary))
+        }
+
         getReports.setOnClickListener {
             val intent = Intent(context, ViewDayReportsActivity::class.java)
+            // Child attributes
             intent.putExtra("childId", child.id)
             intent.putExtra("childName", child.firstName + " " + child.lastName)
+            intent.putExtra("childSsn", child.ssn)
+
+            // DCW attributes
+            intent.putExtra("dcwName", child.dcwName)
+            intent.putExtra("dcwMobile", child.dcwMobile)
+            intent.putExtra("dcwEmail", child.dcwEmail)
             startActivity(context, intent, null)
         }
     }

@@ -19,8 +19,20 @@ class ViewDayReportsActivity : AppCompatActivity() {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mProgressBar: ProgressBar
     private lateinit var mMessage: TextView
+
+    private lateinit var mTitle: TextView //report_view_title
+    private lateinit var mSubtitle: TextView //report_view_subtitle
+    private lateinit var mDcwName: TextView // child_report_dcw_name
+    private lateinit var mDcwPhone: TextView //child_report_dcw_phone
+    private lateinit var mDcwEmail: TextView //child_report_dcw_email
+
     private var mChildId: Int = 0
     private var mChildName: String = ""
+    private var mChildSsn: String = ""
+
+    private var mDcwNameString: String = ""
+    private var mDcwMobile: String = ""
+    private var mDcwEmailString: String = ""
 
     companion object {
         const val TAG: String = "ViewDayReportsActivity"
@@ -31,14 +43,36 @@ class ViewDayReportsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_view_day_reports)
         val bundle = intent.extras
         if (bundle != null) {
+            // Get child attributes
             mChildId = bundle.getInt("childId")
             mChildName = bundle.getString("childName").toString()
+            mChildSsn = bundle.getString("childSsn").toString()
+
+            // Get dcw attributes
+            mDcwNameString = bundle.getString("dcwName").toString()
+            mDcwMobile = bundle.getString("dcwMobile").toString()
+            mDcwEmailString = bundle.getString("dcwEmail").toString()
         }
 
         mMessage = findViewById(R.id.reports_empty_text_view)
         mProgressBar = findViewById(R.id.progress_bar)
         mRecyclerView = findViewById(R.id.recyclerView_DayReports)
         mRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        mTitle = findViewById(R.id.report_view_title)
+        mTitle.text = mChildName
+
+        mSubtitle = findViewById(R.id.report_view_subtitle)
+        mSubtitle.text = mChildSsn
+
+        mDcwName = findViewById(R.id.child_report_dcw_name)
+        mDcwName.text = mDcwNameString
+
+        mDcwPhone = findViewById(R.id.child_report_dcw_phone)
+        mDcwPhone.text = mDcwMobile
+
+        mDcwEmail = findViewById(R.id.child_report_dcw_email)
+        mDcwEmail.text = mDcwEmailString
 
         val networkManager = NetworkManager.getInstance(this)
         networkManager.getDayReportsByChild(mChildId, object : NetworkCallback<ArrayList<DayReportDTO>> {

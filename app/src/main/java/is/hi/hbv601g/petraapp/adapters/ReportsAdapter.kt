@@ -31,9 +31,11 @@ class ReportAdapter(private val reports: ArrayList<DayReportDTO>, private val ch
         fun bind(report: DayReportDTO) {
             dateTextViewDay.text = getDayOfWeek(report.date);
             dateTextViewNum.text = getDate(report.date);
-            dateTextViewMonth.text = getMonth(report.date);
+            dateTextViewMonth.text = getMonth(report.date)
 
-            childNameTextView.text = childName
+            val reportIdx = "Skýrsla - ${reports.indexOf(report)+1}"
+            childNameTextView.text = reportIdx
+
             commentTextView.text = report.comment
 
             val sleepStr = "${getTimeIn24HourFormat(report.sleepFrom)} - ${getTimeIn24HourFormat(report.sleepTo)}"

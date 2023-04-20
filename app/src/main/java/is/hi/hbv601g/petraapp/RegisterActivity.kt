@@ -111,12 +111,12 @@ class RegisterActivity : AppCompatActivity() {
             mAddress.visibility = View.GONE
             mLocation.visibility = View.GONE
         }
+
         mButtonDCWOption.setOnClickListener {
             option = "DCW"
             mExp.visibility = View.VISIBLE
             mAddress.visibility = View.VISIBLE
             mLocation.visibility = View.VISIBLE
-
         }
 
         mButtonRegister.setOnClickListener {
