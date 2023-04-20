@@ -39,8 +39,7 @@
                         android:layout_height="50dp"
                         android:src="@drawable/mood_kid"
                         android:scaleType="centerCrop"
-                        android:contentDescription="Baby Icon"
-                        />
+                        android:contentDescription="Baby Icon"/>
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -54,7 +53,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Titill"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primaryContent"
                             android:textStyle="bold"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             />
@@ -93,7 +92,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primaryContent"
                             android:textAppearance="?attr/textAppearanceBody2"
                             />
                     </LinearLayout>
@@ -123,7 +122,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textStyle="bold"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primaryContent"
                             />
                     </LinearLayout>
 
@@ -142,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="Búa til skýrslu"
+                    android:text="@string/create_report_button"
                     style="?attr/borderlessButtonStyle"
                     />
 
@@ -151,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="Sjá meira"
+                    android:text="@string/see_parent_button"
                     style="?attr/borderlessButtonStyle"
                     />
             </LinearLayout>

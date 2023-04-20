@@ -39,22 +39,23 @@
                         android:layout_height="50dp"
                         android:src="@drawable/mood_kid"
                         android:scaleType="centerCrop"
-                        android:contentDescription="Baby Icon"
+                        android:contentDescription="@string/baby_icon"
                         />
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center_vertical|left"
-                        android:paddingLeft="10dp"
+                        android:gravity="center_vertical|start"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
                         >
 
                         <TextView
                             android:id="@+id/card_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Titill"
-                            android:textColor="@color/black"
+                            android:text="@string/title_placeholder"
+                            android:textColor="@color/primaryContent"
                             android:textStyle="bold"
                             android:textAppearance="?attr/textAppearanceHeadline6"
                             />
@@ -100,7 +101,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primaryContent"
                             android:textAppearance="?attr/textAppearanceBody2"
                             />
                     </LinearLayout>
@@ -130,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:textStyle="bold"
-                            android:textColor="@color/black"
+                            android:textColor="@color/primaryContent"
                             />
                     </LinearLayout>
 
@@ -149,7 +150,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:text="Tilkynna veikindi"
+                    android:text="@string/tilkynna_veikindi"
                     style="?attr/borderlessButtonStyle"
                     />
                 <com.google.android.material.button.MaterialButton

@@ -13,7 +13,10 @@ data class Child(
     val dcwName: String? = null,
     val dcwMobile: String? = null,
     val dcwEmail: String? = null,
-    val parent_id: Int? = null
+    val parent_id: Int? = null,
+    val parentName: String? = null,
+    val parentMobile: String? = null,
+    val parentEmail: String? = null
 ) {
     override fun toString(): String {
         return "$firstName $lastName"

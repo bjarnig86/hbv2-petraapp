@@ -83,7 +83,7 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
             icon.setImageResource(R.drawable.mood_kid)
             notifySickness.isEnabled = true
             notifySickness.setTextColor(ContextCompat.getColor(context, R.color.primary))
-            title.setTextColor(ContextCompat.getColor(context, R.color.black))
+            title.setTextColor(ContextCompat.getColor(context, R.color.primaryContent))
         }
 
         notifySickness.setOnClickListener{

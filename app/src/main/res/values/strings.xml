@@ -137,5 +137,10 @@
     <string name="reports_empty_string">Engar skýrslur um þetta barn</string>
     <string name="dagforeldri">Dagforeldri</string>
     <string name="foreldri_str">Foreldri</string>
+    <string name="see_parent_button">Foreldri</string>
+    <string name="create_report_button">Búa til skýrslu</string>
+    <string name="baby_icon">Baby Icon</string>
+    <string name="title_placeholder">Titill</string>
+    <string name="tilkynna_veikindi">Tilkynna veikindi</string>
 
 </resources>

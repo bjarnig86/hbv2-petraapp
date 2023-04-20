@@ -41,15 +41,31 @@
                 android:layout_height="200dp"
                 android:background="@android:drawable/list_selector_background"/>
         </LinearLayout>
-        <Button
-            android:id="@+id/select_child_button"
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/listview_container"
-            android:layout_centerInParent="true"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/apply_btn_text"/>
+            android:gravity="center"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true">
+
+            <Button
+                android:id="@+id/select_child_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="@string/apply_btn_text" />
+
+            <Button
+                android:id="@+id/select_child_cancel_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_toEndOf="@+id/select_child_button"
+                android:text="@string/cancel_button" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 </FrameLayout>

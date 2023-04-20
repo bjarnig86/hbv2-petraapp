@@ -1,5 +1,6 @@
 package `is`.hi.hbv601g.petraapp.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -34,6 +35,7 @@ class ApplicationFragment : Fragment() {
 
     private lateinit var childListView: ListView
     private lateinit var selectChildButton: Button
+    private lateinit var cancelButton: Button
     private lateinit var greeting: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,7 @@ class ApplicationFragment : Fragment() {
 
         childListView = view.findViewById(R.id.child_auto_complete_text_view)
         selectChildButton = view.findViewById(R.id.select_child_button)
+        cancelButton = view.findViewById(R.id.select_child_cancel_button)
         greeting = view.findViewById(R.id.application_text_view)
         greeting.text = "Veldu barn fyrir umsókn hjá \n$dcwName"
 
@@ -97,6 +100,10 @@ class ApplicationFragment : Fragment() {
 
                 })
             }
+        }
+
+        cancelButton.setOnClickListener {
+            parentFragmentManager.beginTransaction().remove(this@ApplicationFragment).commit()
         }
 
 

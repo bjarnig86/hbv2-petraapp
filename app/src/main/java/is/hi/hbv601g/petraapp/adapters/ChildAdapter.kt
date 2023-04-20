@@ -1,11 +1,11 @@
 package `is`.hi.hbv601g.petraapp.adapters
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import `is`.hi.hbv601g.petraapp.DayReportActivity
 import `is`.hi.hbv601g.petraapp.Entities.Child
-import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
 import `is`.hi.hbv601g.petraapp.R
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,7 +32,7 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
 
         val createReport = itemView.findViewById<MaterialButton>(R.id.child_card_create_report)
 
-        val getReport = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
+        val seeParent = itemView.findViewById<MaterialButton>(R.id.child_card_get_reports)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildAdapter.ViewHolder {
@@ -70,7 +68,7 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
             title.setTextColor(ContextCompat.getColor(context, R.color.sickness_color))
         } else {
             icon.setImageResource(R.drawable.mood_kid)
-            title.setTextColor(ContextCompat.getColor(context, R.color.black))
+            title.setTextColor(ContextCompat.getColor(context, R.color.primaryContent))
         }
 
         val reportCreate = viewHolder.createReport
@@ -84,9 +82,26 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
             startActivity(context, intent, null)
         }
 
-        val reportsGet = viewHolder.getReport
+        val reportsGet = viewHolder.seeParent
         reportsGet.setOnClickListener{
-            Toast.makeText(context,"Sækja skýrlsu", Toast.LENGTH_SHORT).show()
+            // Create a string to display the parent information
+            val parentInfo = "Name: ${child.parentName}\nMobile: ${child.parentMobile}\nEmail: ${child.parentEmail}"
+
+            // Create an AlertDialog builder and set its properties
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Parent Information")
+            builder.setMessage(parentInfo)
+            builder.setCancelable(false)
+
+            // Add an "OK" button to the dialog
+            builder.setPositiveButton("OK") { dialog, id ->
+                // Dismiss the dialog when the button is clicked
+                dialog.dismiss()
+            }
+
+            // Create the AlertDialog object and show it
+            val dialog = builder.create()
+            dialog.show()
         }
     }
 
