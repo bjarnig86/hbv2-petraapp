@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
-
+import org.w3c.dom.Text
 
 
 class ParentActivity : AppCompatActivity() {
@@ -26,6 +27,7 @@ class ParentActivity : AppCompatActivity() {
     private lateinit var mParentId: String
     private lateinit var mProgressBar: ProgressBar
     private lateinit var mChildrenRecyclerView: RecyclerView
+    private lateinit var mNoChildren: TextView
 
     private lateinit var binding: ActivityParentBinding
     companion object {
@@ -39,6 +41,7 @@ class ParentActivity : AppCompatActivity() {
 
         mProgressBar = findViewById(R.id.progress_bar)
         mChildrenRecyclerView = findViewById(R.id.rvChildren)
+        mNoChildren = findViewById(R.id.no_children_text_view)
 
         // do it this way because you cannot be on this page unless logged in
         val fragmentTransaction = supportFragmentManager.beginTransaction()
@@ -57,12 +60,18 @@ class ParentActivity : AppCompatActivity() {
         nm.getChildrenByParent(mParentId.toLong(), object: NetworkCallback<List<Child>> {
             override fun onSuccess(result: List<Child>) {
                 mChildren = result as ArrayList<Child>
-                val adapter = ChildAdapterParent(mChildren,this@ParentActivity)
-                val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
-                childRecyclerView.adapter = adapter
-                childRecyclerView.layoutManager = LinearLayoutManager(this@ParentActivity)
-                mProgressBar.visibility = View.GONE
-                mChildrenRecyclerView.visibility = View.VISIBLE
+
+                if (mChildren.isEmpty()) {
+                    mNoChildren.visibility = View.VISIBLE
+                    mProgressBar.visibility = View.GONE
+                } else {
+                    val adapter = ChildAdapterParent(mChildren,this@ParentActivity)
+                    val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
+                    childRecyclerView.adapter = adapter
+                    childRecyclerView.layoutManager = LinearLayoutManager(this@ParentActivity)
+                    mProgressBar.visibility = View.GONE
+                    mChildrenRecyclerView.visibility = View.VISIBLE
+                }
             }
 
             override fun onFailure(errorString: String) {

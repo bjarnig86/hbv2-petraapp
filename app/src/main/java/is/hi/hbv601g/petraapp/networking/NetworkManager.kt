@@ -3,6 +3,7 @@ package `is`.hi.hbv601g.petraapp.networking
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -63,6 +64,7 @@ class NetworkManager private constructor(context: Context) {
         val request = object : Utf8StringRequest(
             Method.GET, BASE_URL + "daycareworkers",
             Response.Listener { response ->
+                Log.d("Engar dcws!", "getDCWs: $response")
                 val gson = Gson()
                 val listType: Type = object : TypeToken<List<DaycareWorker>>(){}.type
                 val dcws: List<DaycareWorker> = gson.fromJson(response, listType)

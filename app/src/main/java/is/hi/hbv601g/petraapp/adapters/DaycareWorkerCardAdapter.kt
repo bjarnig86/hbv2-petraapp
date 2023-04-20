@@ -93,11 +93,8 @@ class DaycareWorkerCardAdapter(private val mDcws: List<DaycareWorker>, private v
                 val fragment = parentId?.let { it1 -> ApplicationFragment.newInstance(it1, dcwId, dcwName) }
                 if (fragment != null) {
                     transaction.add(R.id.application_fragment_layout, fragment)
+                    transaction.commit()
                 }
-                transaction.addToBackStack(null)
-
-                // Show the background view
-                transaction.commit()
             }
         }
     }

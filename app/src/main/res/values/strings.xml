@@ -144,5 +144,6 @@
     <string name="baby_icon">Baby Icon</string>
     <string name="title_placeholder">Titill</string>
     <string name="tilkynna_veikindi">Tilkynna veikindi</string>
+    <string name="no_children_message">Engin börn skráð!</string>
 
 </resources>

@@ -163,6 +163,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onResume() {
         super.onResume()
+        val networkManager = NetworkManager.getInstance(this)
+        networkManager.getDCWs(object : NetworkCallback<List<DaycareWorker>> {
+            override fun onSuccess(result: List<DaycareWorker>) {
+                mDCWList = result as MutableList<DaycareWorker>
+                val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity, supportFragmentManager);
+                mDCWRecyclerView.adapter = adapter;
+            }
+
+            override fun onFailure(errorString: String) {
+                Log.e(TAG, "onFailure: in onResume can't get dcws:\n $errorString", )
+            }
+
+        })
         Log.d(TAG, "onResume: ")
     }
 
