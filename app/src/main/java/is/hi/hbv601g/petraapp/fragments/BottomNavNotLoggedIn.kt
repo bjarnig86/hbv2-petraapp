@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.auth0.android.authentication.AuthenticationAPIClient
 import com.auth0.android.authentication.AuthenticationException
@@ -47,7 +46,7 @@ class BottomNavNotLoggedIn : Fragment() {
         return root
     }
 
-    fun loginWithBrowser(context: Context) {
+    private fun loginWithBrowser(context: Context) {
         // Setup the WebAuthProvider, using the custom scheme and scope.
 
         WebAuthProvider.login(User.account)
@@ -100,9 +99,9 @@ class BottomNavNotLoggedIn : Fragment() {
                         Log.d(MainActivity.TAG +"userinfo", "onSuccess: $result")
                         User.firstName = result.firstName
                         User.role = userRole
-                        User.id = result.id?.toLong()
+                        User.id = result.id.toLong()
 
-                        // save to sharedpreferences
+                        // save to shared-preferences
                         SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
                         SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
                         SharedPreferencesUtil.saveStringToSharedPreferences(context,"USER_ID", auth0id)
@@ -115,7 +114,7 @@ class BottomNavNotLoggedIn : Fragment() {
                     }
 
                     override fun onFailure(errorString: String) {
-                        Log.e(MainActivity.TAG +"userinfo", "onFailure: $errorString", )
+                        Log.e(MainActivity.TAG +"userinfo", "onFailure: $errorString")
                     }
                 })
             }
@@ -127,7 +126,7 @@ class BottomNavNotLoggedIn : Fragment() {
                         User.role = userRole
                         User.id = result.id?.toLong()
                         Log.d("LOGIN!!!", "onSuccess: ${User.id}")
-                        // save to sharedpreferences
+                        // save to shared-preferences
                         SharedPreferencesUtil.saveUserToSharedPreferences(context, result)
                         SharedPreferencesUtil.saveStringToSharedPreferences(context, "ACCESS_TOKEN", accessToken)
                         SharedPreferencesUtil.saveStringToSharedPreferences(context, "USER_ID", auth0id)
@@ -139,13 +138,13 @@ class BottomNavNotLoggedIn : Fragment() {
                     }
 
                     override fun onFailure(errorString: String) {
-                        Log.e(MainActivity.TAG, "getUserInfo: onFailure: $errorString", )
+                        Log.e(MainActivity.TAG, "getUserInfo: onFailure: $errorString")
                     }
                 })
             }
             else -> {
     //            TODO("if there is no type on user???")
-                Log.e(MainActivity.TAG, "getUserInfo: user has no roles on Auth0", )
+                Log.e(MainActivity.TAG, "getUserInfo: user has no roles on Auth0")
             }
         }
     }

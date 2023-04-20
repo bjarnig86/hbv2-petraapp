@@ -64,7 +64,8 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
         name.text = child.firstName
 
         val ssn = viewHolder.ssnTitleViewContent
-        ssn.text = child.ssn
+        val ssnString = child.ssn.substring(0,6) + "-" + child.ssn.substring(6,10)
+        ssn.text = ssnString
 
         val notifySickness = viewHolder.notifySickness
 
@@ -92,6 +93,10 @@ class ChildAdapterParent(private val mChild: List<Child>, private val context: C
                 // Send the request and go back to the activity
                 networkManager.notifySickLeave(child.id, object : NetworkCallback<String> {
                 override fun onSuccess(result: String) {
+                    icon.setImageResource(R.drawable.sick_outline_rounded)
+                    notifySickness.setTextColor(Color.LTGRAY)
+                    notifySickness.isEnabled = false
+                    title.setTextColor(ContextCompat.getColor(context, R.color.sickness_color))
                     Log.d(TAG, "onSuccess: Notifying Sick Leave SUCCESSFUL")
                     Toast.makeText(context, "Veikindi tilkynnt!", Toast.LENGTH_SHORT).show()
                 }

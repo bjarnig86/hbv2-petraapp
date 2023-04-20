@@ -57,7 +57,8 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
         name.text = child.firstName
 
         val ssn = viewHolder.ssnTitleViewContent
-        ssn.text = child.ssn.toString()
+        val ssnString = child.ssn.substring(0,6) + "-" + child.ssn.substring(6,10)
+        ssn.text = ssnString
 
         if (child.sicknessDay?.let { compareDates(currentDate, it) } == true) {
             icon.setImageResource(R.drawable.sick_outline_rounded)

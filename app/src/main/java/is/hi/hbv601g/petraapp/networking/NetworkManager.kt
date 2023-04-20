@@ -419,7 +419,7 @@ class NetworkManager private constructor(context: Context) {
     fun addParent(parent: ParentDTO, callback: NetworkCallback<Parent>) {
         val url = Uri.parse(BASE_URL)
             .buildUpon()
-            .appendPath("addparent")
+            .appendPath("createparent")
             .build().toString()
 
         val request = object : Utf8StringRequest(
