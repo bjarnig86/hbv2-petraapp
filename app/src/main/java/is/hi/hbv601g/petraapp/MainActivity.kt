@@ -15,16 +15,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.auth0.android.result.UserProfile
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
-import `is`.hi.hbv601g.petraapp.Entities.FullDCW
-import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.databinding.ActivityMainBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
-import `is`.hi.hbv601g.petraapp.utils.SharedPreferencesUtil
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -39,7 +35,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var accessToken: String
     private lateinit var userRole: String
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private val bottomNav = BottomNav()
 
     companion object {
@@ -55,7 +51,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         val networkManager = NetworkManager.getInstance(this)
 
-        // retrieve user if in sharedPrefrences
+        // retrieve user if in sharedPreferences
         val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
         accessToken = prefs.getString("ACCESS_TOKEN", "").toString()
         userRole = prefs.getString("USER_ROLE", null).toString()
@@ -67,7 +63,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         mSearchQueryView = findViewById(R.id.searchQuery)
         mSearchQueryBtn = findViewById(R.id.searchButton)
 
-        // location shiiitt
+        // location stuff
         networkManager.getLocations(object : NetworkCallback<ArrayList<String>> {
             override fun onSuccess(result: ArrayList<String>) {
                 mLocationList = result
@@ -100,7 +96,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
 
             override fun onFailure(errorString: String) {
-                Log.e(TAG, "onFailure: Getting locations failed!", )
+                Log.e(TAG, "onFailure: Getting locations failed!")
             }
         })
 
@@ -117,6 +113,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
                 val filteredAdapter = DaycareWorkerCardAdapter(filteredList, this, supportFragmentManager)
                 mDCWRecyclerView.adapter = filteredAdapter
+                mDCWRecyclerView.layoutManager = LinearLayoutManager(this)
 
                 Toast.makeText(this@MainActivity, "${filteredList.size} dagforeldri fundust!", Toast.LENGTH_SHORT).show()
 
@@ -128,6 +125,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             } else {
                 val filteredAdapter = DaycareWorkerCardAdapter(mDCWList, this, supportFragmentManager)
                 mDCWRecyclerView.adapter = filteredAdapter
+                mDCWRecyclerView.layoutManager = LinearLayoutManager(this)
 
                 this.currentFocus?.let { view ->
                     val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -143,9 +141,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 mDCWList = result.toMutableList()
                 Log.d(TAG, "Successfully fetched DCWs ${mDCWList.size}")
                 // List of cards logic
-                val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity, supportFragmentManager);
-                mDCWRecyclerView.adapter = adapter;
-                mDCWRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity);
+                val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity, supportFragmentManager)
+                mDCWRecyclerView.adapter = adapter
+                mDCWRecyclerView.layoutManager = LinearLayoutManager(this@MainActivity)
                 mDCWRecyclerView.visibility = View.VISIBLE
                 mProgressBar.visibility = View.GONE
             }
@@ -167,12 +165,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         networkManager.getDCWs(object : NetworkCallback<List<DaycareWorker>> {
             override fun onSuccess(result: List<DaycareWorker>) {
                 mDCWList = result as MutableList<DaycareWorker>
-                val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity, supportFragmentManager);
-                mDCWRecyclerView.adapter = adapter;
+                val adapter = DaycareWorkerCardAdapter(mDCWList, this@MainActivity, supportFragmentManager)
+                mDCWRecyclerView.adapter = adapter
             }
 
             override fun onFailure(errorString: String) {
-                Log.e(TAG, "onFailure: in onResume can't get dcws:\n $errorString", )
+                Log.e(TAG, "onFailure: in onResume can't get dcws:\n $errorString")
             }
 
         })

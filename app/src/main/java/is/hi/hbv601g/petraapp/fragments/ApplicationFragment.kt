@@ -8,12 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.get
 import `is`.hi.hbv601g.petraapp.Entities.ApplicationDTO
 import `is`.hi.hbv601g.petraapp.Entities.Child
@@ -93,6 +88,7 @@ class ApplicationFragment : Fragment() {
                         Log.d(TAG, "onSuccess: Application successful!")
                         // Get the parent FragmentManager and remove this fragment
                         parentFragmentManager.beginTransaction().remove(this@ApplicationFragment).commit()
+                        Toast.makeText(context, "Umsókn móttekin!", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onFailure(errorString: String) {

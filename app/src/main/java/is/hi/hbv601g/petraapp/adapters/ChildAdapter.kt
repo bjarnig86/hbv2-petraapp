@@ -85,11 +85,11 @@ class ChildAdapter(private val mChild: ArrayList<Child>, private val context: Co
         val reportsGet = viewHolder.seeParent
         reportsGet.setOnClickListener{
             // Create a string to display the parent information
-            val parentInfo = "Name: ${child.parentName}\nMobile: ${child.parentMobile}\nEmail: ${child.parentEmail}"
+            val parentInfo = "Nafn: ${child.parentName}\nSími: ${child.parentMobile}\nNetfang: ${child.parentEmail}"
 
             // Create an AlertDialog builder and set its properties
             val builder = AlertDialog.Builder(context)
-            builder.setTitle("Parent Information")
+            builder.setTitle("Upplýsingar um foreldri")
             builder.setMessage(parentInfo)
             builder.setCancelable(false)
 

@@ -1,9 +1,11 @@
 package `is`.hi.hbv601g.petraapp.adapters
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import `is`.hi.hbv601g.petraapp.Entities.Appetite
 import `is`.hi.hbv601g.petraapp.Entities.DayReportDTO
@@ -74,6 +76,7 @@ class ReportAdapter(private val reports: ArrayList<DayReportDTO>, private val ch
     }
 
     // Function to extract the time in 24-hour format (e.g. "19:00")
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getTimeIn24HourFormat(dateTime: LocalDateTime): String {
         val formatter = DateTimeFormatter.ofPattern("HH:mm")
         return dateTime.format(formatter)

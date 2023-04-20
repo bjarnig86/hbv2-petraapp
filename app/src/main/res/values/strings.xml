@@ -145,5 +145,6 @@
     <string name="title_placeholder">Titill</string>
     <string name="tilkynna_veikindi">Tilkynna veikindi</string>
     <string name="no_children_message">Engin börn skráð!</string>
+    <string name="no_children_message_dcw">Engin börn í þinni umsjá!</string>
 
 </resources>

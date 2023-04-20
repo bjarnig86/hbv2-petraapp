@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 class DcwActivity : AppCompatActivity(){
     
     private lateinit var ChildList: ArrayList<Child>
+    private lateinit var mNoChildren: TextView
     private val bottomNav = BottomNav()
 
     companion object {
@@ -33,6 +35,7 @@ class DcwActivity : AppCompatActivity(){
         val dcwId = prefs.getString("DCW_ID", "")
 
         bottomNav.handleFragments(this, supportFragmentManager, R.id.bottom_nav)
+        mNoChildren = findViewById(R.id.no_children_text_view)
 
         val childRecyclerView = findViewById<View>(R.id.rvChildren) as RecyclerView
 
@@ -41,6 +44,11 @@ class DcwActivity : AppCompatActivity(){
         networkManager.getChildrenByDCW(dcwId!!, object: NetworkCallback<List<Child>> {
             override fun onSuccess(result: List<Child>) {
                 ChildList = result as ArrayList<Child>
+
+                if (ChildList.isEmpty()) {
+                    mNoChildren.visibility = View.VISIBLE
+                    childRecyclerView.visibility = View.GONE
+                }
                 val adapter = ChildAdapter(ChildList,this@DcwActivity);
                 childRecyclerView.adapter = adapter;
                 childRecyclerView.layoutManager = LinearLayoutManager(this@DcwActivity);
