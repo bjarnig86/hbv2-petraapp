@@ -1,6 +1,5 @@
-package `is`.hi.hbv601g.petraapp
+package `is`.hi.hbv601g.petraapp.fragments
 
-import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,8 +14,10 @@ import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import com.google.gson.Gson
 import `is`.hi.hbv601g.petraapp.Entities.Child
-import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
+import `is`.hi.hbv601g.petraapp.DTOs.ChildDTO
 import `is`.hi.hbv601g.petraapp.Entities.Parent
+import `is`.hi.hbv601g.petraapp.ParentActivity
+import `is`.hi.hbv601g.petraapp.R
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 

@@ -9,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import `is`.hi.hbv601g.petraapp.Entities.Child
-import `is`.hi.hbv601g.petraapp.Entities.ChildDTO
-import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapter
 import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback

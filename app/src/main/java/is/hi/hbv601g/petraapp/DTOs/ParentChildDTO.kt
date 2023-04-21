@@ -1,4 +1,4 @@
-package `is`.hi.hbv601g.petraapp.Entities
+package `is`.hi.hbv601g.petraapp.DTOs
 
 import java.time.LocalDate
 

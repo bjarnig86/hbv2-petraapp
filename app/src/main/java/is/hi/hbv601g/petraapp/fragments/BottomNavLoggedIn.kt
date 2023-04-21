@@ -12,11 +12,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.auth0.android.authentication.AuthenticationException
 import com.auth0.android.callback.Callback
 import com.auth0.android.provider.WebAuthProvider
+import com.google.gson.Gson
 import `is`.hi.hbv601g.petraapp.DcwActivity
+import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.Entities.User
 import `is`.hi.hbv601g.petraapp.MainActivity
 import `is`.hi.hbv601g.petraapp.ParentActivity
@@ -28,6 +32,7 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
     private lateinit var mPetraBtn: ImageButton
     private lateinit var mHomeBtn: ImageButton
     private lateinit var mUserBtn: ImageButton
+    private lateinit var mNavBarGreeting: TextView
     lateinit var res: Drawable;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -41,6 +46,32 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
         mPetraBtn = root.findViewById(R.id.action_bar_petra)
         mHomeBtn = root.findViewById(R.id.action_bar_home)
         mUserBtn = root.findViewById(R.id.action_bar_user)
+
+        mNavBarGreeting = requireActivity().findViewById(R.id.custom_action_bar_greeting_text)
+
+        // handling greeting in navbar
+        val prefs = requireContext().getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json: String? = prefs?.getString("USER_KEY", null)
+        if (json != null) {
+            val key = "\"type\":\"parent\""
+            if (key in json) {
+                val parent: Parent = gson.fromJson(json, Parent::class.java)
+                val pName = parent.firstName
+                val role = "Foreldri"
+                mNavBarGreeting.text = ""
+                mNavBarGreeting.text = "Hæ $pName $role"
+            } else {
+                val dcw: DaycareWorker = gson.fromJson(json, DaycareWorker::class.java)
+                val dcwName = dcw.fullName.split(" ")[0]
+                val role = "Dagforeldri"
+                mNavBarGreeting.text = ""
+                mNavBarGreeting.text = "Hæ $dcwName $role"
+            }
+        } else {
+            mNavBarGreeting.text = ""
+        }
+
 
         // Disabling and handling which acvitity user is on
         if (activity is ParentActivity || activity is DcwActivity) {
@@ -93,6 +124,7 @@ class BottomNavLoggedIn : Fragment(R.layout.menu_dock_logged_in) {
                     // The user has been logged out!
                     User.setUser(null)
                     SharedPreferencesUtil.clearSharedPreferences(context)
+                    mNavBarGreeting.text = ""
 
                     // Go to main activity if logout is successful
                     val intent = Intent(requireContext(), MainActivity::class.java)

@@ -8,8 +8,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import `is`.hi.hbv601g.petraapp.Entities.DayReport
-import `is`.hi.hbv601g.petraapp.Entities.DayReportDTO
+import `is`.hi.hbv601g.petraapp.DTOs.DayReportDTO
 import `is`.hi.hbv601g.petraapp.adapters.ReportAdapter
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager

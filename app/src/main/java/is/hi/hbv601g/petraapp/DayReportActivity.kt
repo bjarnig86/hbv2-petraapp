@@ -12,9 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import `is`.hi.hbv601g.petraapp.Entities.Appetite
 import `is`.hi.hbv601g.petraapp.Entities.DayReport
-import `is`.hi.hbv601g.petraapp.Entities.DayReportDTO
+import `is`.hi.hbv601g.petraapp.DTOs.DayReportDTO
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
 import java.text.SimpleDateFormat

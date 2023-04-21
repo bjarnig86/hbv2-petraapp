@@ -16,9 +16,9 @@ import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.adapters.ChildAdapterParent
 import `is`.hi.hbv601g.petraapp.databinding.ActivityParentBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNavLoggedIn
+import `is`.hi.hbv601g.petraapp.fragments.CreateChildFragment
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
 import `is`.hi.hbv601g.petraapp.networking.NetworkManager
-import org.w3c.dom.Text
 
 
 class ParentActivity : AppCompatActivity() {

@@ -14,11 +14,11 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
+import `is`.hi.hbv601g.petraapp.DTOs.*
 import `is`.hi.hbv601g.petraapp.Entities.*
 import `is`.hi.hbv601g.petraapp.utils.LocalDateTimeDeserializer
 import `is`.hi.hbv601g.petraapp.utils.LocalDateTimeSerializer
 import java.lang.reflect.Type
-import java.nio.ByteBuffer
 import java.time.LocalDateTime
 
 

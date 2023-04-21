@@ -1,7 +1,5 @@
 package `is`.hi.hbv601g.petraapp.fragments
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,8 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.get
-import `is`.hi.hbv601g.petraapp.Entities.ApplicationDTO
+import `is`.hi.hbv601g.petraapp.DTOs.ApplicationDTO
 import `is`.hi.hbv601g.petraapp.Entities.Child
 import `is`.hi.hbv601g.petraapp.R
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback

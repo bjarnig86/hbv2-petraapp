@@ -1,5 +1,6 @@
-package `is`.hi.hbv601g.petraapp.Entities
+package `is`.hi.hbv601g.petraapp.DTOs
 
+import `is`.hi.hbv601g.petraapp.Entities.DayReport
 import java.time.LocalDate
 
 data class ChildDTO(

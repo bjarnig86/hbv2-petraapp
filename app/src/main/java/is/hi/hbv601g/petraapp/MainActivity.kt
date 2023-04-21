@@ -11,12 +11,15 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import `is`.hi.hbv601g.petraapp.adapters.DaycareWorkerCardAdapter
 import `is`.hi.hbv601g.petraapp.Entities.DaycareWorker
+import `is`.hi.hbv601g.petraapp.Entities.Parent
 import `is`.hi.hbv601g.petraapp.databinding.ActivityMainBinding
 import `is`.hi.hbv601g.petraapp.fragments.BottomNav
 import `is`.hi.hbv601g.petraapp.networking.NetworkCallback
@@ -28,6 +31,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var mSearchQueryBtn: Button
     private lateinit var mProgressBar: ProgressBar
     private lateinit var mDCWRecyclerView: RecyclerView
+    private lateinit var mNavBarGreeting: TextView
+
 
     private var mDCWList = mutableListOf<DaycareWorker>()
     private var mLocationList = ArrayList<String>()
@@ -174,6 +179,30 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
 
         })
+        mNavBarGreeting = findViewById(R.id.custom_action_bar_greeting_text)
+
+        // handling greeting in navbar
+        val prefs = getSharedPreferences("MY_APP_PREFS", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val json: String? = prefs.getString("USER_KEY", null)
+        if (json != null) {
+            val key = "\"type\":\"parent\""
+            if (key in json) {
+                val parent: Parent = gson.fromJson(json, Parent::class.java)
+                val pName = parent.firstName
+                val role = "Foreldri"
+                mNavBarGreeting.text = ""
+                mNavBarGreeting.text = "Hæ $pName $role"
+            } else {
+                val dcw: DaycareWorker = gson.fromJson(json, DaycareWorker::class.java)
+                val dcwName = dcw.fullName.split(" ")[0]
+                val role = "Dagforeldri"
+                mNavBarGreeting.text = ""
+                mNavBarGreeting.text = "Hæ $dcwName $role"
+            }
+        } else {
+            mNavBarGreeting.text = ""
+        }
         Log.d(TAG, "onResume: ")
     }
 

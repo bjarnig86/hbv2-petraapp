@@ -1,4 +1,4 @@
-package `is`.hi.hbv601g.petraapp.Entities
+package `is`.hi.hbv601g.petraapp.DTOs
 
 data class DaycareWorkerDTO(
     val firstName: String,

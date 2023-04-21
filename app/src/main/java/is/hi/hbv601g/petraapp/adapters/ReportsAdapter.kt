@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import `is`.hi.hbv601g.petraapp.Entities.Appetite
-import `is`.hi.hbv601g.petraapp.Entities.DayReportDTO
+import `is`.hi.hbv601g.petraapp.DTOs.DayReportDTO
 import `is`.hi.hbv601g.petraapp.R
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
